@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ธีมเริ่มต้น (Night Mode) */
         :root {
             --bg-main: #07090e;
             --surface: #121824;
@@ -30,7 +29,6 @@
             --border-highlight: rgba(255, 255, 255, 0.15);
         }
 
-        /* ธีมสว่าง (Day Mode) */
         [data-theme="light"] {
             --bg-main: #f1f5f9;
             --surface: #ffffff;
@@ -149,6 +147,8 @@
             color: var(--text-main);
             cursor: pointer;
             position: relative;
+            font-size: 12px;
+            font-weight: 700;
         }
 
         .view-content {
@@ -253,6 +253,9 @@
             font-size: 14px;
             font-weight: 700;
             color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .list-stack {
@@ -335,7 +338,7 @@
             background: var(--surface-hover);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 6px;
             font-size: 10px;
             font-weight: 600;
@@ -448,15 +451,6 @@
             color: var(--primary);
         }
 
-        .tag-pill {
-            background: var(--surface-hover);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-
         .svg-icon {
             width: 18px;
             height: 18px;
@@ -475,14 +469,14 @@
         <!-- Top App Header -->
         <header class="app-header">
             <div class="user-profile">
-                <div class="avatar-circle">SC</div>
+                <div class="avatar-circle">มฝ</div>
                 <div>
-                    <div class="greeting-sub">ยินดีต้อนรับกลับมา</div>
-                    <div class="user-name">คุณสมชาย เอกอนันต์</div>
+                    <div class="greeting-sub" data-translate="greeting">ยินดีต้อนรับกลับมา</div>
+                    <div class="user-name">คุณมีเงิน เหลือเฟือ</div>
                 </div>
             </div>
             <div class="header-actions">
-                <!-- Theme Toggle Button -->
+                <div class="icon-btn" onclick="toggleLanguage()" id="lang-btn" title="Switch Language TH/EN">EN</div>
                 <div class="icon-btn" onclick="toggleTheme()" title="สลับโหมด Day/Night">
                     <svg class="svg-icon" id="theme-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                 </div>
@@ -491,37 +485,35 @@
 
         <!-- VIEW 1: DASHBOARD & NET WORTH -->
         <div id="view-home" class="view-content active">
-            <!-- Net Worth Card -->
             <div class="card-box networth-card">
                 <div class="card-label">
-                    <span>ความมั่งคั่งสุทธิ (Net Worth)</span>
+                    <span data-translate="net_worth">ความมั่งคั่งสุทธิ (Net Worth)</span>
                     <svg class="svg-icon" style="width: 16px; height: 16px; cursor: pointer;" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </div>
                 <div class="networth-amount" id="home-networth">฿ 0</div>
-                <div class="growth-badge">
+                <div class="growth-badge" data-translate="realtime_calc">
                     <svg class="svg-icon" style="width: 12px; height: 12px;" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
                     คำนวณจากสินทรัพย์หักหนี้สินแบบเรียลไทม์
                 </div>
                 <div class="card-divider"></div>
                 <div class="networth-sub">
                     <div>
-                        <div class="sub-label">สินทรัพย์รวม</div>
+                        <div class="sub-label" data-translate="total_assets">สินทรัพย์รวม</div>
                         <div class="sub-val" id="home-total-assets">฿ 0</div>
                     </div>
                     <div style="text-align: right;">
-                        <div class="sub-label">หนี้สินรวม</div>
+                        <div class="sub-label" data-translate="total_liabilities">หนี้สินรวม</div>
                         <div class="sub-val" style="color: #fca5a5;" id="home-total-liabilities">฿ 0</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Upcoming Timeline -->
             <div class="card-box">
                 <div class="section-header-row">
-                    <span class="section-title">ปฏิทินเงินเข้า-ออก (7 วันนี้)</span>
+                    <span class="section-title" data-translate="calendar_title">ปฏิทินเงินเข้า-ออก (7 วันนี้)</span>
                 </div>
                 <div class="list-stack" id="upcoming-list-container">
-                    <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ไม่มีรายการใกล้ถึงกำหนด</div>
+                    <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;" data-translate="no_upcoming">ไม่มีรายการใกล้ถึงกำหนด</div>
                 </div>
             </div>
         </div>
@@ -531,59 +523,65 @@
             <div class="card-box form-card">
                 <div class="form-title">
                     <svg class="svg-icon" style="color: var(--primary);" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    เพิ่มสินทรัพย์ / เงินลงทุนใหม่
+                    <span data-translate="add_asset_title">เพิ่มสินทรัพย์ / เงินลงทุนใหม่</span>
                 </div>
                 <div class="field-group">
-                    <label class="field-label">ประเภทสินทรัพย์</label>
+                    <label class="field-label" data-translate="asset_type">ประเภทสินทรัพย์</label>
                     <select class="select-input" id="asset-type-select">
-                        <option value="เงินฝาก">เงินฝากธนาคาร / สลาก</option>
-                        <option value="หุ้นกู้">หุ้นกู้ / พันธบัตร</option>
-                        <option value="กองทุน/หุ้น">หุ้นสามัญ / กองทุนรวม</option>
+                        <option value="เงินฝาก" data-translate="opt_deposit">เงินฝากธนาคาร / สลาก</option>
+                        <option value="หุ้นกู้" data-translate="opt_bond">หุ้นกู้ / พันธบัตร</option>
+                        <option value="กองทุน/หุ้น" data-translate="opt_stock">หุ้นสามัญ / กองทุนรวม</option>
                     </select>
                 </div>
                 <div class="field-group">
-                    <label class="field-label">ชื่อรายการ</label>
+                    <label class="field-label" data-translate="current_value_label">มูลค่าปัจจุบัน (บาท) *บังคับ</label>
+                    <input type="number" class="text-input" id="asset-value-input" placeholder="0.00">
+                </div>
+                <div class="field-group">
+                    <label class="field-label" data-translate="asset_name_label">ชื่อรายการ (ไม่บังคับ)</label>
                     <input type="text" class="text-input" id="asset-name-input" placeholder="เช่น หุ้นกู้ CPALL, KBank">
                 </div>
                 <div class="field-group">
-                    <label class="field-label">มูลค่าปัจจุบัน (บาท)</label>
-                    <input type="number" class="text-input" id="asset-value-input" placeholder="0.00">
+                    <label class="field-label" data-translate="units_label">จำนวนหุ้น / หน่วย (ไม่บังคับ)</label>
+                    <input type="number" class="text-input" id="asset-units-input" placeholder="เช่น 1000">
                 </div>
-                <button class="submit-btn" onclick="addNewAssetItem()">+ บันทึกเข้าพอร์ต</button>
+                <button class="submit-btn" onclick="addNewAssetItem()" data-translate="btn_save_asset">+ บันทึกเข้าพอร์ต</button>
             </div>
 
             <div class="card-box">
                 <div class="section-header-row" style="margin-bottom: 8px;">
-                    <span class="section-title">รายการสินทรัพย์ทั้งหมด</span>
+                    <span class="section-title" data-translate="all_assets_title">รายการสินทรัพย์ทั้งหมด</span>
                 </div>
                 <div class="list-stack" id="asset-list-container">
-                    <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ยังไม่มีสินทรัพย์ในพอร์ต</div>
+                    <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;" data-translate="no_assets">ยังไม่มีสินทรัพย์ในพอร์ต</div>
                 </div>
             </div>
         </div>
 
-        <!-- VIEW 3: CASH FLOW (DASHBOARD + INCOME & EXPENSE) -->
+        <!-- VIEW 3: CASH FLOW -->
         <div id="view-expense" class="view-content">
-            <!-- Clear Summary Dashboard -->
             <div class="card-box" style="border: 1px solid var(--border-highlight);">
                 <div class="section-header-row" style="margin-bottom: 8px;">
-                    <span class="section-title">📊 สรุปกระแสเงินสดเดือนนี้</span>
+                    <span class="section-title" data-translate="cashflow_summary_title">
+                        <svg class="svg-icon" style="width: 16px; height: 16px; color: var(--primary);" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+                        สรุปกระแสเงินสดเดือนนี้
+                    </span>
                     <span style="font-size: 11px; color: var(--success); font-weight: 600;" id="dash-savings-rate">ออมสุทธิ 0%</span>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
                     <div style="background: var(--success-bg); padding: 10px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2);">
-                        <div style="font-size: 10px; color: var(--text-secondary);">รายรับรวม</div>
+                        <div style="font-size: 10px; color: var(--text-secondary);" data-translate="total_income">รายรับรวม</div>
                         <div style="font-size: 15px; font-weight: 700; color: var(--success); margin-top: 2px;" id="dash-total-income">+฿ 0</div>
                     </div>
                     <div style="background: var(--danger-bg); padding: 10px; border-radius: 12px; border: 1px solid rgba(244, 63, 94, 0.2);">
-                        <div style="font-size: 10px; color: var(--text-secondary);">รายจ่ายรวม</div>
+                        <div style="font-size: 10px; color: var(--text-secondary);" data-translate="total_expense">รายจ่ายรวม</div>
                         <div style="font-size: 15px; font-weight: 700; color: var(--danger); margin-top: 2px;" id="dash-total-expense">-฿ 0</div>
                     </div>
                 </div>
 
                 <div style="background: rgba(59, 130, 246, 0.08); padding: 10px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.2); display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 11px; font-weight: 600; color: var(--primary);">💰 เงินเหลือเก็บสุทธิ:</span>
+                    <span style="font-size: 11px; font-weight: 600; color: var(--primary);" data-translate="net_savings">เงินเหลือเก็บสุทธิ:</span>
                     <span style="font-size: 15px; font-weight: 800; color: var(--text-main);" id="dash-net-savings">฿ 0</span>
                 </div>
             </div>
@@ -592,62 +590,87 @@
             <div class="card-box form-card" style="border-color: rgba(16, 185, 129, 0.3);">
                 <div class="form-title" style="color: var(--success);">
                     <svg class="svg-icon" style="color: var(--success);" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    บันทึกรายรับ (เงินเดือน / โบนัส / ปันผล)
+                    <span data-translate="add_income_title">บันทึกรายรับ (เงินเดือน / โบนัส / ปันผล)</span>
                 </div>
                 <div class="field-group">
-                    <label class="field-label">ประเภทรายรับ</label>
+                    <label class="field-label" data-translate="income_type">ประเภทรายรับ</label>
                     <select class="select-input" id="inc-cat-select">
-                        <option value="เงินเดือนประจำ">เงินเดือนประจำ (Salary)</option>
-                        <option value="โบนัส">โบนัสประจำปี</option>
-                        <option value="เงินปันผล/ดอกเบี้ย">เงินปันผล / ดอกเบี้ยรับ</option>
-                        <option value="รายได้พิเศษ">รายได้พิเศษ / ค่าคอมมิชชัน</option>
+                        <option value="เงินเดือนประจำ" data-translate="inc_salary">เงินเดือนประจำ (Salary)</option>
+                        <option value="โบนัส" data-translate="inc_bonus">โบนัสประจำปี</option>
+                        <option value="เงินปันผล/ดอกเบี้ย" data-translate="inc_div">เงินปันผล / ดอกเบี้ยรับ</option>
+                        <option value="รายได้พิเศษ" data-translate="inc_extra">รายได้พิเศษ / ค่าคอมมิชชัน</option>
                     </select>
                 </div>
                 <div class="field-group">
-                    <label class="field-label">รายละเอียดรายการ</label>
+                    <label class="field-label" data-translate="amount_required">จำนวนเงิน (บาท) *บังคับ</label>
+                    <input type="number" class="text-input" id="inc-amount-input" placeholder="0.00">
+                </div>
+                <div class="field-group">
+                    <label class="field-label" data-translate="desc_optional">รายละเอียดรายการ (ไม่บังคับ)</label>
                     <input type="text" class="text-input" id="inc-name-input" placeholder="เช่น เงินเดือนตุลาคม">
                 </div>
                 <div class="field-group">
-                    <label class="field-label">จำนวนเงิน (บาท)</label>
-                    <input type="number" class="text-input" id="inc-amount-input" placeholder="0.00">
+                    <label class="field-label" data-translate="date_label">วันที่ทำรายการ</label>
+                    <input type="date" class="text-input" id="inc-date-input">
                 </div>
-                <button class="submit-btn success" onclick="addIncomeItem()">+ บันทึกรายรับ</button>
+                <div class="field-group">
+                    <label class="field-label" data-translate="repeat_label">ความถี่ (การทำซ้ำ)</label>
+                    <select class="select-input" id="inc-repeat-select">
+                        <option value="ครั้งเดียว" data-translate="rep_once">ทำครั้งเดียว (Once)</option>
+                        <option value="ทุกเดือน" data-translate="rep_monthly">ทุกเดือน (Monthly)</option>
+                        <option value="ทุก 6 เดือน" data-translate="rep_6m">ทุก 6 เดือน (Every 6 Months)</option>
+                        <option value="ทุกปี" data-translate="rep_yearly">ทุกปี (Annually)</option>
+                    </select>
+                </div>
+                <button class="submit-btn success" onclick="addIncomeItem()" data-translate="btn_save_income">+ บันทึกรายรับ</button>
             </div>
 
             <!-- Add Expense Form -->
             <div class="card-box form-card" style="border-color: rgba(244, 63, 94, 0.3);">
                 <div class="form-title" style="color: var(--danger);">
                     <svg class="svg-icon" style="color: var(--danger);" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    บันทึกรายจ่าย & ค่าใช้จ่ายประจำ
+                    <span data-translate="add_expense_title">บันทึกรายจ่าย & ค่าใช้จ่ายประจำ</span>
                 </div>
                 <div class="field-group">
-                    <label class="field-label">หมวดหมู่รายจ่าย</label>
+                    <label class="field-label" data-translate="expense_category">หมวดหมู่รายจ่าย</label>
                     <select class="select-input" id="exp-cat-select">
-                        <option value="ที่อยู่อาศัย/ค่าน้ำ/ค่าไฟ">🏠 ที่อยู่อาศัย (ค่าบ้าน, ค่าน้ำ, ค่าไฟ, เน็ต)</option>
-                        <option value="ค่าบริการรายเดือน">📱 ค่าบริการ (มือถือ, Netflix, Spotify)</option>
-                        <option value="อาหารและเครื่องดื่ม">🍔 อาหารและเครื่องดื่ม</option>
-                        <option value="เดินทาง">🚗 เดินทาง / น้ำมัน / BTS</option>
-                        <option value="ช้อปปิ้ง">🛍️ ช้อปปิ้ง / ของใช้</option>
+                        <option value="ที่อยู่อาศัย/ค่าน้ำ/ค่าไฟ" data-translate="exp_home">ที่อยู่อาศัย (ค่าบ้าน, ค่าน้ำ, ค่าไฟ, เน็ต)</option>
+                        <option value="ค่าบริการรายเดือน" data-translate="exp_sub">ค่าบริการ (มือถือ, Netflix, Spotify)</option>
+                        <option value="อาหารและเครื่องดื่ม" data-translate="exp_food">อาหารและเครื่องดื่ม</option>
+                        <option value="เดินทาง" data-translate="exp_transport">เดินทาง / น้ำมัน / BTS</option>
+                        <option value="ช้อปปิ้ง" data-translate="exp_shop">ช้อปปิ้ง / ของใช้</option>
                     </select>
                 </div>
                 <div class="field-group">
-                    <label class="field-label">รายละเอียดรายการ</label>
+                    <label class="field-label" data-translate="amount_required">จำนวนเงิน (บาท) *บังคับ</label>
+                    <input type="number" class="text-input" id="exp-amount-input" placeholder="0.00">
+                </div>
+                <div class="field-group">
+                    <label class="field-label" data-translate="desc_optional">รายละเอียดรายการ (ไม่บังคับ)</label>
                     <input type="text" class="text-input" id="exp-name-input" placeholder="เช่น ค่าไฟฟ้า, ค่ามือถือ">
                 </div>
                 <div class="field-group">
-                    <label class="field-label">จำนวนเงิน (บาท)</label>
-                    <input type="number" class="text-input" id="exp-amount-input" placeholder="0.00">
+                    <label class="field-label" data-translate="date_label">วันที่ทำรายการ</label>
+                    <input type="date" class="text-input" id="exp-date-input">
                 </div>
-                <button class="submit-btn danger" onclick="addExpenseItem()">บันทึกรายจ่าย</button>
+                <div class="field-group">
+                    <label class="field-label" data-translate="repeat_label">ความถี่ (การทำซ้ำ)</label>
+                    <select class="select-input" id="exp-repeat-select">
+                        <option value="ครั้งเดียว" data-translate="rep_once">ทำครั้งเดียว (Once)</option>
+                        <option value="ทุกเดือน" data-translate="rep_monthly">ทุกเดือน (Monthly)</option>
+                        <option value="ทุก 6 เดือน" data-translate="rep_6m">ทุก 6 เดือน (Every 6 Months)</option>
+                        <option value="ทุกปี" data-translate="rep_yearly">ทุกปี (Annually)</option>
+                    </select>
+                </div>
+                <button class="submit-btn danger" onclick="addExpenseItem()" data-translate="btn_save_expense">บันทึกรายจ่าย</button>
             </div>
 
-            <!-- Cash Flow List -->
             <div class="card-box">
                 <div class="section-header-row">
-                    <span class="section-title">รายการเงินเข้า-ออก ทั้งหมด</span>
+                    <span class="section-title" data-translate="all_cashflow_title">รายการเงินเข้า-ออก ทั้งหมด</span>
                 </div>
                 <div class="list-stack" id="cashflow-list-container">
-                    <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ยังไม่มีรายการกระแสเงินสด</div>
+                    <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;" data-translate="no_cashflow">ยังไม่มีรายการกระแสเงินสด</div>
                 </div>
             </div>
         </div>
@@ -656,32 +679,167 @@
         <nav class="bottom-nav-bar">
             <div class="nav-item active" onclick="switchMobileView('view-home', this)" id="tab-home">
                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span>หน้าหลัก</span>
+                <span data-translate="nav_home">หน้าหลัก</span>
             </div>
             <div class="nav-item" onclick="switchMobileView('view-wealth', this)" id="tab-wealth">
                 <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                <span>สินทรัพย์</span>
+                <span data-translate="nav_wealth">สินทรัพย์</span>
             </div>
             <div class="nav-item" onclick="switchMobileView('view-expense', this)" id="tab-expense">
                 <svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                <span>รายรับ-จ่าย</span>
+                <span data-translate="nav_cashflow">รายรับ-จ่าย</span>
             </div>
-            <div class="nav-item" onclick="alert('ฟีเจอร์รายงานวิเคราะห์กำลังพัฒนา')">
+            <div class="nav-item" onclick="alert('ฟีเจอร์รายงานวิเคราะห์กำลังพัฒนา / Analytics feature coming soon')">
                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-                <span>วิเคราะห์</span>
+                <span data-translate="nav_analytics">วิเคราะห์</span>
             </div>
         </nav>
 
     </div>
 
-    <!-- Script ควบคุมระบบ -->
+    <!-- Script ควบคุมระบบและภาษา -->
     <script>
+        let currentLang = 'th';
         let totalIncome = 0;
         let totalExpense = 0;
         let assetsList = [];
         let cashflowList = [];
 
-        // ฟังก์ชันสลับโหมด Day / Night
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('inc-date-input').value = today;
+            document.getElementById('exp-date-input').value = today;
+        });
+
+        const translations = {
+            th: {
+                greeting: "ยินดีต้อนรับกลับมา",
+                net_worth: "ความมั่งคั่งสุทธิ (Net Worth)",
+                realtime_calc: "คำนวณจากสินทรัพย์หักหนี้สินแบบเรียลไทม์",
+                total_assets: "สินทรัพย์รวม",
+                total_liabilities: "หนี้สินรวม",
+                calendar_title: "ปฏิทินเงินเข้า-ออก (7 วันนี้)",
+                no_upcoming: "ไม่มีรายการใกล้ถึงกำหนด",
+                add_asset_title: "เพิ่มสินทรัพย์ / เงินลงทุนใหม่",
+                asset_type: "ประเภทสินทรัพย์",
+                opt_deposit: "เงินฝากธนาคาร / สลาก",
+                opt_bond: "หุ้นกู้ / พันธบัตร",
+                opt_stock: "หุ้นสามัญ / กองทุนรวม",
+                current_value_label: "มูลค่าปัจจุบัน (บาท) *บังคับ",
+                asset_name_label: "ชื่อรายการ (ไม่บังคับ)",
+                units_label: "จำนวนหุ้น / หน่วย (ไม่บังคับ)",
+                btn_save_asset: "+ บันทึกเข้าพอร์ต",
+                all_assets_title: "รายการสินทรัพย์ทั้งหมด",
+                no_assets: "ยังไม่มีสินทรัพย์ในพอร์ต",
+                cashflow_summary_title: "สรุปกระแสเงินสดเดือนนี้",
+                total_income: "รายรับรวม",
+                total_expense: "รายจ่ายรวม",
+                net_savings: "เงินเหลือเก็บสุทธิ:",
+                add_income_title: "บันทึกรายรับ (เงินเดือน / โบนัส / ปันผล)",
+                income_type: "ประเภทรายรับ",
+                inc_salary: "เงินเดือนประจำ (Salary)",
+                inc_bonus: "โบนัสประจำปี",
+                inc_div: "เงินปันผล / ดอกเบี้ยรับ",
+                inc_extra: "รายได้พิเศษ / ค่าคอมมิชชัน",
+                amount_required: "จำนวนเงิน (บาท) *บังคับ",
+                desc_optional: "รายละเอียดรายการ (ไม่บังคับ)",
+                date_label: "วันที่ทำรายการ",
+                repeat_label: "ความถี่ (การทำซ้ำ)",
+                rep_once: "ทำครั้งเดียว (Once)",
+                rep_monthly: "ทุกเดือน (Monthly)",
+                rep_6m: "ทุก 6 เดือน (Every 6 Months)",
+                rep_yearly: "ทุกปี (Annually)",
+                btn_save_income: "+ บันทึกรายรับ",
+                add_expense_title: "บันทึกรายจ่าย & ค่าใช้จ่ายประจำ",
+                expense_category: "หมวดหมู่รายจ่าย",
+                exp_home: "ที่อยู่อาศัย (ค่าบ้าน, ค่าน้ำ, ค่าไฟ, เน็ต)",
+                exp_sub: "ค่าบริการ (มือถือ, Netflix, Spotify)",
+                exp_food: "อาหารและเครื่องดื่ม",
+                exp_transport: "เดินทาง / น้ำมัน / BTS",
+                exp_shop: "ช้อปปิ้ง / ของใช้",
+                btn_save_expense: "บันทึกรายจ่าย",
+                all_cashflow_title: "รายการเงินเข้า-ออก ทั้งหมด",
+                no_cashflow: "ยังไม่มีรายการกระแสเงินสด",
+                nav_home: "หน้าหลัก",
+                nav_wealth: "สินทรัพย์",
+                nav_cashflow: "รายรับ-จ่าย",
+                nav_analytics: "วิเคราะห์",
+                edit: "แก้ไข",
+                delete: "ลบ"
+            },
+            en: {
+                greeting: "Welcome back",
+                net_worth: "Net Worth",
+                realtime_calc: "Calculated from assets minus liabilities",
+                total_assets: "Total Assets",
+                total_liabilities: "Total Liabilities",
+                calendar_title: "Upcoming Cash Flow (Next 7 Days)",
+                no_upcoming: "No upcoming items",
+                add_asset_title: "Add New Asset / Investment",
+                asset_type: "Asset Type",
+                opt_deposit: "Bank Deposit / Lottery",
+                opt_bond: "Corporate Bond",
+                opt_stock: "Stocks / Mutual Funds",
+                current_value_label: "Current Value (THB) *Required",
+                asset_name_label: "Item Name (Optional)",
+                units_label: "Units / Shares (Optional)",
+                btn_save_asset: "+ Save to Portfolio",
+                all_assets_title: "All Assets",
+                no_assets: "No assets in portfolio yet",
+                cashflow_summary_title: "Monthly Cash Flow Summary",
+                total_income: "Total Income",
+                total_expense: "Total Expense",
+                net_savings: "Net Savings:",
+                add_income_title: "Record Income (Salary / Bonus)",
+                income_type: "Income Type",
+                inc_salary: "Monthly Salary",
+                inc_bonus: "Annual Bonus",
+                inc_div: "Dividend / Interest",
+                inc_extra: "Extra Income / Commission",
+                amount_required: "Amount (THB) *Required",
+                desc_optional: "Description (Optional)",
+                date_label: "Transaction Date",
+                repeat_label: "Frequency (Recurrence)",
+                rep_once: "Once",
+                rep_monthly: "Monthly",
+                rep_6m: "Every 6 Months",
+                rep_yearly: "Annually",
+                btn_save_income: "+ Record Income",
+                add_expense_title: "Record Expense & Fixed Bills",
+                expense_category: "Expense Category",
+                exp_home: "Housing (Rent, Utilities, Internet)",
+                exp_sub: "Subscriptions (Mobile, Netflix, Spotify)",
+                exp_food: "Food & Beverages",
+                exp_transport: "Transport / Fuel / BTS",
+                exp_shop: "Shopping / General",
+                btn_save_expense: "Record Expense",
+                all_cashflow_title: "All Cash Flow Transactions",
+                no_cashflow: "No cash flow records yet",
+                nav_home: "Home",
+                nav_wealth: "Wealth",
+                nav_cashflow: "Cash Flow",
+                nav_analytics: "Analytics",
+                edit: "Edit",
+                delete: "Delete"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'th' ? 'en' : 'th';
+            document.getElementById('lang-btn').innerText = currentLang === 'th' ? 'EN' : 'TH';
+            
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[currentLang][key]) {
+                    el.innerText = translations[currentLang][key];
+                }
+            });
+
+            renderAssets();
+            renderCashflow();
+            updateSystem();
+        }
+
         function toggleTheme() {
             const htmlEl = document.documentElement;
             const iconEl = document.getElementById('theme-icon');
@@ -689,11 +847,9 @@
 
             if (currentTheme === 'light') {
                 htmlEl.removeAttribute('data-theme');
-                // เปลี่ยนเป็นไอคอนพระอาทิตย์ (Night Mode อยู่)
                 iconEl.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
             } else {
                 htmlEl.setAttribute('data-theme', 'light');
-                // เปลี่ยนเป็นไอคอนพระจันทร์ (Light Mode อยู่)
                 iconEl.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
             }
         }
@@ -708,9 +864,9 @@
             
             if (totalIncome > 0) {
                 const savingsRate = Math.round((netSavings / totalIncome) * 100);
-                document.getElementById('dash-savings-rate').innerText = `ออมสุทธิ ${savingsRate}%`;
+                document.getElementById('dash-savings-rate').innerText = (currentLang === 'th' ? `ออมสุทธิ ${savingsRate}%` : `Net Savings ${savingsRate}%`);
             } else {
-                document.getElementById('dash-savings-rate').innerText = `ออมสุทธิ 0%`;
+                document.getElementById('dash-savings-rate').innerText = (currentLang === 'th' ? `ออมสุทธิ 0%` : `Net Savings 0%`);
             }
 
             let totalAssets = assetsList.reduce((sum, item) => sum + item.value, 0);
@@ -733,31 +889,53 @@
         }
 
         function addNewAssetItem() {
-            const name = document.getElementById('asset-name-input').value.trim();
+            let name = document.getElementById('asset-name-input').value.trim();
             const value = parseFloat(document.getElementById('asset-value-input').value);
+            const unitsInput = document.getElementById('asset-units-input').value.trim();
+            const units = unitsInput ? parseFloat(unitsInput) : null;
             const type = document.getElementById('asset-type-select').value;
 
-            if (!name || isNaN(value)) {
-                alert('กรุณากรอกชื่อและมูลค่าให้ถูกต้องครับ');
+            if (isNaN(value)) {
+                alert(currentLang === 'th' ? 'กรุณากรอกมูลค่าปัจจุบันให้ถูกต้องครับ' : 'Please enter a valid current value.');
                 return;
             }
 
-            const newItem = { id: Date.now(), name, value, type };
+            if (!name) {
+                name = `${currentLang === 'th' ? 'สินทรัพย์' : 'Asset'} (${type})`;
+            }
+
+            const newItem = { id: Date.now(), name, value, units, type };
             assetsList.push(newItem);
             renderAssets();
             updateSystem();
 
             document.getElementById('asset-name-input').value = '';
             document.getElementById('asset-value-input').value = '';
+            document.getElementById('asset-units-input').value = '';
         }
 
-        function adjustAsset(id, amount) {
+        function editAsset(id) {
             const asset = assetsList.find(item => item.id === id);
-            if (asset) {
-                asset.value += amount;
-                if (asset.value < 0) asset.value = 0;
+            if (!asset) return;
+
+            const newName = prompt(currentLang === 'th' ? 'แก้ไขชื่อรายการ:' : 'Edit item name:', asset.name);
+            if (newName === null) return;
+
+            const newValueStr = prompt(currentLang === 'th' ? 'แก้ไขมูลค่าปัจจุบัน (บาท):' : 'Edit current value (THB):', asset.value);
+            if (newValueStr === null) return;
+            const newValue = parseFloat(newValueStr);
+
+            const newUnitsStr = prompt(currentLang === 'th' ? 'แก้ไขจำนวนหุ้น/หน่วย (เว้นว่างได้):' : 'Edit units (Optional):', asset.units !== null ? asset.units : '');
+            const newUnits = newUnitsStr ? parseFloat(newUnitsStr) : null;
+
+            if (!isNaN(newValue)) {
+                asset.name = newName.trim() ? newName.trim() : asset.name;
+                asset.value = newValue;
+                asset.units = newUnits;
                 renderAssets();
                 updateSystem();
+            } else {
+                alert(currentLang === 'th' ? 'มูลค่าไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง' : 'Invalid value. Please try again.');
             }
         }
 
@@ -770,12 +948,14 @@
         function renderAssets() {
             const container = document.getElementById('asset-list-container');
             if (assetsList.length === 0) {
-                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ยังไม่มีสินทรัพย์ในพอร์ต</div>`;
+                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">${translations[currentLang].no_assets}</div>`;
                 return;
             }
 
             container.innerHTML = '';
             assetsList.forEach(item => {
+                const unitsText = item.units !== null ? `(${item.units.toLocaleString()} ${currentLang === 'th' ? 'หน่วย' : 'units'})` : '';
+                const subText = `${item.type} ${unitsText}`;
                 const row = document.createElement('div');
                 row.className = 'list-item';
                 row.innerHTML = `
@@ -785,15 +965,14 @@
                         </div>
                         <div>
                             <div class="item-title">${item.name}</div>
-                            <div class="item-sub">${item.type}</div>
+                            <div class="item-sub">${subText}</div>
                         </div>
                     </div>
                     <div class="item-right">
                         <div class="item-amount">฿ ${item.value.toLocaleString()}</div>
                         <div class="action-btns-row">
-                            <button class="btn-mini" onclick="adjustAsset(${item.id}, 1000)">+ซื้อ</button>
-                            <button class="btn-mini" onclick="adjustAsset(${item.id}, -1000)">-ขาย</button>
-                            <button class="btn-mini danger" onclick="deleteAsset(${item.id})">ลบ</button>
+                            <button class="btn-mini" onclick="editAsset(${item.id})">${translations[currentLang].edit}</button>
+                            <button class="btn-mini danger" onclick="deleteAsset(${item.id})">${translations[currentLang].delete}</button>
                         </div>
                     </div>
                 `;
@@ -801,18 +980,43 @@
             });
         }
 
+        // คืนค่า SVG Icon ตามหมวดหมู่รายการ
+        function getCategorySvgIcon(category, type) {
+            if (type === 'income') {
+                return '<svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>';
+            }
+            // สำหรับรายจ่าย แยกตามหมวดหมู่
+            if (category.includes('ที่อยู่อาศัย')) {
+                return '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>';
+            } else if (category.includes('ค่าบริการ')) {
+                return '<svg class="svg-icon" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>';
+            } else if (category.includes('อาหาร')) {
+                return '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>';
+            } else if (category.includes('เดินทาง')) {
+                return '<svg class="svg-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="22" height="13" rx="2" ry="2"></rect><line x1="1" y1="16" x2="23" y2="16"></line><circle cx="5" cy="19" r="2"></circle><circle cx="19" cy="19" r="2"></circle></svg>';
+            } else {
+                return '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>';
+            }
+        }
+
         function addIncomeItem() {
-            const name = document.getElementById('inc-name-input').value.trim();
+            let name = document.getElementById('inc-name-input').value.trim();
             const amount = parseFloat(document.getElementById('inc-amount-input').value);
             const category = document.getElementById('inc-cat-select').value;
+            const date = document.getElementById('inc-date-input').value;
+            const repeat = document.getElementById('inc-repeat-select').value;
 
-            if (!name || isNaN(amount)) {
-                alert('กรุณากรอกข้อมูลรายรับให้ครบถ้วนครับ');
+            if (isNaN(amount)) {
+                alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินรายรับให้ถูกต้องครับ' : 'Please enter a valid income amount.');
                 return;
             }
 
+            if (!name) {
+                name = `${currentLang === 'th' ? 'รายรับ' : 'Income'} (${category})`;
+            }
+
             totalIncome += amount;
-            cashflowList.push({ id: Date.now(), name, amount, type: 'income', category });
+            cashflowList.push({ id: Date.now(), name, amount, type: 'income', category, date, repeat });
             renderCashflow();
             updateSystem();
 
@@ -821,17 +1025,23 @@
         }
 
         function addExpenseItem() {
-            const name = document.getElementById('exp-name-input').value.trim();
+            let name = document.getElementById('exp-name-input').value.trim();
             const amount = parseFloat(document.getElementById('exp-amount-input').value);
             const category = document.getElementById('exp-cat-select').value;
+            const date = document.getElementById('exp-date-input').value;
+            const repeat = document.getElementById('exp-repeat-select').value;
 
-            if (!name || isNaN(amount)) {
-                alert('กรุณากรอกข้อมูลรายจ่ายให้ครบถ้วนครับ');
+            if (isNaN(amount)) {
+                alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินรายจ่ายให้ถูกต้องครับ' : 'Please enter a valid expense amount.');
                 return;
             }
 
+            if (!name) {
+                name = `${currentLang === 'th' ? 'รายจ่าย' : 'Expense'} (${category})`;
+            }
+
             totalExpense += amount;
-            cashflowList.push({ id: Date.now(), name, amount, type: 'expense', category });
+            cashflowList.push({ id: Date.now(), name, amount, type: 'expense', category, date, repeat });
             renderCashflow();
             updateSystem();
 
@@ -853,28 +1063,31 @@
         function renderCashflow() {
             const container = document.getElementById('cashflow-list-container');
             if (cashflowList.length === 0) {
-                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ยังไม่มีรายการกระแสเงินสด</div>`;
+                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">${translations[currentLang].no_cashflow}</div>`;
                 return;
             }
 
             container.innerHTML = '';
             cashflowList.forEach(item => {
                 const isInc = item.type === 'income';
+                const subDetail = `${item.category} • ${item.date || '-'} • [${item.repeat}]`;
+                const svgIconHtml = getCategorySvgIcon(item.category, item.type);
+                
                 const row = document.createElement('div');
                 row.className = 'list-item';
                 row.innerHTML = `
                     <div class="item-left">
                         <div class="item-icon" style="color: ${isInc ? 'var(--success)' : 'var(--danger)'}; background: ${isInc ? 'var(--success-bg)' : 'var(--danger-bg)'};">
-                            <svg class="svg-icon" viewBox="0 0 24 24">${isInc ? '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline>' : '<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline>'}</svg>
+                            ${svgIconHtml}
                         </div>
                         <div>
                             <div class="item-title">${item.name}</div>
-                            <div class="item-sub">${item.category}</div>
+                            <div class="item-sub">${subDetail}</div>
                         </div>
                     </div>
                     <div class="item-right">
                         <div class="item-amount ${isInc ? 'val-plus' : 'val-minus'}">${isInc ? '+' : '-'}฿ ${item.amount.toLocaleString()}</div>
-                        <button class="btn-mini danger" onclick="deleteCashflow(${item.id})">ลบ</button>
+                        <button class="btn-mini danger" onclick="deleteCashflow(${item.id})">${translations[currentLang].delete}</button>
                     </div>
                 `;
                 container.appendChild(row);
