@@ -548,6 +548,10 @@
                     <label class="field-label" data-translate="units_label">จำนวนหุ้น / หน่วย (ไม่บังคับ)</label>
                     <input type="number" class="text-input" id="asset-units-input" placeholder="เช่น 1000">
                 </div>
+                <div class="field-group">
+                    <label class="field-label" data-translate="date_label">วันที่บันทึกรายการ</label>
+                    <input type="date" class="text-input" id="asset-date-input">
+                </div>
                 <button class="submit-btn" onclick="addNewAssetItem()" data-translate="btn_save_asset">+ บันทึกเข้าพอร์ต</button>
             </div>
 
@@ -712,6 +716,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
+            document.getElementById('asset-date-input').value = today;
             document.getElementById('inc-date-input').value = today;
             document.getElementById('exp-date-input').value = today;
         });
@@ -911,6 +916,7 @@
             const unitsInput = document.getElementById('asset-units-input').value.trim();
             const units = unitsInput ? parseFloat(unitsInput) : null;
             const type = document.getElementById('asset-type-select').value;
+            const date = document.getElementById('asset-date-input').value;
 
             if (isNaN(value)) {
                 alert(currentLang === 'th' ? 'กรุณากรอกมูลค่าปัจจุบันให้ถูกต้องครับ' : 'Please enter a valid current value.');
@@ -921,7 +927,7 @@
                 name = `${currentLang === 'th' ? 'สินทรัพย์' : 'Asset'} (${type})`;
             }
 
-            const newItem = { id: Date.now(), name, value, units, type };
+            const newItem = { id: Date.now(), name, value, units, type, date };
             assetsList.push(newItem);
             renderAssets();
             updateSystem();
@@ -972,7 +978,7 @@
             container.innerHTML = '';
             assetsList.forEach(item => {
                 const unitsText = item.units !== null ? `(${item.units.toLocaleString()} ${currentLang === 'th' ? 'หน่วย' : 'units'})` : '';
-                const subText = `${item.type} ${unitsText}`;
+                const subText = `${item.type} ${unitsText} • ${item.date || '-'}`;
                 const row = document.createElement('div');
                 row.className = 'list-item';
                 row.innerHTML = `
@@ -1019,7 +1025,7 @@
             const amount = parseFloat(document.getElementById('inc-amount-input').value);
             const category = document.getElementById('inc-cat-select').value;
             const repeat = document.getElementById('inc-repeat-select').value;
-            const date = repeat === 'ระบุเอง' ? document.getElementById('inc-date-input').value : '-';
+            const date = repeat === 'ระบุเอง' ? document.getElementById('inc-date-input').value : new Date().toISOString().split('T')[0];
 
             if (isNaN(amount)) {
                 alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินรายรับให้ถูกต้องครับ' : 'Please enter a valid income amount.');
@@ -1044,7 +1050,7 @@
             const amount = parseFloat(document.getElementById('exp-amount-input').value);
             const category = document.getElementById('exp-cat-select').value;
             const repeat = document.getElementById('exp-repeat-select').value;
-            const date = repeat === 'ระบุเอง' ? document.getElementById('exp-date-input').value : '-';
+            const date = repeat === 'ระบุเอง' ? document.getElementById('exp-date-input').value : new Date().toISOString().split('T')[0];
 
             if (isNaN(amount)) {
                 alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินรายจ่ายให้ถูกต้องครับ' : 'Please enter a valid expense amount.');
@@ -1085,7 +1091,7 @@
             container.innerHTML = '';
             cashflowList.forEach(item => {
                 const isInc = item.type === 'income';
-                const subDetail = item.repeat === 'ระบุเอง' ? `${item.category} • ${item.date} • [${item.repeat}]` : `${item.category} • [${item.repeat}]`;
+                const subDetail = `${item.category} • ${item.date || '-'} • [${item.repeat}]`;
                 const svgIconHtml = getCategorySvgIcon(item.category, item.type);
                 
                 const row = document.createElement('div');
