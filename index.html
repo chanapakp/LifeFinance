@@ -258,6 +258,72 @@
             gap: 6px;
         }
 
+        /* Chart Styles */
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .donut-chart {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: var(--surface-hover);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donut-hole {
+            width: 85px;
+            height: 85px;
+            background: var(--surface);
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .donut-hole-title {
+            font-size: 9px;
+            color: var(--text-secondary);
+        }
+
+        .donut-hole-val {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .legend-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+        }
+
         .list-stack {
             display: flex;
             flex-direction: column;
@@ -511,6 +577,24 @@
                 </div>
             </div>
 
+            <!-- Asset Breakdown Chart Card -->
+            <div class="card-box">
+                <div class="section-header-row">
+                    <span class="section-title" data-translate="asset_breakdown_title">สัดส่วนประเภทสินทรัพย์</span>
+                </div>
+                <div class="chart-container">
+                    <div class="donut-chart" id="asset-donut-chart">
+                        <div class="donut-hole">
+                            <span class="donut-hole-title" data-translate="total_assets_hole">สินทรัพย์รวม</span>
+                            <span class="donut-hole-val" id="asset-donut-val">฿0</span>
+                        </div>
+                    </div>
+                    <div class="chart-legend" id="asset-chart-legend">
+                        <div style="font-size: 11px; color: var(--text-secondary);" data-translate="no_assets">ยังไม่มีสินทรัพย์ในพอร์ต</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card-box">
                 <div class="section-header-row">
                     <span class="section-title" data-translate="calendar_title">ปฏิทินเงินเข้า-ออก (7 วันนี้)</span>
@@ -591,6 +675,24 @@
                 <div style="background: rgba(59, 130, 246, 0.08); padding: 10px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.2); display: flex; justify-content: space-between; align-items: center;">
                     <span style="font-size: 11px; font-weight: 600; color: var(--primary);" data-translate="net_savings">เงินเหลือเก็บสุทธิ:</span>
                     <span style="font-size: 15px; font-weight: 800; color: var(--text-main);" id="dash-net-savings">฿ 0</span>
+                </div>
+            </div>
+
+            <!-- Expense Breakdown Chart Card -->
+            <div class="card-box">
+                <div class="section-header-row">
+                    <span class="section-title" data-translate="expense_breakdown_title">สัดส่วนประเภทรายจ่าย</span>
+                </div>
+                <div class="chart-container">
+                    <div class="donut-chart" id="expense-donut-chart">
+                        <div class="donut-hole">
+                            <span class="donut-hole-title" data-translate="total_expense_hole">รายจ่ายรวม</span>
+                            <span class="donut-hole-val" id="expense-donut-val">฿0</span>
+                        </div>
+                    </div>
+                    <div class="chart-legend" id="expense-chart-legend">
+                        <div style="font-size: 11px; color: var(--text-secondary);" data-translate="no_cashflow">ยังไม่มีรายการกระแสเงินสด</div>
+                    </div>
                 </div>
             </div>
 
@@ -715,7 +817,7 @@
 
     </div>
 
-    <!-- Script ควบคุมระบบและภาษา -->
+    <!-- Script ควบคุมระบบ กราฟ และภาษา -->
     <script>
         let currentLang = 'th';
         let totalIncome = 0;
@@ -723,13 +825,15 @@
         let assetsList = [];
         let cashflowList = [];
 
+        const chartColors = ['#3b82f6', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#ec4899', '#06b6d4'];
+
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('asset-date-input').value = today;
             document.getElementById('inc-date-input').value = today;
             document.getElementById('exp-date-input').value = today;
             
-            checkAutomatedRecurringTransactions();
+            updateSystem();
         });
 
         function handleRepeatChange(type) {
@@ -751,6 +855,10 @@
                 total_liabilities: "หนี้สินรวม",
                 calendar_title: "ปฏิทินเงินเข้า-ออก (7 วันนี้)",
                 no_upcoming: "ไม่มีรายการใกล้ถึงกำหนด",
+                asset_breakdown_title: "สัดส่วนประเภทสินทรัพย์",
+                total_assets_hole: "สินทรัพย์รวม",
+                expense_breakdown_title: "สัดส่วนประเภทรายจ่าย",
+                total_expense_hole: "รายจ่ายรวม",
                 add_asset_title: "เพิ่มสินทรัพย์ / เงินลงทุนใหม่",
                 asset_type: "ประเภทสินทรัพย์",
                 opt_deposit: "เงินฝากธนาคาร / สลาก",
@@ -809,6 +917,10 @@
                 total_liabilities: "Total Liabilities",
                 calendar_title: "Upcoming Cash Flow (Next 7 Days)",
                 no_upcoming: "No upcoming items",
+                asset_breakdown_title: "Asset Allocation Breakdown",
+                total_assets_hole: "Total Assets",
+                expense_breakdown_title: "Expense Breakdown",
+                total_expense_hole: "Total Expense",
                 add_asset_title: "Add New Asset / Investment",
                 asset_type: "Asset Type",
                 opt_deposit: "Bank Deposit / Lottery",
@@ -889,6 +1001,9 @@
                 htmlEl.setAttribute('data-theme', 'light');
                 iconEl.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
             }
+            
+            renderAssetChart();
+            renderExpenseChart();
         }
 
         function updateSystem() {
@@ -913,6 +1028,11 @@
             document.getElementById('home-total-assets').innerText = '฿ ' + totalAssets.toLocaleString();
             document.getElementById('home-total-liabilities').innerText = '฿ ' + totalLiabilities.toLocaleString();
             document.getElementById('home-networth').innerText = '฿ ' + netWorth.toLocaleString();
+            document.getElementById('asset-donut-val').innerText = '฿ ' + totalAssets.toLocaleString();
+            document.getElementById('expense-donut-val').innerText = '-฿ ' + totalExpense.toLocaleString();
+
+            renderAssetChart();
+            renderExpenseChart();
         }
 
         function switchMobileView(viewId, navEl) {
@@ -1016,6 +1136,53 @@
                 `;
                 container.appendChild(row);
             });
+        }
+
+        function renderAssetChart() {
+            const chartEl = document.getElementById('asset-donut-chart');
+            const legendEl = document.getElementById('asset-chart-legend');
+            
+            if (assetsList.length === 0) {
+                const surfaceHover = getComputedStyle(document.documentElement).getPropertyValue('--surface-hover').trim();
+                chartEl.style.background = surfaceHover;
+                legendEl.innerHTML = `<div style="font-size: 11px; color: var(--text-secondary);">${translations[currentLang].no_assets}</div>`;
+                return;
+            }
+
+            let grouped = {};
+            let total = 0;
+            assetsList.forEach(item => {
+                grouped[item.type] = (grouped[item.type] || 0) + item.value;
+                total += item.value;
+            });
+
+            let cumulativePercent = 0;
+            let conicStops = [];
+            let legendHtml = '';
+            let colorIdx = 0;
+
+            for (let type in grouped) {
+                let amount = grouped[type];
+                let percent = (amount / total) * 100;
+                let color = chartColors[colorIdx % chartColors.length];
+                
+                let startAngle = cumulativePercent * 3.6;
+                cumulativePercent += percent;
+                let endAngle = cumulativePercent * 3.6;
+
+                conicStops.push(`${color} ${startAngle}deg ${endAngle}deg`);
+
+                legendHtml += `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: ${color};"></div>
+                        <span>${type} (${Math.round(percent)}%)</span>
+                    </div>
+                `;
+                colorIdx++;
+            }
+
+            chartEl.style.background = `conic-gradient(${conicStops.join(', ')})`;
+            legendEl.innerHTML = legendHtml;
         }
 
         function getCategorySvgIcon(category, type) {
@@ -1144,8 +1311,53 @@
             });
         }
 
-        function checkAutomatedRecurringTransactions() {
-            console.log("ระบบตรวจสอบรอบความถี่อัตโนมัติพร้อมทำงานแล้ว");
+        function renderExpenseChart() {
+            const chartEl = document.getElementById('expense-donut-chart');
+            const legendEl = document.getElementById('expense-chart-legend');
+            
+            const expenses = cashflowList.filter(item => item.type === 'expense');
+
+            if (expenses.length === 0) {
+                const surfaceHover = document.documentElement.getAttribute('data-theme') === 'light' ? '#e2e8f0' : '#1b2436';
+                chartEl.style.background = surfaceHover;
+                legendEl.innerHTML = `<div style="font-size: 11px; color: var(--text-secondary);">${translations[currentLang].no_cashflow}</div>`;
+                return;
+            }
+
+            let grouped = {};
+            let total = 0;
+            expenses.forEach(item => {
+                grouped[item.category] = (grouped[item.category] || 0) + item.amount;
+                total += item.amount;
+            });
+
+            let cumulativePercent = 0;
+            let conicStops = [];
+            let legendHtml = '';
+            let colorIdx = 0;
+
+            for (let cat in grouped) {
+                let amount = grouped[cat];
+                let percent = (amount / total) * 100;
+                let color = chartColors[colorIdx % chartColors.length];
+                
+                let startAngle = cumulativePercent * 3.6;
+                cumulativePercent += percent;
+                let endAngle = cumulativePercent * 3.6;
+
+                conicStops.push(`${color} ${startAngle}deg ${endAngle}deg`);
+
+                legendHtml += `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: ${color};"></div>
+                        <span>${cat.split('/')[0]} (${Math.round(percent)}%)</span>
+                    </div>
+                `;
+                colorIdx++;
+            }
+
+            chartEl.style.background = `conic-gradient(${conicStops.join(', ')})`;
+            legendEl.innerHTML = legendHtml;
         }
     </script>
 </body>
