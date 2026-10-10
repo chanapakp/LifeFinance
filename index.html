@@ -1084,6 +1084,7 @@
             const newValue = parseFloat(newValueStr);
 
             const newUnitsStr = prompt(currentLang === 'th' ? 'แก้ไขจำนวนหุ้น/หน่วย (เว้นว่างได้):' : 'Edit units (Optional):', asset.units !== null ? asset.units : '');
+            if (newUnitsStr === null) return;
             const newUnits = newUnitsStr ? parseFloat(newUnitsStr) : null;
 
             if (!isNaN(newValue)) {
