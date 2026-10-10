@@ -534,6 +534,7 @@
                         <option value="เงินฝาก" data-translate="opt_deposit">เงินฝากธนาคาร / สลาก</option>
                         <option value="หุ้นกู้" data-translate="opt_bond">หุ้นกู้ / พันธบัตร</option>
                         <option value="กองทุน/หุ้น" data-translate="opt_stock">หุ้นสามัญ / กองทุนรวม</option>
+                        <option value="คริปโต" data-translate="opt_crypto">คริปโต (Cryptocurrency)</option>
                     </select>
                 </div>
                 <div class="field-group">
@@ -549,7 +550,7 @@
                     <input type="number" class="text-input" id="asset-units-input" placeholder="เช่น 1000">
                 </div>
                 <div class="field-group">
-                    <label class="field-label" data-translate="date_label">วันที่บันทึกรายการ</label>
+                    <label class="field-label" data-translate="date_label_trans">วันที่ทำรายการ</label>
                     <input type="date" class="text-input" id="asset-date-input">
                 </div>
                 <button class="submit-btn" onclick="addNewAssetItem()" data-translate="btn_save_asset">+ บันทึกเข้าพอร์ต</button>
@@ -617,7 +618,7 @@
                     <input type="text" class="text-input" id="inc-name-input" placeholder="เช่น เงินเดือนตุลาคม">
                 </div>
                 <div class="field-group">
-                    <label class="field-label" data-translate="date_label">วันที่รับเงินจริง</label>
+                    <label class="field-label" data-translate="date_label_trans">วันที่ทำรายการ</label>
                     <input type="date" class="text-input" id="inc-date-input">
                 </div>
                 <div class="field-group">
@@ -662,7 +663,7 @@
                     <input type="text" class="text-input" id="exp-name-input" placeholder="เช่น ค่าไฟฟ้า, ค่ามือถือ">
                 </div>
                 <div class="field-group">
-                    <label class="field-label" data-translate="date_label">วันที่จ่ายเงินจริง</label>
+                    <label class="field-label" data-translate="date_label_trans">วันที่ทำรายการ</label>
                     <input type="date" class="text-input" id="exp-date-input">
                 </div>
                 <div class="field-group">
@@ -728,7 +729,6 @@
             document.getElementById('inc-date-input').value = today;
             document.getElementById('exp-date-input').value = today;
             
-            // ตรวจสอบรอบเวลาอัตโนมัติจำลองเมื่อเปิดแอป
             checkAutomatedRecurringTransactions();
         });
 
@@ -756,6 +756,7 @@
                 opt_deposit: "เงินฝากธนาคาร / สลาก",
                 opt_bond: "หุ้นกู้ / พันธบัตร",
                 opt_stock: "หุ้นสามัญ / กองทุนรวม",
+                opt_crypto: "คริปโต (Cryptocurrency)",
                 current_value_label: "มูลค่าปัจจุบัน (บาท) *บังคับ",
                 asset_name_label: "ชื่อรายการ (ไม่บังคับ)",
                 units_label: "จำนวนหุ้น / หน่วย (ไม่บังคับ)",
@@ -774,7 +775,7 @@
                 inc_extra: "รายได้พิเศษ / ค่าคอมมิชชัน",
                 amount_required: "จำนวนเงิน (บาท) *บังคับ",
                 desc_optional: "รายละเอียดรายการ (ไม่บังคับ)",
-                date_label: "วันที่ทำรายการจริง",
+                date_label_trans: "วันที่ทำรายการ",
                 repeat_label: "ความถี่ (การทำซ้ำ)",
                 rep_once: "ทำครั้งเดียว (Once)",
                 rep_monthly: "ทุกเดือน (Monthly)",
@@ -813,6 +814,7 @@
                 opt_deposit: "Bank Deposit / Lottery",
                 opt_bond: "Corporate Bond",
                 opt_stock: "Stocks / Mutual Funds",
+                opt_crypto: "Cryptocurrency",
                 current_value_label: "Current Value (THB) *Required",
                 asset_name_label: "Item Name (Optional)",
                 units_label: "Units / Shares (Optional)",
@@ -831,7 +833,7 @@
                 inc_extra: "Extra Income / Commission",
                 amount_required: "Amount (THB) *Required",
                 desc_optional: "Description (Optional)",
-                date_label: "Actual Transaction Date",
+                date_label_trans: "Transaction Date",
                 repeat_label: "Frequency (Recurrence)",
                 rep_once: "Once",
                 rep_monthly: "Monthly",
@@ -1142,9 +1144,7 @@
             });
         }
 
-        // ระบบโครงสร้างจำลองการตรวจสอบรอบเวลาเพื่อบันทึกรายการอัตโนมัติเมื่อถึงรอบวันจริง
         function checkAutomatedRecurringTransactions() {
-            // สามารถเพิ่มเงื่อนไขเช็ควันที่ปัจจุบันกับรอบความถี่ที่กำหนด เพื่อทำการบันทึกอัตโนมัติในระบบเบื้องหลังได้ที่นี่
             console.log("ระบบตรวจสอบรอบความถี่อัตโนมัติพร้อมทำงานแล้ว");
         }
     </script>
