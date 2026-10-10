@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All-in-One Life Finance Tracker - Mock UI</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #eff6ff;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #ca8a04;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Phone Frame */
+        .phone-mockup {
+            width: 380px;
+            height: 780px;
+            background-color: var(--bg-color);
+            border: 12px solid #334155;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Screen Header */
+        .header {
+            background-color: var(--card-bg);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .header-title {
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        /* Scrollable Content */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .net-worth-card {
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            color: white;
+            border: none;
+        }
+
+        .net-worth-card .sub-text {
+            color: #93c5fd;
+            font-size: 13px;
+        }
+
+        .net-worth-card .amount {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 6px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-success { background-color: #dcfce7; color: var(--success); }
+        .badge-warning { background-color: #fef9c3; color: var(--warning); }
+        .badge-danger { background-color: #fee2e2; color: var(--danger); }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* List Items */
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        .item-info div:first-child {
+            font-weight: 600;
+        }
+
+        .item-info div:last-child {
+            font-size: 11px;
+            color: var(--text-sub);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background-color: var(--border);
+            border-radius: 8px;
+            height: 8px;
+            width: 100%;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-bar {
+            background-color: var(--primary);
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            font-size: 11px;
+            color: var(--text-sub);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Tabs Navigation for switching screens */
+        .screen-selector {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .screen-selector button {
+            background-color: #334155;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            margin: 4px;
+            transition: background 0.2s;
+        }
+
+        .screen-selector button.active, .screen-selector button:hover {
+            background-color: var(--primary);
+        }
+
+        .screen {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="screen-selector">
+        <p style="color: #94a3b8; margin-bottom: 8px; font-size: 14px;">คลิกเลือกหน้าจอ Mockup ที่ต้องการดู:</p>
+        <button onclick="switchScreen('screen1')" id="btn-screen1" class="active">1. Home / Net Worth</button>
+        <button onclick="switchScreen('screen2')" id="btn-screen2">2. Wealth & Investments</button>
+        <button onclick="switchScreen('screen3')" id="btn-screen3">3. Cash Flow & Expenses</button>
+    </div>
+
+    <div class="container">
+        <div class="phone-mockup">
+            
+            <!-- SCREEN 1: Home Dashboard -->
+            <div id="screen1" class="screen active">
+                <div class="header">
+                    <span class="header-title">👋 สวัสดี, คุณสมชาย</span>
+                    <span>🔔</span>
+                </div>
+                <div class="content">
+                    <div class="card net-worth-card">
+                        <div class="sub-text">มูลค่าทรัพย์สินสุทธิ (Net Worth) 👁️</div>
+                        <div class="amount">฿ 2,450,000</div>
+                        <div class="sub-text" style="color: #4ade80;">▲ +3.2% จากเดือนที่แล้ว</div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 12px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px;">
+                            <span>สินทรัพย์: ฿2,700,000</span>
+                            <span>หนี้สิน: ฿250,000</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title">สัดส่วนสินทรัพย์ (Asset Allocation)</div>
+                        <div style="display: flex; height: 10px; border-radius: 5px; overflow: hidden; gap: 2px; margin-bottom: 8px;">
+                            <div style="width: 55%; background-color: #2563eb;" title="Investments"></div>
+                            <div style="width: 35%; background-color: #16a34a;" title="Cash"></div>
+                            <div style="width: 10%; background-color: #ca8a04;" title="Bonds"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub);">
+                            <span>🔵 ลงทุน 55%</span>
+                            <span>🟢 เงินสด 35%</span>
+                            <span>🟡 หุ้นกู้ 10%</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title">ปฏิทินเงินเข้า-ออกเร็วๆ นี้ (Upcoming)</div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>ดอกเบี้ยหุ้นกู้ CPALL</div>
+                                <div>15 ต.ค. 2026</div>
+                            </div>
+                            <span class="badge badge-success">+฿4,200</span>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>ผ่อนบ้าน (Fixed)</div>
+                                <div>16 ต.ค. 2026</div>
+                            </div>
+                            <span class="badge badge-danger">-฿18,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-nav">
+                    <div class="nav-item active"><span>🏠</span>หน้าแรก</div>
+                    <div class="nav-item" onclick="switchScreen('screen2')"><span>📈</span>พอร์ตเงินออม</div>
+                    <div class="nav-item" onclick="switchScreen('screen3')"><span>💸</span>รายจ่าย</div>
+                    <div class="nav-item"><span>📊</span>วิเคราะห์</div>
+                </div>
+            </div>
+
+            <!-- SCREEN 2: Wealth & Investments -->
+            <div id="screen2" class="screen">
+                <div class="header">
+                    <span class="header-title">พอร์ตสินทรัพย์และการลงทุน</span>
+                    <span style="color: var(--primary); font-size: 14px; font-weight: bold;">+ เพิ่ม</span>
+                </div>
+                <div class="content">
+                    <div class="card">
+                        <div class="section-title"><span>🏦 เงินสดและสภาพคล่อง</span><span>฿850,000</span></div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>KBank ดิจิทัล (ดอกเบี้ย 1.5%)</div>
+                                <div>ออมทรัพย์</div>
+                            </div>
+                            <span>฿350,000</span>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>สลากออมสินพิเศษ</div>
+                                <div>🎁 ถูกรางวัลล่าสุด: ฿300</div>
+                            </div>
+                            <span>฿500,000</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title"><span>📜 หุ้นกู้ / พันธบัตร</span><span>฿400,000</span></div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>หุ้นกู้ CPALL (ดอกเบี้ย 4.2%)</div>
+                                <div>🔔 รับดอกเบี้ย 15 พ.ย.</div>
+                            </div>
+                            <span>฿400,000</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title"><span>📈 หุ้น & กองทุนรวม</span><span>฿1,200,000</span></div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>หุ้นไทย (SET Portfolio)</div>
+                                <div style="color: var(--success);">กำไร +8.4%</div>
+                            </div>
+                            <span>฿700,000</span>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>กองทุนหุ้นเทคโนโลยี US</div>
+                                <div style="color: var(--success);">กำไร +14.2%</div>
+                            </div>
+                            <span>฿500,000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-nav">
+                    <div class="nav-item" onclick="switchScreen('screen1')"><span>🏠</span>หน้าแรก</div>
+                    <div class="nav-item active"><span>📈</span>พอร์ตเงินออม</div>
+                    <div class="nav-item" onclick="switchScreen('screen3')"><span>💸</span>รายจ่าย</div>
+                    <div class="nav-item"><span>📊</span>วิเคราะห์</div>
+                </div>
+            </div>
+
+            <!-- SCREEN 3: Cash Flow & Expense -->
+            <div id="screen3" class="screen">
+                <div class="header">
+                    <span class="header-title">รายรับ & รายจ่าย (ตุลาคม)</span>
+                    <span>📅</span>
+                </div>
+                <div class="content">
+                    <div class="card">
+                        <div class="section-title">งบประมาณรายเดือน (Monthly Budget)</div>
+                        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+                            <span>ใช้ไป: ฿28,400</span>
+                            <span style="color: var(--text-sub);">จาก ฿45,000</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar" style="width: 63%;"></div>
+                        </div>
+                        <div style="font-size: 11px; color: var(--warning); margin-top: 4px;">⚠️ ใกล้ถึงขีดจำกัดงบหมวดอาหารและเดินทาง</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title">ค่าใช้จ่ายประจำ (Fixed Expenses)</div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>[✓] ผ่อนคอนโดมิเนียม</div>
+                                <div>ตัดบัญชีอัตโนมัติ (1 ต.ค.)</div>
+                            </div>
+                            <span style="font-weight: 600;">฿18,000</span>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>[ ] ประกันรถยนต์ (รายปี)</div>
+                                <div style="color: var(--danger);">ครบกำหนด 28 ต.ค.</div>
+                            </div>
+                            <span style="font-weight: 600;">฿16,000</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="section-title">บันทึกรายจ่ายวันนี้ (10 ต.ค.)</div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>☕ กาแฟ Starbucks</div>
+                                <div>ค่าใช้จ่ายทั่วไป</div>
+                            </div>
+                            <span style="color: var(--danger); font-weight: 600;">-฿165</span>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info">
+                                <div>🚗 รถไฟฟ้า BTS</div>
+                                <div>เดินทาง</div>
+                            </div>
+                            <span style="color: var(--danger); font-weight: 600;">-฿59</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom-nav">
+                    <div class="nav-item" onclick="switchScreen('screen1')"><span>🏠</span>หน้าแรก</div>
+                    <div class="nav-item" onclick="switchScreen('screen2')"><span>📈</span>พอร์ตเงินออม</div>
+                    <div class="nav-item active"><span>💸</span>รายจ่าย</div>
+                    <div class="nav-item"><span>📊</span>วิเคราะห์</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function switchScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.screen-selector button').forEach(b => b.classList.remove('active'));
+            
+            // Show target screen
+            document.getElementById(screenId).classList.add('active');
+            
+            // Activate button mapping
+            if(screenId === 'screen1') document.getElementById('btn-screen1').classList.add('active');
+            if(screenId === 'screen2') document.getElementById('btn-screen2').classList.add('active');
+            if(screenId === 'screen3') document.getElementById('btn-screen3').classList.add('active');
+        }
+    </script>
+</body>
+</html>
