@@ -491,6 +491,42 @@
             background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
         }
 
+        /* Modal Popup Styles */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            width: 100%;
+            max-width: 380px;
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--border-highlight);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
         .bottom-nav-bar {
             height: 64px;
             background: var(--surface);
@@ -795,6 +831,29 @@
             </div>
         </div>
 
+        <!-- Custom Edit Modal Popup -->
+        <div class="modal-overlay" id="edit-modal">
+            <div class="modal-card">
+                <div class="form-title" style="margin-bottom: 4px;">แก้ไขข้อมูลสินทรัพย์</div>
+                <div class="field-group">
+                    <label class="field-label">ชื่อรายการ</label>
+                    <input type="text" class="text-input" id="modal-name-input">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">มูลค่าปัจจุบัน (บาท)</label>
+                    <input type="number" class="text-input" id="modal-value-input">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">จำนวนหุ้น / หน่วย</label>
+                    <input type="number" class="text-input" id="modal-units-input">
+                </div>
+                <div class="modal-buttons">
+                    <button class="submit-btn" style="background: var(--surface-hover); color: var(--text-main); border: 1px solid var(--border);" onclick="closeEditModal()">ยกเลิก</button>
+                    <button class="submit-btn" onclick="saveEditAsset()">บันทึก</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Bottom Tab Navigation Bar -->
         <nav class="bottom-nav-bar">
             <div class="nav-item active" onclick="switchMobileView('view-home', this)" id="tab-home">
@@ -824,6 +883,7 @@
         let totalExpense = 0;
         let assetsList = [];
         let cashflowList = [];
+        let editingAssetId = null;
 
         const chartColors = ['#3b82f6', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#ec4899', '#06b6d4'];
 
@@ -1072,30 +1132,44 @@
             document.getElementById('asset-units-input').value = '';
         }
 
-        function editAsset(id) {
+        function openEditModal(id) {
             const asset = assetsList.find(item => item.id === id);
             if (!asset) return;
 
-            const newName = prompt(currentLang === 'th' ? 'แก้ไขชื่อรายการ:' : 'Edit item name:', asset.name);
-            if (newName === null) return;
+            editingAssetId = id;
+            document.getElementById('modal-name-input').value = asset.name;
+            document.getElementById('modal-value-input').value = asset.value;
+            document.getElementById('modal-units-input').value = asset.units !== null ? asset.units : '';
+            
+            document.getElementById('edit-modal').classList.add('active');
+        }
 
-            const newValueStr = prompt(currentLang === 'th' ? 'แก้ไขมูลค่าปัจจุบัน (บาท):' : 'Edit current value (THB):', asset.value);
-            if (newValueStr === null) return;
-            const newValue = parseFloat(newValueStr);
+        function closeEditModal() {
+            editingAssetId = null;
+            document.getElementById('edit-modal').classList.remove('active');
+        }
 
-            const newUnitsStr = prompt(currentLang === 'th' ? 'แก้ไขจำนวนหุ้น/หน่วย (เว้นว่างได้):' : 'Edit units (Optional):', asset.units !== null ? asset.units : '');
-            if (newUnitsStr === null) return;
-            const newUnits = newUnitsStr ? parseFloat(newUnitsStr) : null;
+        function saveEditAsset() {
+            const asset = assetsList.find(item => item.id === editingAssetId);
+            if (!asset) return;
 
-            if (!isNaN(newValue)) {
-                asset.name = newName.trim() ? newName.trim() : asset.name;
-                asset.value = newValue;
-                asset.units = newUnits;
-                renderAssets();
-                updateSystem();
-            } else {
-                alert(currentLang === 'th' ? 'มูลค่าไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง' : 'Invalid value. Please try again.');
+            const newName = document.getElementById('modal-name-input').value.trim();
+            const newValue = parseFloat(document.getElementById('modal-value-input').value);
+            const newUnitsInput = document.getElementById('modal-units-input').value.trim();
+            const newUnits = newUnitsInput ? parseFloat(newUnitsInput) : null;
+
+            if (isNaN(newValue)) {
+                alert(currentLang === 'th' ? 'กรุณากรอกมูลค่าปัจจุบันให้ถูกต้องครับ' : 'Please enter a valid value.');
+                return;
             }
+
+            asset.name = newName ? newName : asset.name;
+            asset.value = newValue;
+            asset.units = newUnits;
+
+            closeEditModal();
+            renderAssets();
+            updateSystem();
         }
 
         function deleteAsset(id) {
@@ -1130,7 +1204,7 @@
                     <div class="item-right">
                         <div class="item-amount">฿ ${item.value.toLocaleString()}</div>
                         <div class="action-btns-row">
-                            <button class="btn-mini" onclick="editAsset(${item.id})">${translations[currentLang].edit}</button>
+                            <button class="btn-mini" onclick="openEditModal(${item.id})">${translations[currentLang].edit}</button>
                             <button class="btn-mini danger" onclick="deleteAsset(${item.id})">${translations[currentLang].delete}</button>
                         </div>
                     </div>
