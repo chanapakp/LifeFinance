@@ -3,519 +3,950 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All-in-One Life Finance Tracker - Interactive Mock UI</title>
+    <title>WealthFlow - Personal Finance Tracker</title>
+    <!-- Google Font: Plus Jakarta Sans & Noto Sans Thai -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-light: #eff6ff;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --warning: #ca8a04;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-sub: #64748b;
-            --border: #e2e8f0;
+            --bg-app: #090d16;
+            --surface-card: #131b2e;
+            --surface-card-hover: #1c2742;
+            --primary-accent: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            --card-gradient-1: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            --card-gradient-networth: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #1e40af 100%);
+            --success-color: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.12);
+            --danger-color: #f43f5e;
+            --danger-bg: rgba(244, 63, 94, 0.12);
+            --warning-color: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.12);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.15);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans Thai', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #0f172a;
-            color: var(--text-main);
+            background-color: #030712;
+            color: var(--text-primary);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 20px 10px;
         }
 
-        .container {
+        /* Screen Switcher Control Outside Phone */
+        .preview-controls {
             display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #111827;
+            padding: 6px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
         }
 
-        /* Phone Frame */
-        .phone-mockup {
-            width: 380px;
-            height: 780px;
-            background-color: var(--bg-color);
-            border: 12px solid #334155;
-            border-radius: 40px;
+        .preview-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .preview-btn.active {
+            background: var(--primary-accent);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+        }
+
+        /* Smartphone Hardware Mockup Frame */
+        .device-container {
+            width: 390px;
+            height: 820px;
+            background: var(--bg-app);
+            border-radius: 48px;
+            border: 10px solid #1f293d;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7),
+                        0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            position: relative;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
-        /* Screen Header */
-        .header {
-            background-color: var(--card-bg);
-            padding: 16px 20px;
+        /* Status Bar (Top) */
+        .status-bar {
+            height: 44px;
+            padding: 0 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border);
+            font-size: 13px;
             font-weight: 600;
+            color: var(--text-primary);
+            z-index: 10;
         }
 
-        .header-title {
-            font-size: 16px;
-            color: var(--text-main);
+        .dynamic-island {
+            width: 110px;
+            height: 28px;
+            background-color: #000;
+            border-radius: 20px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        /* Scrollable Content */
-        .content {
+        /* Screen Views */
+        .app-view {
+            display: none;
             flex: 1;
+            flex-direction: column;
             overflow-y: auto;
-            padding: 16px;
+            padding: 12px 18px 20px 18px;
+            gap: 16px;
+            scrollbar-width: none;
+        }
+
+        .app-view::-webkit-scrollbar {
+            display: none;
+        }
+
+        .app-view.active {
+            display: flex;
+        }
+
+        /* Top Bar Header */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0 8px 0;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f43f5e, #fb923c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(244, 63, 94, 0.3);
+        }
+
+        .greeting-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .user-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--surface-card);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--danger-color);
+            border-radius: 50%;
+            border: 2px solid var(--surface-card);
+        }
+
+        /* Cards Style */
+        .card {
+            background: var(--surface-card);
+            border-radius: 20px;
+            padding: 18px;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .networth-card {
+            background: var(--card-gradient-networth);
+            box-shadow: 0 12px 24px -6px rgba(37, 99, 235, 0.4);
+            border: none;
+            overflow: hidden;
+        }
+
+        .networth-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .card-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .networth-amount {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin: 8px 0 4px 0;
+            color: #ffffff;
+        }
+
+        .trend-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            color: #ffffff;
+        }
+
+        .networth-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            margin: 14px 0 12px 0;
+        }
+
+        .networth-details {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .networth-item {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 2px;
         }
 
-        /* Cards */
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border: 1px solid var(--border);
-        }
-
-        .net-worth-card {
-            background: linear-gradient(135deg, #1e40af, #2563eb);
-            color: white;
-            border: none;
-        }
-
-        .net-worth-card .sub-text {
-            color: #93c5fd;
-            font-size: 13px;
-        }
-
-        .net-worth-card .amount {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 6px 0;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 6px;
+        .networth-item-label {
             font-size: 11px;
-            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .badge-success { background-color: #dcfce7; color: var(--success); }
-        .badge-warning { background-color: #fef9c3; color: var(--warning); }
-        .badge-danger { background-color: #fee2e2; color: var(--danger); }
-
-        /* Section Titles */
-        .section-title {
+        .networth-item-val {
             font-size: 14px;
             font-weight: 700;
-            color: var(--text-sub);
-            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        /* Section Title Header */
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 4px;
         }
 
-        /* List Items */
-        .item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 13px;
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
         }
 
-        .item-row:last-child {
-            border-bottom: none;
-        }
-
-        .item-info div:first-child {
-            font-weight: 600;
-        }
-
-        .item-info div:last-child {
-            font-size: 11px;
-            color: var(--text-sub);
-        }
-
-        /* Form Controls inside Mockup */
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        .form-group label {
-            display: block;
+        .see-all-btn {
             font-size: 12px;
+            color: var(--primary-accent);
+            text-decoration: none;
             font-weight: 600;
-            margin-bottom: 4px;
-            color: var(--text-main);
         }
 
-        .form-control {
+        /* Asset Distribution Bar */
+        .allocation-bar {
+            height: 10px;
+            border-radius: 6px;
+            background: #1e293b;
+            display: flex;
+            overflow: hidden;
+            margin: 12px 0;
+            gap: 2px;
+        }
+
+        .alloc-segment {
+            height: 100%;
+        }
+
+        .allocation-legend {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* List Rows */
+        .transaction-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .item-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 1px solid var(--border-color);
+        }
+
+        .item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .item-subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .item-right {
+            text-align: right;
+        }
+
+        .item-amount {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .amount-plus { color: var(--success-color); }
+        .amount-minus { color: var(--text-primary); }
+
+        .item-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* Custom Input Form Components */
+        .form-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid var(--border-highlight);
+        }
+
+        .form-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .input-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .input-field, .select-field {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 14px;
+            color: var(--text-primary);
             font-size: 13px;
             outline: none;
-            background-color: #f8fafc;
+            transition: all 0.2s;
         }
 
-        .form-control:focus {
-            border-color: var(--primary);
-            background-color: #fff;
+        .input-field:focus, .select-field:focus {
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
 
-        .btn-submit {
+        .submit-btn {
             width: 100%;
-            background-color: var(--primary);
+            background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 8px;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
             font-size: 13px;
-        }
-
-        .btn-submit:hover {
-            background-color: #1d4ed8;
-        }
-
-        .btn-action {
-            background: none;
-            border: none;
-            color: var(--primary);
-            font-weight: 600;
             cursor: pointer;
-            font-size: 12px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            margin-top: 4px;
         }
 
-        /* Progress Bar */
-        .progress-container {
-            background-color: var(--border);
-            border-radius: 8px;
+        .submit-btn-danger {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+        }
+
+        /* Budget Progress */
+        .progress-bar-bg {
             height: 8px;
-            width: 100%;
+            background: #1e293b;
+            border-radius: 4px;
             overflow: hidden;
-            margin: 8px 0;
+            margin: 10px 0 6px 0;
         }
 
-        .progress-bar {
-            background-color: var(--primary);
+        .progress-bar-fill {
             height: 100%;
-            border-radius: 8px;
+            background: var(--primary-gradient);
+            border-radius: 4px;
         }
 
-        /* Bottom Nav */
+        /* Bottom Tab Navigation Bar */
         .bottom-nav {
-            background-color: var(--card-bg);
-            border-top: 1px solid var(--border);
+            height: 68px;
+            background: rgba(19, 27, 46, 0.95);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
-            font-size: 11px;
-            color: var(--text-sub);
+            align-items: center;
+            padding: 0 10px 10px 10px;
         }
 
-        .nav-item {
+        .nav-tab {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            cursor: pointer;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 10px;
             font-weight: 600;
-        }
-
-        /* Screen Selector outside Phone */
-        .screen-selector {
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        .screen-selector button {
-            background-color: #334155;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
             cursor: pointer;
-            font-size: 13px;
-            margin: 4px;
-            transition: background 0.2s;
+            width: 25%;
+            transition: color 0.2s;
         }
 
-        .screen-selector button.active, .screen-selector button:hover {
-            background-color: var(--primary);
+        .nav-tab.active {
+            color: var(--primary-accent);
         }
 
-        .screen {
-            display: none;
-            flex: 1;
-            flex-direction: column;
-            overflow: hidden;
+        .nav-icon {
+            font-size: 20px;
         }
 
-        .screen.active {
-            display: flex;
+        /* iOS Home Indicator Bar */
+        .home-indicator {
+            width: 134px;
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            position: absolute;
+            bottom: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .asset-tag {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
         }
     </style>
 </head>
 <body>
 
-    <div class="screen-selector">
-        <p style="color: #94a3b8; margin-bottom: 8px; font-size: 14px;">คลิกเลือกหน้าจอ Mockup พร้อมช่องกรอกข้อมูล:</p>
-        <button onclick="switchScreen('screen1')" id="btn-screen1" class="active">1. Home / Net Worth</button>
-        <button onclick="switchScreen('screen2')" id="btn-screen2">2. Wealth & Add Asset</button>
-        <button onclick="switchScreen('screen3')" id="btn-screen3">3. Expense & Add Transaction</button>
+    <!-- Top Preview Controls -->
+    <div class="preview-controls">
+        <button class="preview-btn active" onclick="switchView('view-home', this)">1. Dashboard</button>
+        <button class="preview-btn" onclick="switchView('view-wealth', this)">2. Wealth & Asset</button>
+        <button class="preview-btn" onclick="switchView('view-expense', this)">3. Daily Expense</button>
     </div>
 
-    <div class="container">
-        <div class="phone-mockup">
-            
-            <!-- SCREEN 1: Home Dashboard -->
-            <div id="screen1" class="screen active">
-                <div class="header">
-                    <span class="header-title">👋 สวัสดี, คุณสมชาย</span>
-                    <span>🔔</span>
-                </div>
-                <div class="content">
-                    <div class="card net-worth-card">
-                        <div class="sub-text">มูลค่าทรัพย์สินสุทธิ (Net Worth) 👁️</div>
-                        <div class="amount" id="net-worth-display">฿ 2,450,000</div>
-                        <div class="sub-text" style="color: #4ade80;">▲ +3.2% จากเดือนที่แล้ว</div>
-                    </div>
-
-                    <div class="card">
-                        <div class="section-title">สัดส่วนสินทรัพย์ (Asset Allocation)</div>
-                        <div style="display: flex; height: 10px; border-radius: 5px; overflow: hidden; gap: 2px; margin-bottom: 8px;">
-                            <div style="width: 55%; background-color: #2563eb;"></div>
-                            <div style="width: 35%; background-color: #16a34a;"></div>
-                            <div style="width: 10%; background-color: #ca8a04;"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub);">
-                            <span>🔵 ลงทุน 55%</span>
-                            <span>🟢 เงินสด 35%</span>
-                            <span>🟡 หุ้นกู้ 10%</span>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="section-title">ปฏิทินเงินเข้า-ออก (Upcoming)</div>
-                        <div class="item-row">
-                            <div class="item-info">
-                                <div>ดอกเบี้ยหุ้นกู้ CPALL</div>
-                                <div>15 ต.ค. 2026</div>
-                            </div>
-                            <span class="badge badge-success">+฿4,200</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="bottom-nav">
-                    <div class="nav-item active"><span>🏠</span>หน้าแรก</div>
-                    <div class="nav-item" onclick="switchScreen('screen2')"><span>📈</span>พอร์ตเงินออม</div>
-                    <div class="nav-item" onclick="switchScreen('screen3')"><span>💸</span>รายจ่าย</div>
-                    <div class="nav-item"><span>📊</span>วิเคราะห์</div>
-                </div>
-            </div>
-
-            <!-- SCREEN 2: Wealth & Add Asset -->
-            <div id="screen2" class="screen">
-                <div class="header">
-                    <span class="header-title">พอร์ตสินทรัพย์ & เพิ่มรายการ</span>
-                </div>
-                <div class="content">
-                    <!-- ฟอร์มสำหรับกรอกข้อมูลเพิ่มสินทรัพย์/เงินออม -->
-                    <div class="card" style="background-color: var(--primary-light); border: 1px dashed var(--primary);">
-                        <div class="section-title" style="color: var(--primary);">➕ เพิ่มสินทรัพย์ / เงินออมใหม่</div>
-                        <div class="form-group">
-                            <label>ประเภทสินทรัพย์</label>
-                            <select class="form-control" id="asset-type">
-                                <option value="cash">เงินสด / บัญชีออมทรัพย์ / สลาก</option>
-                                <option value="bond">หุ้นกู้ / พันธบัตร</option>
-                                <option value="stock">หุ้นสามัญ / กองทุนรวม</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>ชื่อรายการ (เช่น หุ้นกู้ บมจ. ...)</label>
-                            <input type="text" class="form-control" id="asset-name" placeholder="ระบุชื่อสินทรัพย์">
-                        </div>
-                        <div class="form-group">
-                            <label>มูลค่า / เงินต้น (บาท)</label>
-                            <input type="number" class="form-control" id="asset-amount" placeholder="0.00">
-                        </div>
-                        <button class="btn-submit" onclick="addAsset()">บันทึกเข้าพอร์ต</button>
-                    </div>
-
-                    <div class="card">
-                        <div class="section-title"><span>🏦 รายการสินทรัพย์ปัจจุบัน</span></div>
-                        <div id="asset-list-container">
-                            <div class="item-row">
-                                <div class="item-info">
-                                    <div>KBank ดิจิทัล (ออมทรัพย์)</div>
-                                    <div>ดอกเบี้ย 1.5%</div>
-                                </div>
-                                <span>฿350,000</span>
-                            </div>
-                            <div class="item-row">
-                                <div class="item-info">
-                                    <div>สลากออมสินพิเศษ</div>
-                                    <div>🎁 ลุ้นรางวัลทุกวันที่ 16</div>
-                                </div>
-                                <span>฿500,000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bottom-nav">
-                    <div class="nav-item" onclick="switchScreen('screen1')"><span>🏠</span>หน้าแรก</div>
-                    <div class="nav-item active"><span>📈</span>พอร์ตเงินออม</div>
-                    <div class="nav-item" onclick="switchScreen('screen3')"><span>💸</span>รายจ่าย</div>
-                    <div class="nav-item"><span>📊</span>วิเคราะห์</div>
-                </div>
-            </div>
-
-            <!-- SCREEN 3: Expense & Add Transaction -->
-            <div id="screen3" class="screen">
-                <div class="header">
-                    <span class="header-title">บันทึกรายรับ-รายจ่าย</span>
-                </div>
-                <div class="content">
-                    <!-- ฟอร์มสำหรับกรอกรายจ่ายประจำวัน -->
-                    <div class="card" style="background-color: #fef2f2; border: 1px dashed var(--danger);">
-                        <div class="section-title" style="color: var(--danger);">➖ บันทึกค่าใช้จ่ายใหม่</div>
-                        <div class="form-group">
-                            <label>หมวดหมู่รายจ่าย</label>
-                            <select class="form-control" id="exp-category">
-                                <option value="อาหารและเครื่องดื่ม">🍔 อาหารและเครื่องดื่ม</option>
-                                <option value="เดินทาง">🚗 เดินทาง / ขนส่ง</option>
-                                <option value="ช้อปปิ้ง">🛍️ ช้อปปิ้ง / ของใช้</option>
-                                <option value="ค่าใช้จ่ายประจำ">🏠 ค่าใช้จ่ายประจำ (Fixed)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>รายการ</label>
-                            <input type="text" class="form-control" id="exp-name" placeholder="เช่น กาแฟ, ค่าทางด่วน">
-                        </div>
-                        <div class="form-group">
-                            <label>จำนวนเงิน (บาท)</label>
-                            <input type="number" class="form-control" id="exp-amount" placeholder="0.00">
-                        </div>
-                        <button class="btn-submit" style="background-color: var(--danger);" onclick="addExpense()">บันทึกรายจ่าย</button>
-                    </div>
-
-                    <div class="card">
-                        <div class="section-title">รายการวันนี้</div>
-                        <div id="expense-list-container">
-                            <div class="item-row">
-                                <div class="item-info">
-                                    <div>☕ กาแฟ Starbucks</div>
-                                    <div>อาหารและเครื่องดื่ม</div>
-                                </div>
-                                <span style="color: var(--danger); font-weight: 600;">-฿165</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bottom-nav">
-                    <div class="nav-item" onclick="switchScreen('screen1')"><span>🏠</span>หน้าแรก</div>
-                    <div class="nav-item" onclick="switchScreen('screen2')"><span>📈</span>พอร์ตเงินออม</div>
-                    <div class="nav-item active"><span>💸</span>รายจ่าย</div>
-                    <div class="nav-item"><span>📊</span>วิเคราะห์</div>
-                </div>
-            </div>
-
+    <!-- Phone Device Shell -->
+    <div class="device-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <div class="dynamic-island"></div>
+            <span>5G 🔋</span>
         </div>
+
+        <!-- VIEW 1: HOME / NET WORTH DASHBOARD -->
+        <div id="view-home" class="app-view active">
+            <div class="top-header">
+                <div class="user-profile">
+                    <div class="avatar">SC</div>
+                    <div>
+                        <div class="greeting-text">ยินดีต้อนรับกลับมา</div>
+                        <div class="user-name">คุณสมชาย เอกอนันต์</div>
+                    </div>
+                </div>
+                <div class="icon-btn">
+                    🔔
+                    <div class="notification-dot"></div>
+                </div>
+            </div>
+
+            <!-- Net Worth Main Card -->
+            <div class="card networth-card">
+                <div class="card-label">
+                    <span>ความมั่งคั่งสุทธิ (Net Worth)</span>
+                    <span style="cursor: pointer;">👁️</span>
+                </div>
+                <div class="networth-amount">฿ 2,450,000</div>
+                <div class="trend-badge">▲ +3.2% เดือนนี้ (+฿76,000)</div>
+                <div class="networth-divider"></div>
+                <div class="networth-details">
+                    <div class="networth-item">
+                        <span class="networth-item-label">สินทรัพย์รวม</span>
+                        <span class="networth-item-val">฿ 2,700,000</span>
+                    </div>
+                    <div class="networth-item" style="text-align: right;">
+                        <span class="networth-item-label">หนี้สินรวม</span>
+                        <span class="networth-item-val" style="color: #fca5a5;">฿ 250,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asset Allocation -->
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-title">สัดส่วนสินทรัพย์</span>
+                    <a href="#" class="see-all-btn">ปรับแต่ง</a>
+                </div>
+                <div class="allocation-bar">
+                    <div class="alloc-segment" style="width: 55%; background: #3b82f6;"></div>
+                    <div class="alloc-segment" style="width: 30%; background: #10b981;"></div>
+                    <div class="alloc-segment" style="width: 15%; background: #f59e0b;"></div>
+                </div>
+                <div class="allocation-legend">
+                    <div class="legend-item"><div class="legend-dot" style="background: #3b82f6;"></div>หุ้น/กองทุน 55%</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: #10b981;"></div>เงินสด/สลาก 30%</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: #f59e0b;"></div>หุ้นกู้ 15%</div>
+                </div>
+            </div>
+
+            <!-- Upcoming Timeline -->
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-title">ปฏิทินเงินเข้า-ออก (7 วันข้างหน้า)</span>
+                </div>
+                <div class="transaction-list">
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon" style="color: #10b981; background: var(--success-bg);">📜</div>
+                            <div>
+                                <div class="item-title">ดอกเบี้ยหุ้นกู้ CPALL</div>
+                                <div class="item-subtitle">15 ต.ค. • เข้าบัญชี KBank</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount amount-plus">+฿ 4,200</div>
+                            <div class="item-badge" style="background: var(--success-bg); color: var(--success-color);">รับเงิน</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon" style="color: #f43f5e; background: var(--danger-bg);">🏠</div>
+                            <div>
+                                <div class="item-title">ผ่อนคอนโด (Fixed Expense)</div>
+                                <div class="item-subtitle">16 ต.ค. • ตัดบัญชีอัตโนมัติ</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount amount-minus">-฿ 18,000</div>
+                            <div class="item-badge" style="background: var(--danger-bg); color: var(--danger-color);">รอชำระ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 2: WEALTH & ASSETS MANAGEMENT -->
+        <div id="view-wealth" class="app-view">
+            <div class="top-header">
+                <div>
+                    <div class="greeting-text">PORTFOLIO TRACKER</div>
+                    <div class="user-name">สินทรัพย์และการลงทุน</div>
+                </div>
+                <div class="icon-btn">📊</div>
+            </div>
+
+            <!-- Add Asset Input Form -->
+            <div class="card form-card">
+                <div class="form-title">
+                    <span style="color: var(--primary-accent);">⚡</span> บันทึกสินทรัพย์ / เงินลงทุนใหม่
+                </div>
+                <div class="input-group">
+                    <label class="input-label">ประเภทสินทรัพย์</label>
+                    <select class="select-field" id="asset-type-select">
+                        <option value="cash">🏦 เงินฝากธนาคาร / สลากออมทรัพย์</option>
+                        <option value="bond">📜 หุ้นกู้ / พันธบัตรรัฐบาล</option>
+                        <option value="stock">📈 หุ้นสามัญ / กองทุนรวม (Mutual Fund)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">ชื่อสินทรัพย์ / ธนาคาร</label>
+                    <input type="text" class="input-field" id="asset-name-input" placeholder="เช่น หุ้นกู้ CPALL, K-US500">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">มูลค่าปัจจุบัน (บาท)</label>
+                    <input type="number" class="input-field" id="asset-value-input" placeholder="0.00">
+                </div>
+                <button class="submit-btn" onclick="addNewAsset()">+ เพิ่มลงในพอร์ต</button>
+            </div>
+
+            <!-- Portfolio Assets List -->
+            <div class="card">
+                <div class="section-header" style="margin-bottom: 12px;">
+                    <span class="section-title">รายการสินทรัพย์ในพอร์ต</span>
+                </div>
+                <div class="transaction-list" id="asset-list">
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">🏦</div>
+                            <div>
+                                <div class="item-title">KBank Digital Savings</div>
+                                <div class="item-subtitle">ดอกเบี้ย 1.5% ต่อปี</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount">฿ 350,000</div>
+                            <div class="asset-tag">เงินฝาก</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">🎁</div>
+                            <div>
+                                <div class="item-title">สลากออมสินพิเศษ 2 ปี</div>
+                                <div class="item-subtitle">ถูกรางวัลล่าสุด ฿300</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount">฿ 500,000</div>
+                            <div class="asset-tag">สลาก</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">📜</div>
+                            <div>
+                                <div class="item-title">หุ้นกู้ CPALL26NA</div>
+                                <div class="item-subtitle">ดอกเบี้ย 4.2% (รับ พ.ย.)</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount">฿ 400,000</div>
+                            <div class="asset-tag">หุ้นกู้</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: DAILY EXPENSE & BUDGETING -->
+        <div id="view-expense" class="app-view">
+            <div class="top-header">
+                <div>
+                    <div class="greeting-text">CASH FLOW</div>
+                    <div class="user-name">รายรับ - รายจ่าย</div>
+                </div>
+                <div class="icon-btn">📅</div>
+            </div>
+
+            <!-- Monthly Budget Status -->
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-title">งบประมาณเดือนนี้</span>
+                    <span style="font-size: 12px; color: var(--text-secondary);">63% ใช้ไปแล้ว</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" style="width: 63%;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 4px;">
+                    <span style="color: var(--text-secondary);">ใช้ไป ฿ 28,400</span>
+                    <span style="font-weight: 700;">งบรวม ฿ 45,000</span>
+                </div>
+            </div>
+
+            <!-- Expense Form -->
+            <div class="card form-card" style="border-color: rgba(244, 63, 94, 0.3);">
+                <div class="form-title" style="color: #fca5a5;">
+                    <span>💸</span> บันทึกค่าใช้จ่ายใหม่
+                </div>
+                <div class="input-group">
+                    <label class="input-label">หมวดหมู่</label>
+                    <select class="select-field" id="exp-cat-select">
+                        <option value="อาหาร">🍔 อาหารและเครื่องดื่ม</option>
+                        <option value="เดินทาง">🚗 เดินทาง / น้ำมัน / BTS</option>
+                        <option value="ช้อปปิ้ง">🛍️ ช้อปปิ้ง / ของใช้</option>
+                        <option value="ค่าใช้จ่ายประจำ">🏠 ค่าใช้จ่ายประจำ (Fixed)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">รายละเอียดรายการ</label>
+                    <input type="text" class="input-field" id="exp-name-input" placeholder="เช่น ค่ากาแฟ, ค่าทางด่วน">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">จำนวนเงิน (บาท)</label>
+                    <input type="number" class="input-field" id="exp-amount-input" placeholder="0.00">
+                </div>
+                <button class="submit-btn submit-btn-danger" onclick="addNewExpense()">บันทึกรายจ่าย</button>
+            </div>
+
+            <!-- Today Expenses List -->
+            <div class="card">
+                <div class="section-header">
+                    <span class="section-title">รายการวันนี้ (10 ต.ค.)</span>
+                </div>
+                <div class="transaction-list" id="expense-list">
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">☕</div>
+                            <div>
+                                <div class="item-title">Starbucks Coffee</div>
+                                <div class="item-subtitle">อาหารและเครื่องดื่ม</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount" style="color: var(--danger-color);">-฿ 165</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">🚆</div>
+                            <div>
+                                <div class="item-title">รถไฟฟ้า BTS</div>
+                                <div class="item-subtitle">เดินทาง</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount" style="color: var(--danger-color);">-฿ 59</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="bottom-nav">
+            <div class="nav-tab active" onclick="switchView('view-home', document.querySelectorAll('.preview-btn')[0])" id="tab-home">
+                <span class="nav-icon">🏠</span>
+                <span>หน้าหลัก</span>
+            </div>
+            <div class="nav-tab" onclick="switchView('view-wealth', document.querySelectorAll('.preview-btn')[1])" id="tab-wealth">
+                <span class="nav-icon">📈</span>
+                <span>สินทรัพย์</span>
+            </div>
+            <div class="nav-tab" onclick="switchView('view-expense', document.querySelectorAll('.preview-btn')[2])" id="tab-expense">
+                <span class="nav-icon">💸</span>
+                <span>รายจ่าย</span>
+            </div>
+            <div class="nav-tab">
+                <span class="nav-icon">📊</span>
+                <span>วิเคราะห์</span>
+            </div>
+        </div>
+
+        <!-- Home Bar -->
+        <div class="home-indicator"></div>
     </div>
 
+    <!-- Interactive Script -->
     <script>
-        function switchScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.screen-selector button').forEach(b => b.classList.remove('active'));
-            
-            document.getElementById(screenId).classList.add('active');
-            if(screenId === 'screen1') document.getElementById('btn-screen1').classList.add('active');
-            if(screenId === 'screen2') document.getElementById('btn-screen2').classList.add('active');
-            if(screenId === 'screen3') document.getElementById('btn-screen3').classList.add('active');
+        function switchView(viewId, btnElement) {
+            // Hide all views
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+            // Remove active style from top buttons
+            document.querySelectorAll('.preview-btn').forEach(b => b.classList.remove('active'));
+            // Remove active style from bottom nav tabs
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+
+            // Show selected view
+            document.getElementById(viewId).classList.add('active');
+
+            // Set top preview button active if provided
+            if(btnElement && btnElement.classList.contains('preview-btn')) {
+                btnElement.classList.add('active');
+            }
+
+            // Sync Bottom Navigation Tabs state
+            if (viewId === 'view-home') {
+                document.getElementById('tab-home').classList.add('active');
+                document.querySelectorAll('.preview-btn')[0].classList.add('active');
+            } else if (viewId === 'view-wealth') {
+                document.getElementById('tab-wealth').classList.add('active');
+                document.querySelectorAll('.preview-btn')[1].classList.add('active');
+            } else if (viewId === 'view-expense') {
+                document.getElementById('tab-expense').classList.add('active');
+                document.querySelectorAll('.preview-btn')[2].classList.add('active');
+            }
         }
 
-        // ฟังก์ชันจำลองการเพิ่มสินทรัพย์
-        function addAsset() {
-            const name = document.getElementById('asset-name').value;
-            const amount = parseFloat(document.getElementById('asset-amount').value);
-            
-            if(!name || isNaN(amount)) {
-                alert('กรุณากรอกชื่อและจำนวนเงินให้ครบถ้วน');
+        // Action: Add Asset Interactive
+        function addNewAsset() {
+            const name = document.getElementById('asset-name-input').value.trim();
+            const value = parseFloat(document.getElementById('asset-value-input').value);
+            const typeSelect = document.getElementById('asset-type-select');
+            const typeText = typeSelect.options[typeSelect.selectedIndex].text.split(' ')[1] || 'สินทรัพย์';
+
+            if (!name || isNaN(value)) {
+                alert('กรุณากรอกชื่อสินทรัพย์และมูลค่าให้ถูกต้อง');
                 return;
             }
 
-            const container = document.getElementById('asset-list-container');
-            const newRow = document.createElement('div');
-            newRow.className = 'item-row';
-            newRow.innerHTML = `
-                <div class="item-info">
-                    <div>${name}</div>
-                    <div>เพิ่มใหม่วันนี้</div>
+            const list = document.getElementById('asset-list');
+            const newItem = document.createElement('div');
+            newItem.className = 'list-item';
+            newItem.innerHTML = `
+                <div class="item-left">
+                    <div class="item-icon">💎</div>
+                    <div>
+                        <div class="item-title">${name}</div>
+                        <div class="item-subtitle">บันทึกใหม่</div>
+                    </div>
                 </div>
-                <span>฿${amount.toLocaleString()}</span>
+                <div class="item-right">
+                    <div class="item-amount">฿ ${value.toLocaleString()}</div>
+                    <div class="asset-tag">${typeText}</div>
+                </div>
             `;
-            container.appendChild(newRow);
+            list.prepend(newItem);
 
-            //เคลียร์ฟอร์ม
-            document.getElementById('asset-name').value = '';
-            document.getElementById('asset-amount').value = '';
-            alert('บันทึกสินทรัพย์สำเร็จ!');
+            document.getElementById('asset-name-input').value = '';
+            document.getElementById('asset-value-input').value = '';
+            alert('เพิ่มสินทรัพย์เข้าพอร์ตเรียบร้อยแล้ว!');
         }
 
-        // ฟังก์ชันจำลองการเพิ่มรายจ่าย
-        function addExpense() {
-            const category = document.getElementById('exp-category').value;
-            const name = document.getElementById('exp-name').value;
-            const amount = parseFloat(document.getElementById('exp-amount').value);
-            
-            if(!name || isNaN(amount)) {
-                alert('กรุณากรอกข้อมูลรายจ่ายให้ครบถ้วน');
+        // Action: Add Expense Interactive
+        function addNewExpense() {
+            const name = document.getElementById('exp-name-input').value.trim();
+            const amount = parseFloat(document.getElementById('exp-amount-input').value);
+            const cat = document.getElementById('exp-cat-select').value;
+
+            if (!name || isNaN(amount)) {
+                alert('กรุณากรอกรายละเอียดและจำนวนเงินรายจ่าย');
                 return;
             }
 
-            const container = document.getElementById('expense-list-container');
-            const newRow = document.createElement('div');
-            newRow.className = 'item-row';
-            newRow.innerHTML = `
-                <div class="item-info">
-                    <div>${name}</div>
-                    <div>${category}</div>
+            const list = document.getElementById('expense-list');
+            const newItem = document.createElement('div');
+            newItem.className = 'list-item';
+            newItem.innerHTML = `
+                <div class="item-left">
+                    <div class="item-icon">🧾</div>
+                    <div>
+                        <div class="item-title">${name}</div>
+                        <div class="item-subtitle">${cat}</div>
+                    </div>
                 </div>
-                <span style="color: var(--danger); font-weight: 600;">-฿${amount.toLocaleString()}</span>
+                <div class="item-right">
+                    <div class="item-amount" style="color: var(--danger-color);">-฿ ${amount.toLocaleString()}</div>
+                </div>
             `;
-            container.appendChild(newRow);
+            list.prepend(newItem);
 
-            //เคลียร์ฟอร์ม
-            document.getElementById('exp-name').value = '';
-            document.getElementById('exp-amount').value = '';
-            alert('บันทึกรายจ่ายสำเร็จ!');
+            document.getElementById('exp-name-input').value = '';
+            document.getElementById('exp-amount-input').value = '';
+            alert('บันทึกรายจ่ายเรียบร้อยแล้ว!');
         }
     </script>
 </body>
