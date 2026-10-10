@@ -393,6 +393,9 @@
             font-size: 13px;
             outline: none;
             transition: all 0.2s;
+            max-width: 100%;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         .text-input:focus, .select-input:focus {
@@ -610,17 +613,18 @@
                     <input type="text" class="text-input" id="inc-name-input" placeholder="เช่น เงินเดือนตุลาคม">
                 </div>
                 <div class="field-group">
-                    <label class="field-label" data-translate="date_label">วันที่ทำรายการ</label>
-                    <input type="date" class="text-input" id="inc-date-input">
-                </div>
-                <div class="field-group">
                     <label class="field-label" data-translate="repeat_label">ความถี่ (การทำซ้ำ)</label>
-                    <select class="select-input" id="inc-repeat-select">
-                        <option value="ครั้งเดียว" data-translate="rep_once">ทำครั้งเดียว (Once)</option>
+                    <select class="select-input" id="inc-repeat-select" onchange="handleRepeatChange('inc')">
+                        <option value="ทำครั้งเดียว" data-translate="rep_once">ทำครั้งเดียว (Once)</option>
                         <option value="ทุกเดือน" data-translate="rep_monthly">ทุกเดือน (Monthly)</option>
                         <option value="ทุก 6 เดือน" data-translate="rep_6m">ทุก 6 เดือน (Every 6 Months)</option>
                         <option value="ทุกปี" data-translate="rep_yearly">ทุกปี (Annually)</option>
+                        <option value="ระบุเอง" data-translate="rep_custom">ระบุเอง (Custom)</option>
                     </select>
+                </div>
+                <div class="field-group" id="inc-date-group" style="display: none;">
+                    <label class="field-label" data-translate="date_label">วันที่ทำรายการ</label>
+                    <input type="date" class="text-input" id="inc-date-input">
                 </div>
                 <button class="submit-btn success" onclick="addIncomeItem()" data-translate="btn_save_income">+ บันทึกรายรับ</button>
             </div>
@@ -650,17 +654,18 @@
                     <input type="text" class="text-input" id="exp-name-input" placeholder="เช่น ค่าไฟฟ้า, ค่ามือถือ">
                 </div>
                 <div class="field-group">
-                    <label class="field-label" data-translate="date_label">วันที่ทำรายการ</label>
-                    <input type="date" class="text-input" id="exp-date-input">
-                </div>
-                <div class="field-group">
                     <label class="field-label" data-translate="repeat_label">ความถี่ (การทำซ้ำ)</label>
-                    <select class="select-input" id="exp-repeat-select">
-                        <option value="ครั้งเดียว" data-translate="rep_once">ทำครั้งเดียว (Once)</option>
+                    <select class="select-input" id="exp-repeat-select" onchange="handleRepeatChange('exp')">
+                        <option value="ทำครั้งเดียว" data-translate="rep_once">ทำครั้งเดียว (Once)</option>
                         <option value="ทุกเดือน" data-translate="rep_monthly">ทุกเดือน (Monthly)</option>
                         <option value="ทุก 6 เดือน" data-translate="rep_6m">ทุก 6 เดือน (Every 6 Months)</option>
                         <option value="ทุกปี" data-translate="rep_yearly">ทุกปี (Annually)</option>
+                        <option value="ระบุเอง" data-translate="rep_custom">ระบุเอง (Custom)</option>
                     </select>
+                </div>
+                <div class="field-group" id="exp-date-group" style="display: none;">
+                    <label class="field-label" data-translate="date_label">วันที่ทำรายการ</label>
+                    <input type="date" class="text-input" id="exp-date-input">
                 </div>
                 <button class="submit-btn danger" onclick="addExpenseItem()" data-translate="btn_save_expense">บันทึกรายจ่าย</button>
             </div>
@@ -711,6 +716,16 @@
             document.getElementById('exp-date-input').value = today;
         });
 
+        function handleRepeatChange(type) {
+            const repeatSelect = document.getElementById(`${type}-repeat-select`);
+            const dateGroup = document.getElementById(`${type}-date-group`);
+            if (repeatSelect.value === 'ระบุเอง') {
+                dateGroup.style.display = 'flex';
+            } else {
+                dateGroup.style.display = 'none';
+            }
+        }
+
         const translations = {
             th: {
                 greeting: "ยินดีต้อนรับกลับมา",
@@ -749,6 +764,7 @@
                 rep_monthly: "ทุกเดือน (Monthly)",
                 rep_6m: "ทุก 6 เดือน (Every 6 Months)",
                 rep_yearly: "ทุกปี (Annually)",
+                rep_custom: "ระบุเอง (Custom)",
                 btn_save_income: "+ บันทึกรายรับ",
                 add_expense_title: "บันทึกรายจ่าย & ค่าใช้จ่ายประจำ",
                 expense_category: "หมวดหมู่รายจ่าย",
@@ -804,6 +820,7 @@
                 rep_monthly: "Monthly",
                 rep_6m: "Every 6 Months",
                 rep_yearly: "Annually",
+                rep_custom: "Custom Date",
                 btn_save_income: "+ Record Income",
                 add_expense_title: "Record Expense & Fixed Bills",
                 expense_category: "Expense Category",
@@ -980,12 +997,10 @@
             });
         }
 
-        // คืนค่า SVG Icon ตามหมวดหมู่รายการ
         function getCategorySvgIcon(category, type) {
             if (type === 'income') {
                 return '<svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>';
             }
-            // สำหรับรายจ่าย แยกตามหมวดหมู่
             if (category.includes('ที่อยู่อาศัย')) {
                 return '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>';
             } else if (category.includes('ค่าบริการ')) {
@@ -1003,8 +1018,8 @@
             let name = document.getElementById('inc-name-input').value.trim();
             const amount = parseFloat(document.getElementById('inc-amount-input').value);
             const category = document.getElementById('inc-cat-select').value;
-            const date = document.getElementById('inc-date-input').value;
             const repeat = document.getElementById('inc-repeat-select').value;
+            const date = repeat === 'ระบุเอง' ? document.getElementById('inc-date-input').value : '-';
 
             if (isNaN(amount)) {
                 alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินรายรับให้ถูกต้องครับ' : 'Please enter a valid income amount.');
@@ -1028,8 +1043,8 @@
             let name = document.getElementById('exp-name-input').value.trim();
             const amount = parseFloat(document.getElementById('exp-amount-input').value);
             const category = document.getElementById('exp-cat-select').value;
-            const date = document.getElementById('exp-date-input').value;
             const repeat = document.getElementById('exp-repeat-select').value;
+            const date = repeat === 'ระบุเอง' ? document.getElementById('exp-date-input').value : '-';
 
             if (isNaN(amount)) {
                 alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินรายจ่ายให้ถูกต้องครับ' : 'Please enter a valid expense amount.');
@@ -1070,7 +1085,7 @@
             container.innerHTML = '';
             cashflowList.forEach(item => {
                 const isInc = item.type === 'income';
-                const subDetail = `${item.category} • ${item.date || '-'} • [${item.repeat}]`;
+                const subDetail = item.repeat === 'ระบุเอง' ? `${item.category} • ${item.date} • [${item.repeat}]` : `${item.category} • [${item.repeat}]`;
                 const svgIconHtml = getCategorySvgIcon(item.category, item.type);
                 
                 const row = document.createElement('div');
