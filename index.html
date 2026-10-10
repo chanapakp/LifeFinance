@@ -671,9 +671,13 @@
                 <button class="submit-btn" onclick="addNewAssetItem()" data-translate="btn_save_asset">+ บันทึกเข้าพอร์ต</button>
             </div>
 
+            <!-- All Assets List with Month Filter -->
             <div class="card-box">
                 <div class="section-header-row" style="margin-bottom: 8px;">
                     <span class="section-title" data-translate="all_assets_title">รายการสินทรัพย์ทั้งหมด</span>
+                    <select class="select-input" id="asset-month-filter" style="width: 140px; padding: 6px 10px; font-size: 11px;" onchange="renderAssets()">
+                        <option value="all">ทั้งหมด (All)</option>
+                    </select>
                 </div>
                 <div class="list-stack" id="asset-list-container">
                     <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;" data-translate="no_assets">ยังไม่มีสินทรัพย์ในพอร์ต</div>
@@ -827,7 +831,7 @@
                 <div class="section-header-row" style="margin-bottom: 8px;">
                     <span class="section-title" data-translate="all_cashflow_title">รายการรายรับ-รายจ่ายทั้งหมด</span>
                     <select class="select-input" id="cashflow-month-filter" style="width: 140px; padding: 6px 10px; font-size: 11px;" onchange="renderCashflow()">
-                        <option value="all">ทั้งหมด (All Months)</option>
+                        <option value="all">ทั้งหมด (All)</option>
                     </select>
                 </div>
                 <div class="list-stack" id="cashflow-list-container">
@@ -893,7 +897,6 @@
         let currentTheme = 'dark';
         let currentLang = 'th';
 
-        // Load state data from LocalStorage
         let assetsData = JSON.parse(localStorage.getItem('wealthpulse_assets')) || [];
         let cashflowData = JSON.parse(localStorage.getItem('wealthpulse_cashflow')) || [];
 
@@ -1031,11 +1034,10 @@
             document.getElementById('inc-date-input').value = todayStr;
             document.getElementById('exp-date-input').value = todayStr;
             
-            populateMonthFilter();
+            populateMonthFilters();
             updateUI();
         });
 
-        // Save data to localStorage whenever data updates
         function saveDataToStorage() {
             localStorage.setItem('wealthpulse_assets', JSON.stringify(assetsData));
             localStorage.setItem('wealthpulse_cashflow', JSON.stringify(cashflowData));
@@ -1056,7 +1058,7 @@
                     el.innerText = translations[currentLang][key];
                 }
             });
-            populateMonthFilter();
+            populateMonthFilters();
         }
 
         function switchTab(tabId) {
@@ -1081,41 +1083,48 @@
             return num.toLocaleString('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
         }
 
-        function populateMonthFilter() {
-            const filterSelect = document.getElementById('cashflow-month-filter');
-            const currentVal = filterSelect.value;
-            
-            let monthsSet = new Set();
+        function populateMonthFilters() {
+            // Asset Filter
+            const assetFilter = document.getElementById('asset-month-filter');
+            const assetVal = assetFilter.value;
+            let assetMonths = new Set();
+            assetsData.forEach(item => {
+                if (item.date) assetMonths.add(item.date.substring(0, 7));
+            });
+
+            // Cashflow Filter
+            const cfFilter = document.getElementById('cashflow-month-filter');
+            const cfVal = cfFilter.value;
+            let cfMonths = new Set();
             cashflowData.forEach(item => {
-                if (item.actualDate) {
-                    let ym = item.actualDate.substring(0, 7);
-                    monthsSet.add(ym);
-                }
+                if (item.actualDate) cfMonths.add(item.actualDate.substring(0, 7));
             });
 
             let now = new Date();
             let currentYM = now.toISOString().substring(0, 7);
-            monthsSet.add(currentYM);
+            assetMonths.add(currentYM);
+            cfMonths.add(currentYM);
 
-            let sortedMonths = Array.from(monthsSet).sort().reverse();
+            let sortedAssetMonths = Array.from(assetMonths).sort().reverse();
+            let sortedCfMonths = Array.from(cfMonths).sort().reverse();
 
-            filterSelect.innerHTML = `<option value="all">${currentLang === 'th' ? 'ทั้งหมด (All)' : 'All Months'}</option>`;
-            
-            sortedMonths.forEach(ym => {
+            assetFilter.innerHTML = `<option value="all">${currentLang === 'th' ? 'ทั้งหมด (All)' : 'All Months'}</option>`;
+            sortedAssetMonths.forEach(ym => {
                 let [year, month] = ym.split('-');
                 let monthIdx = parseInt(month, 10) - 1;
-                let displayLabel = currentLang === 'th' ? 
-                    `${monthNamesTh[monthIdx]} ${parseInt(year)+543}` : 
-                    `${new Date(year, monthIdx).toLocaleString('en', { month: 'short' })} ${year}`;
-                
-                filterSelect.innerHTML += `<option value="${ym}">${displayLabel}</option>`;
+                let label = currentLang === 'th' ? `${monthNamesTh[monthIdx]} ${parseInt(year)+543}` : `${new Date(year, monthIdx).toLocaleString('en', { month: 'short' })} ${year}`;
+                assetFilter.innerHTML += `<option value="${ym}">${label}</option>`;
             });
+            assetFilter.value = assetFilter.querySelector(`option[value="${assetVal}"]`) ? assetVal : currentYM;
 
-            if (filterSelect.querySelector(`option[value="${currentVal}"]`)) {
-                filterSelect.value = currentVal;
-            } else {
-                filterSelect.value = currentYM;
-            }
+            cfFilter.innerHTML = `<option value="all">${currentLang === 'th' ? 'ทั้งหมด (All)' : 'All Months'}</option>`;
+            sortedCfMonths.forEach(ym => {
+                let [year, month] = ym.split('-');
+                let monthIdx = parseInt(month, 10) - 1;
+                let label = currentLang === 'th' ? `${monthNamesTh[monthIdx]} ${parseInt(year)+543}` : `${new Date(year, monthIdx).toLocaleString('en', { month: 'short' })} ${year}`;
+                cfFilter.innerHTML += `<option value="${ym}">${label}</option>`;
+            });
+            cfFilter.value = cfFilter.querySelector(`option[value="${cfVal}"]`) ? cfVal : currentYM;
         }
 
         function addNewAssetItem() {
@@ -1145,12 +1154,14 @@
             document.getElementById('asset-value-input').value = '';
             document.getElementById('asset-name-input').value = '';
             document.getElementById('asset-units-input').value = '';
+            populateMonthFilters();
             updateUI();
         }
 
         function deleteAssetItem(id) {
             assetsData = assetsData.filter(item => item.id !== id);
             saveDataToStorage();
+            populateMonthFilters();
             updateUI();
         }
 
@@ -1160,6 +1171,7 @@
             const copy = { ...item, id: 'asset_' + Date.now(), name: item.name + ' (สำเนา)' };
             assetsData.push(copy);
             saveDataToStorage();
+            populateMonthFilters();
             updateUI();
         }
 
@@ -1238,7 +1250,7 @@
 
             document.getElementById('inc-amount-input').value = '';
             document.getElementById('inc-name-input').value = '';
-            populateMonthFilter();
+            populateMonthFilters();
             updateUI();
         }
 
@@ -1272,14 +1284,14 @@
 
             document.getElementById('exp-amount-input').value = '';
             document.getElementById('exp-name-input').value = '';
-            populateMonthFilter();
+            populateMonthFilters();
             updateUI();
         }
 
         function deleteCashflowItem(id) {
             cashflowData = cashflowData.filter(item => item.id !== id);
             saveDataToStorage();
-            populateMonthFilter();
+            populateMonthFilters();
             updateUI();
         }
 
@@ -1289,7 +1301,7 @@
             const copy = { ...item, id: 'cf_' + Date.now(), name: item.name + ' (สำเนา)' };
             cashflowData.push(copy);
             saveDataToStorage();
-            populateMonthFilter();
+            populateMonthFilters();
             updateUI();
         }
 
@@ -1371,7 +1383,7 @@
 
             saveDataToStorage();
             closeEditModal();
-            populateMonthFilter();
+            populateMonthFilters();
             updateUI();
         }
 
@@ -1383,33 +1395,47 @@
 
         function renderAssets() {
             const container = document.getElementById('asset-list-container');
+            const selectedMonth = document.getElementById('asset-month-filter').value;
+
             if (assetsData.length === 0) {
                 container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ยังไม่มีสินทรัพย์ในพอร์ต</div>`;
                 return;
             }
 
             container.innerHTML = '';
-            assetsData.forEach(item => {
-                container.innerHTML += `
-                    <div class="list-item">
-                        <div class="item-left">
-                            <div class="item-icon">💰</div>
-                            <div>
-                                <div class="item-title">${item.name}</div>
-                                <div class="item-sub">${item.type} ${item.units ? '• ' + item.units + ' หน่วย' : ''} • บันทึก: ${item.date}</div>
+            let sorted = [...assetsData].sort((a,b) => new Date(b.date) - new Date(a.date));
+            let filteredCount = 0;
+
+            sorted.forEach(item => {
+                let itemYM = item.date ? item.date.substring(0, 7) : '';
+
+                if (selectedMonth === 'all' || itemYM === selectedMonth) {
+                    filteredCount++;
+                    container.innerHTML += `
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="item-icon">💰</div>
+                                <div>
+                                    <div class="item-title">${item.name}</div>
+                                    <div class="item-sub">${item.type} ${item.units ? '• ' + item.units + ' หน่วย' : ''} • บันทึก: ${item.date}</div>
+                                </div>
+                            </div>
+                            <div class="item-right">
+                                <div class="item-amount val-plus">฿ ${formatNumber(item.value)}</div>
+                                <div class="action-btns-row">
+                                    <button class="btn-mini" onclick="openEditModal('${item.id}', 'asset')">แก้ไข</button>
+                                    <button class="btn-mini" onclick="duplicateAssetItem('${item.id}')">คัดลอก</button>
+                                    <button class="btn-mini danger" onclick="deleteAssetItem('${item.id}')">ลบ</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="item-right">
-                            <div class="item-amount val-plus">฿ ${formatNumber(item.value)}</div>
-                            <div class="action-btns-row">
-                                <button class="btn-mini" onclick="openEditModal('${item.id}', 'asset')">แก้ไข</button>
-                                <button class="btn-mini" onclick="duplicateAssetItem('${item.id}')">คัดลอก</button>
-                                <button class="btn-mini danger" onclick="deleteAssetItem('${item.id}')">ลบ</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                    `;
+                }
             });
+
+            if (filteredCount === 0) {
+                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ไม่มีรายการสินทรัพย์ในเดือนนี้</div>`;
+            }
         }
 
         function renderCashflow() {
