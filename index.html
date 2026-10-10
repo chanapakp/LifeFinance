@@ -519,6 +519,8 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-buttons {
@@ -831,7 +833,7 @@
             </div>
         </div>
 
-        <!-- Custom Edit Modal Popup -->
+        <!-- Custom Edit Modal Popup for Assets -->
         <div class="modal-overlay" id="edit-modal">
             <div class="modal-card">
                 <div class="form-title" style="margin-bottom: 4px;">แก้ไขข้อมูลสินทรัพย์</div>
@@ -850,6 +852,49 @@
                 <div class="modal-buttons">
                     <button class="submit-btn" style="background: var(--surface-hover); color: var(--text-main); border: 1px solid var(--border);" onclick="closeEditModal()">ยกเลิก</button>
                     <button class="submit-btn" onclick="saveEditAsset()">บันทึก</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Edit Modal Popup for Cash Flow -->
+        <div class="modal-overlay" id="edit-cashflow-modal">
+            <div class="modal-card">
+                <div class="form-title" style="margin-bottom: 4px;" id="cf-modal-title">แก้ไขรายการเงินเข้า-ออก</div>
+                <div class="field-group">
+                    <label class="field-label">รายละเอียดรายการ</label>
+                    <input type="text" class="text-input" id="cf-modal-name-input">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">จำนวนเงิน (บาท)</label>
+                    <input type="number" class="text-input" id="cf-modal-amount-input">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">หมวดหมู่</label>
+                    <select class="select-input" id="cf-modal-category-select">
+                        <!-- Options injected dynamically based on type -->
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">วันที่ทำรายการ</label>
+                    <input type="date" class="text-input" id="cf-modal-date-input">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">ความถี่ (การทำซ้ำ)</label>
+                    <select class="select-input" id="cf-modal-repeat-select" onchange="handleModalRepeatChange()">
+                        <option value="ทำครั้งเดียว">ทำครั้งเดียว (Once)</option>
+                        <option value="ทุกเดือน">ทุกเดือน (Monthly)</option>
+                        <option value="ทุก 6 เดือน">ทุก 6 เดือน (Every 6 Months)</option>
+                        <option value="ทุกปี">ทุกปี (Annually)</option>
+                        <option value="ระบุเอง">ระบุเอง (กำหนดจำนวนเดือน)</option>
+                    </select>
+                </div>
+                <div class="field-group" id="cf-modal-custom-group" style="display: none;">
+                    <label class="field-label">ทำซ้ำทุกๆ (จำนวนเดือน)</label>
+                    <input type="number" class="text-input" id="cf-modal-custom-months" placeholder="เช่น 3 (ทุก 3 เดือน)" min="1">
+                </div>
+                <div class="modal-buttons">
+                    <button class="submit-btn" style="background: var(--surface-hover); color: var(--text-main); border: 1px solid var(--border);" onclick="closeEditCashflowModal()">ยกเลิก</button>
+                    <button class="submit-btn" id="cf-modal-save-btn" onclick="saveEditCashflow()">บันทึก</button>
                 </div>
             </div>
         </div>
@@ -884,8 +929,12 @@
         let assetsList = [];
         let cashflowList = [];
         let editingAssetId = null;
+        let editingCashflowId = null;
 
         const chartColors = ['#3b82f6', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#ec4899', '#06b6d4'];
+
+        const incomeCategories = ['เงินเดือนประจำ', 'โบนัส', 'เงินปันผล/ดอกเบี้ย', 'รายได้พิเศษ'];
+        const expenseCategories = ['ที่อยู่อาศัย/ค่าน้ำ/ค่าไฟ', 'ค่าบริการรายเดือน', 'อาหารและเครื่องดื่ม', 'เดินทาง', 'ช้อปปิ้ง'];
 
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
@@ -899,6 +948,16 @@
         function handleRepeatChange(type) {
             const repeatSelect = document.getElementById(`${type}-repeat-select`);
             const customGroup = document.getElementById(`${type}-custom-group`);
+            if (repeatSelect.value === 'ระบุเอง') {
+                customGroup.style.display = 'flex';
+            } else {
+                customGroup.style.display = 'none';
+            }
+        }
+
+        function handleModalRepeatChange() {
+            const repeatSelect = document.getElementById('cf-modal-repeat-select');
+            const customGroup = document.getElementById('cf-modal-custom-group');
             if (repeatSelect.value === 'ระบุเอง') {
                 customGroup.style.display = 'flex';
             } else {
@@ -1341,6 +1400,90 @@
             document.getElementById('exp-custom-months').value = '';
         }
 
+        function openEditCashflowModal(id) {
+            const item = cashflowList.find(c => c.id === id);
+            if (!item) return;
+
+            editingCashflowId = id;
+            document.getElementById('cf-modal-title').innerText = item.type === 'income' ? 'แก้ไขรายการรายรับ' : 'แก้ไขรายการรายจ่าย';
+            document.getElementById('cf-modal-name-input').value = item.name;
+            document.getElementById('cf-modal-amount-input').value = item.amount;
+            document.getElementById('cf-modal-date-input').value = item.date || '';
+
+            // Populate category select options
+            const catSelect = document.getElementById('cf-modal-category-select');
+            catSelect.innerHTML = '';
+            const categories = item.type === 'income' ? incomeCategories : expenseCategories;
+            categories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.innerText = cat;
+                if (cat === item.category) opt.selected = true;
+                catSelect.appendChild(opt);
+            });
+
+            // Handle repeat select & custom field
+            const repeatSelect = document.getElementById('cf-modal-repeat-select');
+            const customGroup = document.getElementById('cf-modal-custom-group');
+            const customInput = document.getElementById('cf-modal-custom-months');
+
+            if (item.repeat.startsWith('ทุกๆ ')) {
+                repeatSelect.value = 'ระบุเอง';
+                customGroup.style.display = 'flex';
+                customInput.value = item.repeat.replace('ทุกๆ ', '').replace(' เดือน', '');
+            } else {
+                repeatSelect.value = item.repeat;
+                customGroup.style.display = 'none';
+                customInput.value = '';
+            }
+
+            document.getElementById('edit-cashflow-modal').classList.add('active');
+        }
+
+        function closeEditCashflowModal() {
+            editingCashflowId = null;
+            document.getElementById('edit-cashflow-modal').classList.remove('active');
+        }
+
+        function saveEditCashflow() {
+            const item = cashflowList.find(c => c.id === editingCashflowId);
+            if (!item) return;
+
+            const newName = document.getElementById('cf-modal-name-input').value.trim();
+            const newAmount = parseFloat(document.getElementById('cf-modal-amount-input').value);
+            const newCategory = document.getElementById('cf-modal-category-select').value;
+            const newDate = document.getElementById('cf-modal-date-input').value;
+            const repeatSelectVal = document.getElementById('cf-modal-repeat-select').value;
+
+            let newRepeat = repeatSelectVal;
+            if (repeatSelectVal === 'ระบุเอง') {
+                const months = document.getElementById('cf-modal-custom-months').value;
+                newRepeat = months ? `ทุกๆ ${months} เดือน` : 'ระบุเอง';
+            }
+
+            if (isNaN(newAmount)) {
+                alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินให้ถูกต้องครับ' : 'Please enter a valid amount.');
+                return;
+            }
+
+            // Adjust totals
+            if (item.type === 'income') {
+                totalIncome = totalIncome - item.amount + newAmount;
+            } else {
+                totalExpense = totalExpense - item.amount + newAmount;
+            }
+
+            item.name = newName ? newName : item.name;
+            item.amount = newAmount;
+            item.category = newCategory;
+            item.date = newDate;
+            item.repeat = newRepeat;
+
+            closeEditCashflowModal();
+            renderCashflow();
+            updateSystem();
+        }
+
         function deleteCashflow(id) {
             const item = cashflowList.find(c => c.id === id);
             if (item) {
@@ -1379,11 +1522,16 @@
                     </div>
                     <div class="item-right">
                         <div class="item-amount ${isInc ? 'val-plus' : 'val-minus'}">${isInc ? '+' : '-'}฿ ${item.amount.toLocaleString()}</div>
-                        <button class="btn-mini danger" onclick="deleteCashflow(${item.id})">${translations[currentLang].delete}</button>
+                        <div class="action-btns-row">
+                            <button class="btn-mini" onclick="openEditCashflowModal(${item.id})">${translations[currentLang].edit}</button>
+                            <button class="btn-mini danger" onclick="deleteCashflow(${item.id})">${translations[currentLang].delete}</button>
+                        </div>
                     </div>
                 `;
                 container.appendChild(row);
             });
+
+            renderExpenseChart();
         }
 
         function renderExpenseChart() {
