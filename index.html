@@ -47,7 +47,6 @@
             overflow: hidden;
         }
 
-        /* Mobile Container Wrapper (จำลองหน้าจอมือถือแบบเต็มพื้นที่แนวดิ่ง) */
         .mobile-app-container {
             width: 100%;
             max-width: 430px;
@@ -69,7 +68,6 @@
             }
         }
 
-        /* App Top Navigation Bar */
         .app-header {
             padding: 16px 20px;
             display: flex;
@@ -121,7 +119,6 @@
             align-items: center;
             justify-content: center;
             color: var(--text-main);
-            font-size: 16px;
             cursor: pointer;
             position: relative;
         }
@@ -136,7 +133,6 @@
             border-radius: 50%;
         }
 
-        /* Scrollable Content Views */
         .view-content {
             flex: 1;
             overflow-y: auto;
@@ -155,7 +151,6 @@
             display: flex;
         }
 
-        /* Cards Style */
         .card-box {
             background: var(--surface);
             border-radius: 20px;
@@ -221,7 +216,6 @@
             margin-top: 2px;
         }
 
-        /* Section Titles */
         .section-header-row {
             display: flex;
             justify-content: space-between;
@@ -235,7 +229,6 @@
             color: var(--text-main);
         }
 
-        /* Allocation Bar */
         .allocation-bar {
             height: 8px;
             border-radius: 4px;
@@ -269,7 +262,6 @@
             border-radius: 50%;
         }
 
-        /* Item Lists */
         .list-stack {
             display: flex;
             flex-direction: column;
@@ -303,8 +295,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
             border: 1px solid var(--border);
+            color: var(--text-main);
         }
 
         .item-title {
@@ -340,7 +332,6 @@
             margin-top: 2px;
         }
 
-        /* Forms */
         .form-card {
             background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
             border: 1px solid var(--border-highlight);
@@ -400,12 +391,16 @@
             margin-top: 4px;
         }
 
+        .submit-btn.success {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
         .submit-btn.danger {
             background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
             box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
         }
 
-        /* Bottom Tab Navigation Bar (Mobile Native Style) */
         .bottom-nav-bar {
             height: 64px;
             background: rgba(18, 24, 36, 0.95);
@@ -436,10 +431,6 @@
             color: var(--primary);
         }
 
-        .nav-symbol {
-            font-size: 20px;
-        }
-
         .tag-pill {
             background: rgba(255, 255, 255, 0.05);
             padding: 3px 8px;
@@ -447,6 +438,16 @@
             font-size: 10px;
             font-weight: 600;
             color: var(--text-secondary);
+        }
+
+        .svg-icon {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
         }
     </style>
 </head>
@@ -463,8 +464,8 @@
                     <div class="user-name">คุณสมชาย เอกอนันต์</div>
                 </div>
             </div>
-            <div class="icon-btn">
-                🔔
+            <div class="icon-btn" title="การแจ้งเตือน">
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                 <div class="notification-dot"></div>
             </div>
         </header>
@@ -475,10 +476,13 @@
             <div class="card-box networth-card">
                 <div class="card-label">
                     <span>ความมั่งคั่งสุทธิ (Net Worth)</span>
-                    <span style="cursor: pointer;">👁️</span>
+                    <svg class="svg-icon" style="width: 16px; height: 16px; cursor: pointer;" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </div>
                 <div class="networth-amount">฿ 2,450,000</div>
-                <div class="growth-badge">▲ +3.2% เดือนนี้ (+฿76,000)</div>
+                <div class="growth-badge">
+                    <svg class="svg-icon" style="width: 12px; height: 12px;" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                    +3.2% เดือนนี้ (+฿76,000)
+                </div>
                 <div class="card-divider"></div>
                 <div class="networth-sub">
                     <div>
@@ -496,7 +500,7 @@
             <div class="card-box">
                 <div class="section-header-row">
                     <span class="section-title">สัดส่วนพอร์ตสินทรัพย์</span>
-                    <span style="font-size: 12px; color: var(--primary);">จัดการ</span>
+                    <span style="font-size: 12px; color: var(--primary); cursor: pointer;">จัดการ</span>
                 </div>
                 <div class="allocation-bar">
                     <div class="alloc-seg" style="width: 55%; background: #3b82f6;"></div>
@@ -518,7 +522,9 @@
                 <div class="list-stack">
                     <div class="list-item">
                         <div class="item-left">
-                            <div class="item-icon" style="color: #10b981; background: var(--success-bg);">📜</div>
+                            <div class="item-icon" style="color: #10b981; background: var(--success-bg);">
+                                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                            </div>
                             <div>
                                 <div class="item-title">ดอกเบี้ยหุ้นกู้ CPALL</div>
                                 <div class="item-sub">15 ต.ค. • เข้าบัญชี KBank</div>
@@ -531,7 +537,9 @@
                     </div>
                     <div class="list-item">
                         <div class="item-left">
-                            <div class="item-icon" style="color: #f43f5e; background: var(--danger-bg);">🏠</div>
+                            <div class="item-icon" style="color: #f43f5e; background: var(--danger-bg);">
+                                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            </div>
                             <div>
                                 <div class="item-title">ผ่อนคอนโด (Fixed)</div>
                                 <div class="item-sub">16 ต.ค. • ตัดอัตโนมัติ</div>
@@ -551,14 +559,15 @@
             <!-- Add Asset Form -->
             <div class="card-box form-card">
                 <div class="form-title">
-                    <span style="color: var(--primary);">⚡</span> เพิ่มสินทรัพย์ / เงินลงทุนใหม่
+                    <svg class="svg-icon" style="color: var(--primary);" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    เพิ่มสินทรัพย์ / เงินลงทุนใหม่
                 </div>
                 <div class="field-group">
                     <label class="field-label">ประเภทสินทรัพย์</label>
                     <select class="select-input" id="asset-type-select">
-                        <option value="cash">🏦 เงินฝากธนาคาร / สลาก</option>
-                        <option value="bond">📜 หุ้นกู้ / พันธบัตร</option>
-                        <option value="stock">📈 หุ้นสามัญ / กองทุนรวม</option>
+                        <option value="cash">เงินฝากธนาคาร / สลาก</option>
+                        <option value="bond">หุ้นกู้ / พันธบัตร</option>
+                        <option value="stock">หุ้นสามัญ / กองทุนรวม</option>
                     </select>
                 </div>
                 <div class="field-group">
@@ -580,7 +589,9 @@
                 <div class="list-stack" id="asset-list-container">
                     <div class="list-item">
                         <div class="item-left">
-                            <div class="item-icon">🏦</div>
+                            <div class="item-icon">
+                                <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                            </div>
                             <div>
                                 <div class="item-title">KBank Digital Savings</div>
                                 <div class="item-sub">ดอกเบี้ย 1.5% ต่อปี</div>
@@ -593,7 +604,9 @@
                     </div>
                     <div class="list-item">
                         <div class="item-left">
-                            <div class="item-icon">🎁</div>
+                            <div class="item-icon">
+                                <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
+                            </div>
                             <div>
                                 <div class="item-title">สลากออมสินพิเศษ 2 ปี</div>
                                 <div class="item-sub">ถูกรางวัลล่าสุด ฿300</div>
@@ -604,52 +617,51 @@
                             <div class="tag-pill">สลาก</div>
                         </div>
                     </div>
-                    <div class="list-item">
-                        <div class="item-left">
-                            <div class="item-icon">📜</div>
-                            <div>
-                                <div class="item-title">หุ้นกู้ CPALL26NA</div>
-                                <div class="item-sub">ดอกเบี้ย 4.2% (รับ พ.ย.)</div>
-                            </div>
-                        </div>
-                        <div class="item-right">
-                            <div class="item-amount">฿ 400,000</div>
-                            <div class="tag-pill">หุ้นกู้</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- VIEW 3: DAILY EXPENSE & BUDGETING -->
+        <!-- VIEW 3: CASH FLOW (INCOME & EXPENSE) -->
         <div id="view-expense" class="view-content">
-            <!-- Budget Status Card -->
-            <div class="card-box">
-                <div class="section-header-row">
-                    <span class="section-title">งบประมาณเดือนนี้</span>
-                    <span style="font-size: 11px; color: var(--text-secondary);">ใช้ไปแล้ว 63%</span>
+            <!-- Add Income Form (เพิ่มใหม่ตาม BRD 2.1) -->
+            <div class="card-box form-card" style="border-color: rgba(16, 185, 129, 0.3);">
+                <div class="form-title" style="color: var(--success);">
+                    <svg class="svg-icon" style="color: var(--success);" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    บันทึกรายรับ (เงินเดือน / โบนัส / ปันผล)
                 </div>
-                <div style="height: 8px; background: #1e293b; border-radius: 4px; overflow: hidden; margin: 10px 0 6px 0;">
-                    <div style="height: 100%; width: 63%; background: var(--primary-gradient); border-radius: 4px;"></div>
+                <div class="field-group">
+                    <label class="field-label">ประเภทรายรับ</label>
+                    <select class="select-input" id="inc-cat-select">
+                        <option value="เงินเดือน">เงินเดือนประจำ (Salary)</option>
+                        <option value="โบนัส">โบนัสประจำปี</option>
+                        <option value="เงินปันผล/ดอกเบี้ย">เงินปันผล / ดอกเบี้ยรับ</option>
+                        <option value="รายได้พิเศษ">รายได้พิเศษ / ค่าคอมมิชชัน</option>
+                    </select>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 11px;">
-                    <span style="color: var(--text-secondary);">ใช้ไป ฿ 28,400</span>
-                    <span style="font-weight: 700;">งบรวม ฿ 45,000</span>
+                <div class="field-group">
+                    <label class="field-label">รายละเอียดรายการ</label>
+                    <input type="text" class="text-input" id="inc-name-input" placeholder="เช่น เงินเดือนรอบเดือนตุลาคม">
                 </div>
+                <div class="field-group">
+                    <label class="field-label">จำนวนเงิน (บาท)</label>
+                    <input type="number" class="text-input" id="inc-amount-input" placeholder="0.00">
+                </div>
+                <button class="submit-btn success" onclick="addIncomeItem()">+ บันทึกรายรับ</button>
             </div>
 
             <!-- Add Expense Form -->
             <div class="card-box form-card" style="border-color: rgba(244, 63, 94, 0.3);">
                 <div class="form-title" style="color: #fca5a5;">
-                    <span>💸</span> บันทึกค่าใช้จ่ายรายวัน
+                    <svg class="svg-icon" style="color: var(--danger);" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    บันทึกค่าใช้จ่ายรายวัน
                 </div>
                 <div class="field-group">
-                    <label class="field-label">หมวดหมู่</label>
+                    <label class="field-label">หมวดหมู่รายจ่าย</label>
                     <select class="select-input" id="exp-cat-select">
-                        <option value="อาหาร">🍔 อาหารและเครื่องดื่ม</option>
-                        <option value="เดินทาง">🚗 เดินทาง / น้ำมัน / BTS</option>
-                        <option value="ช้อปปิ้ง">🛍️ ช้อปปิ้ง / ของใช้</option>
-                        <option value="ค่าใช้จ่ายประจำ">🏠 ค่าใช้จ่ายประจำ (Fixed)</option>
+                        <option value="อาหาร">อาหารและเครื่องดื่ม</option>
+                        <option value="เดินทาง">เดินทาง / น้ำมัน / BTS</option>
+                        <option value="ช้อปปิ้ง">ช้อปปิ้ง / ของใช้</option>
+                        <option value="ค่าใช้จ่ายประจำ">ค่าใช้จ่ายประจำ (Fixed)</option>
                     </select>
                 </div>
                 <div class="field-group">
@@ -663,34 +675,38 @@
                 <button class="submit-btn danger" onclick="addExpenseItem()">บันทึกรายจ่าย</button>
             </div>
 
-            <!-- Daily Expense List -->
+            <!-- Cash Flow List (รวมทั้งรายรับและรายจ่าย) -->
             <div class="card-box">
                 <div class="section-header-row">
-                    <span class="section-title">รายการวันนี้ (10 ต.ค.)</span>
+                    <span class="section-title">รายการเงินเข้า-ออก ล่าสุด</span>
                 </div>
-                <div class="list-stack" id="expense-list-container">
+                <div class="list-stack" id="cashflow-list-container">
                     <div class="list-item">
                         <div class="item-left">
-                            <div class="item-icon">☕</div>
+                            <div class="item-icon" style="color: var(--success); background: var(--success-bg);">
+                                <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            </div>
+                            <div>
+                                <div class="item-title">เงินเดือนตุลาคม</div>
+                                <div class="item-sub">เงินเดือนประจำ</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount val-plus">+฿ 65,000</div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon" style="color: var(--danger); background: var(--danger-bg);">
+                                <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+                            </div>
                             <div>
                                 <div class="item-title">Starbucks Coffee</div>
                                 <div class="item-sub">อาหารและเครื่องดื่ม</div>
                             </div>
                         </div>
                         <div class="item-right">
-                            <div class="item-amount" style="color: var(--danger);">-฿ 165</div>
-                        </div>
-                    </div>
-                    <div class="list-item">
-                        <div class="item-left">
-                            <div class="item-icon">🚆</div>
-                            <div>
-                                <div class="item-title">รถไฟฟ้า BTS</div>
-                                <div class="item-sub">เดินทาง</div>
-                            </div>
-                        </div>
-                        <div class="item-right">
-                            <div class="item-amount" style="color: var(--danger);">-฿ 59</div>
+                            <div class="item-amount val-minus">-฿ 165</div>
                         </div>
                     </div>
                 </div>
@@ -700,26 +716,26 @@
         <!-- Bottom Tab Navigation Bar -->
         <nav class="bottom-nav-bar">
             <div class="nav-item active" onclick="switchMobileView('view-home', this)" id="tab-home">
-                <span class="nav-symbol">🏠</span>
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                 <span>หน้าหลัก</span>
             </div>
             <div class="nav-item" onclick="switchMobileView('view-wealth', this)" id="tab-wealth">
-                <span class="nav-symbol">📈</span>
+                <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 <span>สินทรัพย์</span>
             </div>
             <div class="nav-item" onclick="switchMobileView('view-expense', this)" id="tab-expense">
-                <span class="nav-symbol">💸</span>
-                <span>รายจ่าย</span>
+                <svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                <span>รายรับ-จ่าย</span>
             </div>
             <div class="nav-item" onclick="alert('ฟีเจอร์รายงานวิเคราะห์กำลังพัฒนา')">
-                <span class="nav-symbol">📊</span>
+                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
                 <span>วิเคราะห์</span>
             </div>
         </nav>
 
     </div>
 
-    <!-- Script ควบคุมการทำงานของ Mobile App -->
+    <!-- Script ควบคุมการทำงาน -->
     <script>
         function switchMobileView(viewId, navEl) {
             document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
@@ -735,7 +751,7 @@
             const name = document.getElementById('asset-name-input').value.trim();
             const value = parseFloat(document.getElementById('asset-value-input').value);
             const selectEl = document.getElementById('asset-type-select');
-            const typeText = selectEl.options[selectEl.selectedIndex].text.split(' ')[1] || 'ทรัพย์สิน';
+            const typeText = selectEl.options[selectEl.selectedIndex].text.split('/')[0] || 'ทรัพย์สิน';
 
             if (!name || isNaN(value)) {
                 alert('กรุณากรอกชื่อรายการและมูลค่าให้ถูกต้องครับ');
@@ -747,7 +763,9 @@
             row.className = 'list-item';
             row.innerHTML = `
                 <div class="item-left">
-                    <div class="item-icon">💎</div>
+                    <div class="item-icon">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                    </div>
                     <div>
                         <div class="item-title">${name}</div>
                         <div class="item-sub">บันทึกใหม่</div>
@@ -765,29 +783,65 @@
             alert('เพิ่มสินทรัพย์เข้าพอร์ตสำเร็จ!');
         }
 
-        function addExpenseItem() {
-            const name = document.getElementById('exp-name-input').value.trim();
-            const amount = parseFloat(document.getElementById('exp-amount-input').value);
-            const category = document.getElementById('exp-cat-select').value;
+        function addIncomeItem() {
+            const name = document.getElementById('inc-name-input').value.trim();
+            const amount = parseFloat(document.getElementById('inc-amount-input').value);
+            const category = document.getElementById('inc-cat-select').value;
 
             if (!name || isNaN(amount)) {
-                alert('กรุณากรอกรายละเอียดและจำนวนเงินให้ครบถ้วนครับ');
+                alert('กรุณากรอกรายละเอียดและจำนวนเงินรายรับให้ครบถ้วนครับ');
                 return;
             }
 
-            const container = document.getElementById('expense-list-container');
+            const container = document.getElementById('cashflow-list-container');
             const row = document.createElement('div');
             row.className = 'list-item';
             row.innerHTML = `
                 <div class="item-left">
-                    <div class="item-icon">🧾</div>
+                    <div class="item-icon" style="color: var(--success); background: var(--success-bg);">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    </div>
                     <div>
                         <div class="item-title">${name}</div>
                         <div class="item-sub">${category}</div>
                     </div>
                 </div>
                 <div class="item-right">
-                    <div class="item-amount" style="color: var(--danger);">-฿ ${amount.toLocaleString()}</div>
+                    <div class="item-amount val-plus">+฿ ${amount.toLocaleString()}</div>
+                </div>
+            `;
+            container.prepend(row);
+
+            document.getElementById('inc-name-input').value = '';
+            document.getElementById('inc-amount-input').value = '';
+            alert('บันทึกรายรับสำเร็จ!');
+        }
+
+        function addExpenseItem() {
+            const name = document.getElementById('exp-name-input').value.trim();
+            const amount = parseFloat(document.getElementById('exp-amount-input').value);
+            const category = document.getElementById('exp-cat-select').value;
+
+            if (!name || isNaN(amount)) {
+                alert('กรุณากรอกรายละเอียดและจำนวนเงินรายจ่ายให้ครบถ้วนครับ');
+                return;
+            }
+
+            const container = document.getElementById('cashflow-list-container');
+            const row = document.createElement('div');
+            row.className = 'list-item';
+            row.innerHTML = `
+                <div class="item-left">
+                    <div class="item-icon" style="color: var(--danger); background: var(--danger-bg);">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+                    </div>
+                    <div>
+                        <div class="item-title">${name}</div>
+                        <div class="item-sub">${category}</div>
+                    </div>
+                </div>
+                <div class="item-right">
+                    <div class="item-amount val-minus">-฿ ${amount.toLocaleString()}</div>
                 </div>
             `;
             container.prepend(row);
