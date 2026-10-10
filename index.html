@@ -657,6 +657,8 @@
                         <option value="หุ้นกู้" data-translate="opt_bond">หุ้นกู้ / พันธบัตร</option>
                         <option value="กองทุน/หุ้น" data-translate="opt_stock">หุ้นสามัญ / กองทุนรวม</option>
                         <option value="คริปโต" data-translate="opt_crypto">คริปโต (Cryptocurrency)</option>
+                        <option value="กองทุนสำรองเลี้ยงชีพ" data-translate="opt_pvd">กองทุนสำรองเลี้ยงชีพ (PVD)</option>
+                        <option value="อสังหาริมทรัพย์" data-translate="opt_property">อสังหาริมทรัพย์ (Property)</option>
                     </select>
                 </div>
                 <div class="field-group">
@@ -931,7 +933,7 @@
         let editingAssetId = null;
         let editingCashflowId = null;
 
-        const chartColors = ['#3b82f6', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#ec4899', '#06b6d4'];
+        const chartColors = ['#3b82f6', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6', '#6366f1'];
 
         const incomeCategories = ['เงินเดือนประจำ', 'โบนัส', 'เงินปันผล/ดอกเบี้ย', 'รายได้พิเศษ'];
         const expenseCategories = ['ที่อยู่อาศัย/ค่าน้ำ/ค่าไฟ', 'ค่าบริการรายเดือน', 'อาหารและเครื่องดื่ม', 'เดินทาง', 'ช้อปปิ้ง'];
@@ -984,6 +986,8 @@
                 opt_bond: "หุ้นกู้ / พันธบัตร",
                 opt_stock: "หุ้นสามัญ / กองทุนรวม",
                 opt_crypto: "คริปโต (Cryptocurrency)",
+                opt_pvd: "กองทุนสำรองเลี้ยงชีพ (PVD)",
+                opt_property: "อสังหาริมทรัพย์ (Property)",
                 current_value_label: "มูลค่าปัจจุบัน (บาท) *บังคับ",
                 asset_name_label: "ชื่อรายการ (ไม่บังคับ)",
                 units_label: "จำนวนหุ้น / หน่วย (ไม่บังคับ)",
@@ -1046,6 +1050,8 @@
                 opt_bond: "Corporate Bond",
                 opt_stock: "Stocks / Mutual Funds",
                 opt_crypto: "Cryptocurrency",
+                opt_pvd: "Provident Fund (PVD)",
+                opt_property: "Real Estate (Property)",
                 current_value_label: "Current Value (THB) *Required",
                 asset_name_label: "Item Name (Optional)",
                 units_label: "Units / Shares (Optional)",
@@ -1410,7 +1416,6 @@
             document.getElementById('cf-modal-amount-input').value = item.amount;
             document.getElementById('cf-modal-date-input').value = item.date || '';
 
-            // Populate category select options
             const catSelect = document.getElementById('cf-modal-category-select');
             catSelect.innerHTML = '';
             const categories = item.type === 'income' ? incomeCategories : expenseCategories;
@@ -1422,7 +1427,6 @@
                 catSelect.appendChild(opt);
             });
 
-            // Handle repeat select & custom field
             const repeatSelect = document.getElementById('cf-modal-repeat-select');
             const customGroup = document.getElementById('cf-modal-custom-group');
             const customInput = document.getElementById('cf-modal-custom-months');
@@ -1466,7 +1470,6 @@
                 return;
             }
 
-            // Adjust totals
             if (item.type === 'income') {
                 totalIncome = totalIncome - item.amount + newAmount;
             } else {
