@@ -258,7 +258,6 @@
             gap: 6px;
         }
 
-        /* Chart Styles */
         .chart-container {
             display: flex;
             flex-direction: column;
@@ -397,16 +396,18 @@
 
         .action-btns-row {
             display: flex;
-            gap: 6px;
+            gap: 4px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         .btn-mini {
             background: var(--surface-hover);
             border: 1px solid var(--border);
             color: var(--text-secondary);
-            padding: 3px 8px;
+            padding: 3px 6px;
             border-radius: 6px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
             cursor: pointer;
         }
@@ -459,7 +460,6 @@
             font-size: 13px;
             outline: none;
             transition: all 0.2s;
-            max-width: 100%;
             appearance: none;
             -webkit-appearance: none;
         }
@@ -483,13 +483,8 @@
             margin-top: 4px;
         }
 
-        .submit-btn.success {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-        }
-
-        .submit-btn.danger {
-            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
-        }
+        .submit-btn.success { background: linear-gradient(135deg, #059669 0%, #047857 100%); }
+        .submit-btn.danger { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); }
 
         /* Modal Popup Styles */
         .modal-overlay {
@@ -504,9 +499,7 @@
             padding: 20px;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal-card {
             width: 100%;
@@ -554,9 +547,7 @@
             transition: color 0.2s;
         }
 
-        .nav-item.active {
-            color: var(--primary);
-        }
+        .nav-item.active { color: var(--primary); }
 
         .svg-icon {
             width: 18px;
@@ -696,18 +687,18 @@
                 <div class="section-header-row" style="margin-bottom: 8px;">
                     <span class="section-title" data-translate="cashflow_summary_title">
                         <svg class="svg-icon" style="width: 16px; height: 16px; color: var(--primary);" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-                        สรุปกระแสเงินสดเดือนนี้
+                        สรุปกระแสเงินสดเดือนนี้ (และทั้งปี)
                     </span>
                     <span style="font-size: 11px; color: var(--success); font-weight: 600;" id="dash-savings-rate">ออมสุทธิ 0%</span>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
                     <div style="background: var(--success-bg); padding: 10px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2);">
-                        <div style="font-size: 10px; color: var(--text-secondary);" data-translate="total_income">รายรับรวม</div>
+                        <div style="font-size: 10px; color: var(--text-secondary);" data-translate="total_income">รายรับรวม (ปีนี้)</div>
                         <div style="font-size: 15px; font-weight: 700; color: var(--success); margin-top: 2px;" id="dash-total-income">+฿ 0</div>
                     </div>
                     <div style="background: var(--danger-bg); padding: 10px; border-radius: 12px; border: 1px solid rgba(244, 63, 94, 0.2);">
-                        <div style="font-size: 10px; color: var(--text-secondary);" data-translate="total_expense">รายจ่ายรวม</div>
+                        <div style="font-size: 10px; color: var(--text-secondary);" data-translate="total_expense">รายจ่ายรวม (ปีนี้)</div>
                         <div style="font-size: 15px; font-weight: 700; color: var(--danger); margin-top: 2px;" id="dash-total-expense">-฿ 0</div>
                     </div>
                 </div>
@@ -749,6 +740,7 @@
                         <option value="โบนัส" data-translate="inc_bonus">โบนัสประจำปี</option>
                         <option value="เงินปันผล/ดอกเบี้ย" data-translate="inc_div">เงินปันผล / ดอกเบี้ยรับ</option>
                         <option value="รายได้พิเศษ" data-translate="inc_extra">รายได้พิเศษ / ค่าคอมมิชชัน</option>
+                        <option value="Other" data-translate="inc_other">อื่นๆ (Other)</option>
                     </select>
                 </div>
                 <div class="field-group">
@@ -757,7 +749,7 @@
                 </div>
                 <div class="field-group">
                     <label class="field-label" data-translate="desc_optional">รายละเอียดรายการ (ไม่บังคับ)</label>
-                    <input type="text" class="text-input" id="inc-name-input" placeholder="เช่น เงินเดือนตุลาคม">
+                    <input type="text" class="text-input" id="inc-name-input" placeholder="เช่น เงินเดือนมกราคม">
                 </div>
                 <div class="field-group">
                     <label class="field-label" data-translate="date_label_trans">วันที่ทำรายการ</label>
@@ -767,6 +759,7 @@
                     <label class="field-label" data-translate="repeat_label">ความถี่ (การทำซ้ำ)</label>
                     <select class="select-input" id="inc-repeat-select" onchange="handleRepeatChange('inc')">
                         <option value="ทำครั้งเดียว" data-translate="rep_once">ทำครั้งเดียว (Once)</option>
+                        <option value="ทุกสัปดาห์" data-translate="rep_weekly">ทุกสัปดาห์ (Weekly)</option>
                         <option value="ทุกเดือน" data-translate="rep_monthly">ทุกเดือน (Monthly)</option>
                         <option value="ทุก 6 เดือน" data-translate="rep_6m">ทุก 6 เดือน (Every 6 Months)</option>
                         <option value="ทุกปี" data-translate="rep_yearly">ทุกปี (Annually)</option>
@@ -794,6 +787,9 @@
                         <option value="อาหารและเครื่องดื่ม" data-translate="exp_food">อาหารและเครื่องดื่ม</option>
                         <option value="เดินทาง" data-translate="exp_transport">เดินทาง / น้ำมัน / BTS</option>
                         <option value="ช้อปปิ้ง" data-translate="exp_shop">ช้อปปิ้ง / ของใช้</option>
+                        <option value="ค่าประกัน" data-translate="exp_insurance">ค่าประกัน (Insurance)</option>
+                        <option value="ค่า car maintenance" data-translate="exp_car">ค่าบำรุงรักษารถยนต์ (Car Maintenance)</option>
+                        <option value="Other" data-translate="exp_other">อื่นๆ (Other)</option>
                     </select>
                 </div>
                 <div class="field-group">
@@ -802,7 +798,7 @@
                 </div>
                 <div class="field-group">
                     <label class="field-label" data-translate="desc_optional">รายละเอียดรายการ (ไม่บังคับ)</label>
-                    <input type="text" class="text-input" id="exp-name-input" placeholder="เช่น ค่าไฟฟ้า, ค่ามือถือ">
+                    <input type="text" class="text-input" id="exp-name-input" placeholder="เช่น ค่าผ่อนคอนโด, ค่าไฟ">
                 </div>
                 <div class="field-group">
                     <label class="field-label" data-translate="date_label_trans">วันที่ทำรายการ</label>
@@ -812,6 +808,7 @@
                     <label class="field-label" data-translate="repeat_label">ความถี่ (การทำซ้ำ)</label>
                     <select class="select-input" id="exp-repeat-select" onchange="handleRepeatChange('exp')">
                         <option value="ทำครั้งเดียว" data-translate="rep_once">ทำครั้งเดียว (Once)</option>
+                        <option value="ทุกสัปดาห์" data-translate="rep_weekly">ทุกสัปดาห์ (Weekly)</option>
                         <option value="ทุกเดือน" data-translate="rep_monthly">ทุกเดือน (Monthly)</option>
                         <option value="ทุก 6 เดือน" data-translate="rep_6m">ทุก 6 เดือน (Every 6 Months)</option>
                         <option value="ทุกปี" data-translate="rep_yearly">ทุกปี (Annually)</option>
@@ -822,12 +819,16 @@
                     <label class="field-label" data-translate="custom_repeat_label">ทำซ้ำทุกๆ (จำนวนเดือน)</label>
                     <input type="number" class="text-input" id="exp-custom-months" placeholder="เช่น 3 (ทุก 3 เดือน)" min="1">
                 </div>
-                <button class="submit-btn danger" onclick="addExpenseItem()" data-translate="btn_save_expense">บันทึกรายจ่าย</button>
+                <button class="submit-btn danger" onclick="addExpenseItem()" data-translate="btn_save_expense">+ บันทึกรายจ่าย</button>
             </div>
 
+            <!-- All Cash Flow List with Month Filter -->
             <div class="card-box">
-                <div class="section-header-row">
-                    <span class="section-title" data-translate="all_cashflow_title">รายการเงินเข้า-ออก ทั้งหมด</span>
+                <div class="section-header-row" style="margin-bottom: 8px;">
+                    <span class="section-title" data-translate="all_cashflow_title">รายการรายรับ-รายจ่ายทั้งหมด</span>
+                    <select class="select-input" id="cashflow-month-filter" style="width: 140px; padding: 6px 10px; font-size: 11px;" onchange="renderCashflow()">
+                        <option value="all">ทั้งหมด (All Months)</option>
+                    </select>
                 </div>
                 <div class="list-stack" id="cashflow-list-container">
                     <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;" data-translate="no_cashflow">ยังไม่มีรายการกระแสเงินสด</div>
@@ -835,137 +836,71 @@
             </div>
         </div>
 
-        <!-- Custom Edit Modal Popup for Assets -->
-        <div class="modal-overlay" id="edit-modal">
-            <div class="modal-card">
-                <div class="form-title" style="margin-bottom: 4px;">แก้ไขข้อมูลสินทรัพย์</div>
-                <div class="field-group">
-                    <label class="field-label">ชื่อรายการ</label>
-                    <input type="text" class="text-input" id="modal-name-input">
-                </div>
-                <div class="field-group">
-                    <label class="field-label">มูลค่าปัจจุบัน (บาท)</label>
-                    <input type="number" class="text-input" id="modal-value-input">
-                </div>
-                <div class="field-group">
-                    <label class="field-label">จำนวนหุ้น / หน่วย</label>
-                    <input type="number" class="text-input" id="modal-units-input">
-                </div>
-                <div class="modal-buttons">
-                    <button class="submit-btn" style="background: var(--surface-hover); color: var(--text-main); border: 1px solid var(--border);" onclick="closeEditModal()">ยกเลิก</button>
-                    <button class="submit-btn" onclick="saveEditAsset()">บันทึก</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Custom Edit Modal Popup for Cash Flow -->
-        <div class="modal-overlay" id="edit-cashflow-modal">
-            <div class="modal-card">
-                <div class="form-title" style="margin-bottom: 4px;" id="cf-modal-title">แก้ไขรายการเงินเข้า-ออก</div>
-                <div class="field-group">
-                    <label class="field-label">รายละเอียดรายการ</label>
-                    <input type="text" class="text-input" id="cf-modal-name-input">
-                </div>
-                <div class="field-group">
-                    <label class="field-label">จำนวนเงิน (บาท)</label>
-                    <input type="number" class="text-input" id="cf-modal-amount-input">
-                </div>
-                <div class="field-group">
-                    <label class="field-label">หมวดหมู่</label>
-                    <select class="select-input" id="cf-modal-category-select">
-                        <!-- Options injected dynamically based on type -->
-                    </select>
-                </div>
-                <div class="field-group">
-                    <label class="field-label">วันที่ทำรายการ</label>
-                    <input type="date" class="text-input" id="cf-modal-date-input">
-                </div>
-                <div class="field-group">
-                    <label class="field-label">ความถี่ (การทำซ้ำ)</label>
-                    <select class="select-input" id="cf-modal-repeat-select" onchange="handleModalRepeatChange()">
-                        <option value="ทำครั้งเดียว">ทำครั้งเดียว (Once)</option>
-                        <option value="ทุกเดือน">ทุกเดือน (Monthly)</option>
-                        <option value="ทุก 6 เดือน">ทุก 6 เดือน (Every 6 Months)</option>
-                        <option value="ทุกปี">ทุกปี (Annually)</option>
-                        <option value="ระบุเอง">ระบุเอง (กำหนดจำนวนเดือน)</option>
-                    </select>
-                </div>
-                <div class="field-group" id="cf-modal-custom-group" style="display: none;">
-                    <label class="field-label">ทำซ้ำทุกๆ (จำนวนเดือน)</label>
-                    <input type="number" class="text-input" id="cf-modal-custom-months" placeholder="เช่น 3 (ทุก 3 เดือน)" min="1">
-                </div>
-                <div class="modal-buttons">
-                    <button class="submit-btn" style="background: var(--surface-hover); color: var(--text-main); border: 1px solid var(--border);" onclick="closeEditCashflowModal()">ยกเลิก</button>
-                    <button class="submit-btn" id="cf-modal-save-btn" onclick="saveEditCashflow()">บันทึก</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bottom Tab Navigation Bar -->
+        <!-- BOTTOM NAVIGATION BAR -->
         <nav class="bottom-nav-bar">
-            <div class="nav-item active" onclick="switchMobileView('view-home', this)" id="tab-home">
+            <div class="nav-item active" onclick="switchTab('home')" id="nav-home">
                 <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span data-translate="nav_home">หน้าหลัก</span>
+                <span data-translate="nav_home">หน้าแรก</span>
             </div>
-            <div class="nav-item" onclick="switchMobileView('view-wealth', this)" id="tab-wealth">
-                <svg class="svg-icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <div class="nav-item" onclick="switchTab('wealth')" id="nav-wealth">
+                <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
                 <span data-translate="nav_wealth">สินทรัพย์</span>
             </div>
-            <div class="nav-item" onclick="switchMobileView('view-expense', this)" id="tab-expense">
+            <div class="nav-item" onclick="switchTab('expense')" id="nav-expense">
                 <svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
                 <span data-translate="nav_cashflow">รายรับ-จ่าย</span>
             </div>
-            <div class="nav-item" onclick="alert('ฟีเจอร์รายงานวิเคราะห์กำลังพัฒนา / Analytics feature coming soon')">
-                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
-                <span data-translate="nav_analytics">วิเคราะห์</span>
-            </div>
         </nav>
+
+        <!-- EDIT MODAL POPUP -->
+        <div class="modal-overlay" id="edit-modal">
+            <div class="modal-card">
+                <div class="form-title" id="modal-title">แก้ไขรายการ</div>
+                <input type="hidden" id="edit-id">
+                <input type="hidden" id="edit-type">
+                
+                <div class="field-group">
+                    <label class="field-label">ชื่อรายการ</label>
+                    <input type="text" class="text-input" id="edit-name">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">จำนวนเงิน / มูลค่า (บาท)</label>
+                    <input type="number" class="text-input" id="edit-amount">
+                </div>
+                <div class="field-group" id="edit-units-group" style="display: none;">
+                    <label class="field-label">จำนวนหุ้น / หน่วย</label>
+                    <input type="number" class="text-input" id="edit-units">
+                </div>
+                <div class="field-group" id="edit-cat-group" style="display: none;">
+                    <label class="field-label">หมวดหมู่</label>
+                    <select class="select-input" id="edit-category"></select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">วันที่ทำรายการ</label>
+                    <input type="date" class="text-input" id="edit-date">
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="submit-btn" style="background: var(--surface-hover); color: var(--text-main); border: 1px solid var(--border);" onclick="closeEditModal()">ยกเลิก</button>
+                    <button class="submit-btn" onclick="saveEditModal()">บันทึกการแก้ไข</button>
+                </div>
+            </div>
+        </div>
 
     </div>
 
-    <!-- Script ควบคุมระบบ กราฟ และภาษา -->
     <script>
+        let currentTheme = 'dark';
         let currentLang = 'th';
-        let totalIncome = 0;
-        let totalExpense = 0;
-        let assetsList = [];
-        let cashflowList = [];
-        let editingAssetId = null;
-        let editingCashflowId = null;
 
-        const chartColors = ['#3b82f6', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#ec4899', '#06b6d4', '#14b8a6', '#6366f1'];
+        // State Data
+        let assetsData = [];
+        let cashflowData = [];
 
-        const incomeCategories = ['เงินเดือนประจำ', 'โบนัส', 'เงินปันผล/ดอกเบี้ย', 'รายได้พิเศษ'];
-        const expenseCategories = ['ที่อยู่อาศัย/ค่าน้ำ/ค่าไฟ', 'ค่าบริการรายเดือน', 'อาหารและเครื่องดื่ม', 'เดินทาง', 'ช้อปปิ้ง'];
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('asset-date-input').value = today;
-            document.getElementById('inc-date-input').value = today;
-            document.getElementById('exp-date-input').value = today;
-            
-            updateSystem();
-        });
-
-        function handleRepeatChange(type) {
-            const repeatSelect = document.getElementById(`${type}-repeat-select`);
-            const customGroup = document.getElementById(`${type}-custom-group`);
-            if (repeatSelect.value === 'ระบุเอง') {
-                customGroup.style.display = 'flex';
-            } else {
-                customGroup.style.display = 'none';
-            }
-        }
-
-        function handleModalRepeatChange() {
-            const repeatSelect = document.getElementById('cf-modal-repeat-select');
-            const customGroup = document.getElementById('cf-modal-custom-group');
-            if (repeatSelect.value === 'ระบุเอง') {
-                customGroup.style.display = 'flex';
-            } else {
-                customGroup.style.display = 'none';
-            }
-        }
+        const monthNamesTh = [
+            "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+            "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+        ];
 
         const translations = {
             th: {
@@ -974,41 +909,38 @@
                 realtime_calc: "คำนวณจากสินทรัพย์หักหนี้สินแบบเรียลไทม์",
                 total_assets: "สินทรัพย์รวม",
                 total_liabilities: "หนี้สินรวม",
-                calendar_title: "ปฏิทินเงินเข้า-ออก (7 วันนี้)",
-                no_upcoming: "ไม่มีรายการใกล้ถึงกำหนด",
                 asset_breakdown_title: "สัดส่วนประเภทสินทรัพย์",
                 total_assets_hole: "สินทรัพย์รวม",
-                expense_breakdown_title: "สัดส่วนประเภทรายจ่าย",
-                total_expense_hole: "รายจ่ายรวม",
+                no_assets: "ยังไม่มีสินทรัพย์ในพอร์ต",
+                calendar_title: "ปฏิทินเงินเข้า-ออก (7 วันนี้)",
+                no_upcoming: "ไม่มีรายการใกล้ถึงกำหนด",
                 add_asset_title: "เพิ่มสินทรัพย์ / เงินลงทุนใหม่",
                 asset_type: "ประเภทสินทรัพย์",
-                opt_deposit: "เงินฝากธนาคาร / สลาก",
-                opt_bond: "หุ้นกู้ / พันธบัตร",
-                opt_stock: "หุ้นสามัญ / กองทุนรวม",
-                opt_crypto: "คริปโต (Cryptocurrency)",
-                opt_pvd: "กองทุนสำรองเลี้ยงชีพ (PVD)",
-                opt_property: "อสังหาริมทรัพย์ (Property)",
                 current_value_label: "มูลค่าปัจจุบัน (บาท) *บังคับ",
                 asset_name_label: "ชื่อรายการ (ไม่บังคับ)",
                 units_label: "จำนวนหุ้น / หน่วย (ไม่บังคับ)",
+                date_label_trans: "วันที่ทำรายการ",
                 btn_save_asset: "+ บันทึกเข้าพอร์ต",
                 all_assets_title: "รายการสินทรัพย์ทั้งหมด",
-                no_assets: "ยังไม่มีสินทรัพย์ในพอร์ต",
-                cashflow_summary_title: "สรุปกระแสเงินสดเดือนนี้",
-                total_income: "รายรับรวม",
-                total_expense: "รายจ่ายรวม",
+                cashflow_summary_title: "สรุปกระแสเงินสดเดือนนี้ (และทั้งปี)",
+                total_income: "รายรับรวม (ปีนี้)",
+                total_expense: "รายจ่ายรวม (ปีนี้)",
                 net_savings: "เงินเหลือเก็บสุทธิ:",
+                expense_breakdown_title: "สัดส่วนประเภทรายจ่าย",
+                total_expense_hole: "รายจ่ายรวม",
+                no_cashflow: "ยังไม่มีรายการกระแสเงินสด",
                 add_income_title: "บันทึกรายรับ (เงินเดือน / โบนัส / ปันผล)",
                 income_type: "ประเภทรายรับ",
                 inc_salary: "เงินเดือนประจำ (Salary)",
                 inc_bonus: "โบนัสประจำปี",
                 inc_div: "เงินปันผล / ดอกเบี้ยรับ",
                 inc_extra: "รายได้พิเศษ / ค่าคอมมิชชัน",
+                inc_other: "อื่นๆ (Other)",
                 amount_required: "จำนวนเงิน (บาท) *บังคับ",
                 desc_optional: "รายละเอียดรายการ (ไม่บังคับ)",
-                date_label_trans: "วันที่ทำรายการ",
                 repeat_label: "ความถี่ (การทำซ้ำ)",
                 rep_once: "ทำครั้งเดียว (Once)",
+                rep_weekly: "ทุกสัปดาห์ (Weekly)",
                 rep_monthly: "ทุกเดือน (Monthly)",
                 rep_6m: "ทุก 6 เดือน (Every 6 Months)",
                 rep_yearly: "ทุกปี (Annually)",
@@ -1022,85 +954,95 @@
                 exp_food: "อาหารและเครื่องดื่ม",
                 exp_transport: "เดินทาง / น้ำมัน / BTS",
                 exp_shop: "ช้อปปิ้ง / ของใช้",
-                btn_save_expense: "บันทึกรายจ่าย",
-                all_cashflow_title: "รายการเงินเข้า-ออก ทั้งหมด",
-                no_cashflow: "ยังไม่มีรายการกระแสเงินสด",
-                nav_home: "หน้าหลัก",
+                exp_insurance: "ค่าประกัน (Insurance)",
+                exp_car: "ค่าบำรุงรักษารถยนต์ (Car Maintenance)",
+                exp_other: "อื่นๆ (Other)",
+                btn_save_expense: "+ บันทึกรายจ่าย",
+                all_cashflow_title: "รายการรายรับ-รายจ่ายทั้งหมด",
+                nav_home: "หน้าแรก",
                 nav_wealth: "สินทรัพย์",
-                nav_cashflow: "รายรับ-จ่าย",
-                nav_analytics: "วิเคราะห์",
-                edit: "แก้ไข",
-                delete: "ลบ"
+                nav_cashflow: "รายรับ-จ่าย"
             },
             en: {
                 greeting: "Welcome back",
                 net_worth: "Net Worth",
-                realtime_calc: "Calculated from assets minus liabilities",
+                realtime_calc: "Calculated in real-time from assets & liabilities",
                 total_assets: "Total Assets",
                 total_liabilities: "Total Liabilities",
-                calendar_title: "Upcoming Cash Flow (Next 7 Days)",
-                no_upcoming: "No upcoming items",
-                asset_breakdown_title: "Asset Allocation Breakdown",
+                asset_breakdown_title: "Asset Breakdown",
                 total_assets_hole: "Total Assets",
-                expense_breakdown_title: "Expense Breakdown",
-                total_expense_hole: "Total Expense",
+                no_assets: "No assets in portfolio",
+                calendar_title: "Upcoming Cash Flow (7 Days)",
+                no_upcoming: "No upcoming schedule",
                 add_asset_title: "Add New Asset / Investment",
                 asset_type: "Asset Type",
-                opt_deposit: "Bank Deposit / Lottery",
-                opt_bond: "Corporate Bond",
-                opt_stock: "Stocks / Mutual Funds",
-                opt_crypto: "Cryptocurrency",
-                opt_pvd: "Provident Fund (PVD)",
-                opt_property: "Real Estate (Property)",
                 current_value_label: "Current Value (THB) *Required",
                 asset_name_label: "Item Name (Optional)",
                 units_label: "Units / Shares (Optional)",
-                btn_save_asset: "+ Save to Portfolio",
+                date_label_trans: "Transaction Date",
+                btn_save_asset: "+ Save Asset",
                 all_assets_title: "All Assets",
-                no_assets: "No assets in portfolio yet",
-                cashflow_summary_title: "Monthly Cash Flow Summary",
-                total_income: "Total Income",
-                total_expense: "Total Expense",
+                cashflow_summary_title: "Cash Flow Summary (Monthly & Yearly)",
+                total_income: "Total Income (YTD)",
+                total_expense: "Total Expense (YTD)",
                 net_savings: "Net Savings:",
-                add_income_title: "Record Income (Salary / Bonus)",
+                expense_breakdown_title: "Expense Breakdown",
+                total_expense_hole: "Total Expense",
+                no_cashflow: "No cash flow records",
+                add_income_title: "Record Income (Salary / Bonus / Dividend)",
                 income_type: "Income Type",
-                inc_salary: "Monthly Salary",
-                inc_bonus: "Annual Bonus",
+                inc_salary: "Salary",
+                inc_bonus: "Bonus",
                 inc_div: "Dividend / Interest",
                 inc_extra: "Extra Income / Commission",
+                inc_other: "Other",
                 amount_required: "Amount (THB) *Required",
                 desc_optional: "Description (Optional)",
-                date_label_trans: "Transaction Date",
-                repeat_label: "Frequency (Recurrence)",
+                repeat_label: "Frequency",
                 rep_once: "Once",
+                rep_weekly: "Weekly",
                 rep_monthly: "Monthly",
                 rep_6m: "Every 6 Months",
                 rep_yearly: "Annually",
-                rep_custom: "Custom (Every X months)",
-                custom_repeat_label: "Repeat every (Number of months)",
-                btn_save_income: "+ Record Income",
+                rep_custom: "Custom Months",
+                custom_repeat_label: "Repeat every (Months)",
+                btn_save_income: "+ Save Income",
                 add_expense_title: "Record Expense & Fixed Bills",
                 expense_category: "Expense Category",
-                exp_home: "Housing (Rent, Utilities, Internet)",
-                exp_sub: "Subscriptions (Mobile, Netflix, Spotify)",
-                exp_food: "Food & Beverages",
-                exp_transport: "Transport / Fuel / BTS",
-                exp_shop: "Shopping / General",
-                btn_save_expense: "Record Expense",
-                all_cashflow_title: "All Cash Flow Transactions",
-                no_cashflow: "No cash flow records yet",
+                exp_home: "Housing & Utilities",
+                exp_sub: "Digital Subscriptions",
+                exp_food: "Food & Beverage",
+                exp_transport: "Transport",
+                exp_shop: "Shopping",
+                exp_insurance: "Insurance",
+                exp_car: "Car Maintenance",
+                exp_other: "Other",
+                btn_save_expense: "+ Save Expense",
+                all_cashflow_title: "All Transactions",
                 nav_home: "Home",
                 nav_wealth: "Wealth",
-                nav_cashflow: "Cash Flow",
-                nav_analytics: "Analytics",
-                edit: "Edit",
-                delete: "Delete"
+                nav_cashflow: "Cash Flow"
             }
         };
 
+        window.addEventListener('DOMContentLoaded', () => {
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('asset-date-input').value = todayStr;
+            document.getElementById('inc-date-input').value = todayStr;
+            document.getElementById('exp-date-input').value = todayStr;
+            
+            populateMonthFilter();
+            updateUI();
+        });
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+
         function toggleLanguage() {
             currentLang = currentLang === 'th' ? 'en' : 'th';
-            document.getElementById('lang-btn').innerText = currentLang === 'th' ? 'EN' : 'TH';
+            document.getElementById('lang-btn').innerText = currentLang.toUpperCase();
             
             document.querySelectorAll('[data-translate]').forEach(el => {
                 const key = el.getAttribute('data-translate');
@@ -1108,482 +1050,549 @@
                     el.innerText = translations[currentLang][key];
                 }
             });
-
-            renderAssets();
-            renderCashflow();
-            updateSystem();
+            populateMonthFilter();
         }
 
-        function toggleTheme() {
-            const htmlEl = document.documentElement;
-            const iconEl = document.getElementById('theme-icon');
-            const currentTheme = htmlEl.getAttribute('data-theme');
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('view-' + tabId).classList.add('active');
+            document.getElementById('nav-' + tabId).classList.add('active');
+        }
 
-            if (currentTheme === 'light') {
-                htmlEl.removeAttribute('data-theme');
-                iconEl.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+        function handleRepeatChange(type) {
+            const select = document.getElementById(type + '-repeat-select');
+            const customGroup = document.getElementById(type + '-custom-group');
+            if (select.value === 'ระบุเอง') {
+                customGroup.style.display = 'flex';
             } else {
-                htmlEl.setAttribute('data-theme', 'light');
-                iconEl.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+                customGroup.style.display = 'none';
             }
-            
-            renderAssetChart();
-            renderExpenseChart();
         }
 
-        function updateSystem() {
-            document.getElementById('dash-total-income').innerText = '+฿ ' + totalIncome.toLocaleString();
-            document.getElementById('dash-total-expense').innerText = '-฿ ' + totalExpense.toLocaleString();
+        function formatNumber(num) {
+            return num.toLocaleString('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        }
+
+        function populateMonthFilter() {
+            const filterSelect = document.getElementById('cashflow-month-filter');
+            const currentVal = filterSelect.value;
             
-            const netSavings = totalIncome - totalExpense;
-            const netSavingsEl = document.getElementById('dash-net-savings');
-            netSavingsEl.innerText = (netSavings >= 0 ? '+฿ ' : '-฿ ') + Math.abs(netSavings).toLocaleString();
+            // Collect unique months from cashflowData
+            let monthsSet = new Set();
+            cashflowData.forEach(item => {
+                if (item.actualDate) {
+                    let ym = item.actualDate.substring(0, 7); // YYYY-MM
+                    monthsSet.add(ym);
+                }
+            });
+
+            // Ensure current month is always present
+            let now = new Date();
+            let currentYM = now.toISOString().substring(0, 7);
+            monthsSet.add(currentYM);
+
+            let sortedMonths = Array.from(monthsSet).sort().reverse();
+
+            filterSelect.innerHTML = `<option value="all">${currentLang === 'th' ? 'ทั้งหมด (All)' : 'All Months'}</option>`;
             
-            if (totalIncome > 0) {
-                const savingsRate = Math.round((netSavings / totalIncome) * 100);
-                document.getElementById('dash-savings-rate').innerText = (currentLang === 'th' ? `ออมสุทธิ ${savingsRate}%` : `Net Savings ${savingsRate}%`);
+            sortedMonths.forEach(ym => {
+                let [year, month] = ym.split('-');
+                let monthIdx = parseInt(month, 10) - 1;
+                let displayLabel = currentLang === 'th' ? 
+                    `${monthNamesTh[monthIdx]} ${parseInt(year)+543}` : 
+                    `${new Date(year, monthIdx).toLocaleString('en', { month: 'short' })} ${year}`;
+                
+                filterSelect.innerHTML += `<option value="${ym}">${displayLabel}</option>`;
+            });
+
+            // Set default to current month if not previously set
+            if (filterSelect.querySelector(`option[value="${currentVal}"]`)) {
+                filterSelect.value = currentVal;
             } else {
-                document.getElementById('dash-savings-rate').innerText = (currentLang === 'th' ? `ออมสุทธิ 0%` : `Net Savings 0%`);
-            }
-
-            let totalAssets = assetsList.reduce((sum, item) => sum + item.value, 0);
-            const totalLiabilities = 0;
-            const netWorth = totalAssets - totalLiabilities;
-
-            document.getElementById('home-total-assets').innerText = '฿ ' + totalAssets.toLocaleString();
-            document.getElementById('home-total-liabilities').innerText = '฿ ' + totalLiabilities.toLocaleString();
-            document.getElementById('home-networth').innerText = '฿ ' + netWorth.toLocaleString();
-            document.getElementById('asset-donut-val').innerText = '฿ ' + totalAssets.toLocaleString();
-            document.getElementById('expense-donut-val').innerText = '-฿ ' + totalExpense.toLocaleString();
-
-            renderAssetChart();
-            renderExpenseChart();
-        }
-
-        function switchMobileView(viewId, navEl) {
-            document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-            document.getElementById(viewId).classList.add('active');
-            if(navEl) {
-                navEl.classList.add('active');
+                filterSelect.value = currentYM;
             }
         }
 
         function addNewAssetItem() {
-            let name = document.getElementById('asset-name-input').value.trim();
-            const value = parseFloat(document.getElementById('asset-value-input').value);
-            const unitsInput = document.getElementById('asset-units-input').value.trim();
-            const units = unitsInput ? parseFloat(unitsInput) : null;
             const type = document.getElementById('asset-type-select').value;
-            const date = document.getElementById('asset-date-input').value;
+            const valInput = document.getElementById('asset-value-input').value;
+            const nameInput = document.getElementById('asset-name-input').value.trim();
+            const unitsInput = document.getElementById('asset-units-input').value;
+            const dateInput = document.getElementById('asset-date-input').value;
 
-            if (isNaN(value)) {
-                alert(currentLang === 'th' ? 'กรุณากรอกมูลค่าปัจจุบันให้ถูกต้องครับ' : 'Please enter a valid current value.');
+            if (!valInput || Number(valInput) <= 0) {
+                alert('กรุณากรอกมูลค่าปัจจุบัน');
                 return;
             }
 
-            if (!name) {
-                name = `${currentLang === 'th' ? 'สินทรัพย์' : 'Asset'} (${type})`;
-            }
+            const newAsset = {
+                id: 'asset_' + Date.now(),
+                type: type,
+                name: nameInput || type,
+                value: Number(valInput),
+                units: unitsInput ? Number(unitsInput) : null,
+                date: dateInput || new Date().toISOString().split('T')[0]
+            };
 
-            const newItem = { id: Date.now(), name, value, units, type, date };
-            assetsList.push(newItem);
-            renderAssets();
-            updateSystem();
-
-            document.getElementById('asset-name-input').value = '';
+            assetsData.push(newAsset);
             document.getElementById('asset-value-input').value = '';
+            document.getElementById('asset-name-input').value = '';
             document.getElementById('asset-units-input').value = '';
+            updateUI();
         }
 
-        function openEditModal(id) {
-            const asset = assetsList.find(item => item.id === id);
-            if (!asset) return;
+        function deleteAssetItem(id) {
+            assetsData = assetsData.filter(item => item.id !== id);
+            updateUI();
+        }
 
-            editingAssetId = id;
-            document.getElementById('modal-name-input').value = asset.name;
-            document.getElementById('modal-value-input').value = asset.value;
-            document.getElementById('modal-units-input').value = asset.units !== null ? asset.units : '';
-            
-            document.getElementById('edit-modal').classList.add('active');
+        function duplicateAssetItem(id) {
+            const item = assetsData.find(i => i.id === id);
+            if (!item) return;
+            const copy = { ...item, id: 'asset_' + Date.now(), name: item.name + ' (สำเนา)' };
+            assetsData.push(copy);
+            updateUI();
+        }
+
+        function generateRecurringEntries(baseItem) {
+            let entries = [];
+            let startDate = new Date(baseItem.startDate);
+            let today = new Date();
+            today.setHours(0,0,0,0);
+
+            let repeat = baseItem.repeat;
+            let customMonths = baseItem.customMonths || 1;
+
+            if (repeat === 'ทำครั้งเดียว' || startDate > today) {
+                entries.push({ ...baseItem, id: baseItem.id + '_0', actualDate: baseItem.startDate });
+                return entries;
+            }
+
+            let curr = new Date(startDate);
+            let index = 0;
+
+            while (curr <= today && index < 120) {
+                let dateStr = curr.toISOString().split('T')[0];
+                entries.push({
+                    ...baseItem,
+                    id: baseItem.id + '_' + index,
+                    actualDate: dateStr,
+                    isGenerated: index > 0
+                });
+
+                if (repeat === 'ทุกสัปดาห์') {
+                    curr.setDate(curr.getDate() + 7);
+                } else if (repeat === 'ทุกเดือน') {
+                    curr.setMonth(curr.getMonth() + 1);
+                } else if (repeat === 'ทุก 6 เดือน') {
+                    curr.setMonth(curr.getMonth() + 6);
+                } else if (repeat === 'ทุกปี') {
+                    curr.setFullYear(curr.getFullYear() + 1);
+                } else if (repeat === 'ระบุเอง') {
+                    curr.setMonth(curr.getMonth() + Number(customMonths));
+                } else {
+                    break;
+                }
+                index++;
+            }
+
+            return entries;
+        }
+
+        function addIncomeItem() {
+            const cat = document.getElementById('inc-cat-select').value;
+            const amount = document.getElementById('inc-amount-input').value;
+            const name = document.getElementById('inc-name-input').value.trim();
+            const date = document.getElementById('inc-date-input').value;
+            const repeat = document.getElementById('inc-repeat-select').value;
+            const customMonths = document.getElementById('inc-custom-months').value;
+
+            if (!amount || Number(amount) <= 0) {
+                alert('กรุณากรอกจำนวนเงิน');
+                return;
+            }
+
+            const baseItem = {
+                id: 'inc_' + Date.now(),
+                flowType: 'income',
+                category: cat,
+                name: name || cat,
+                amount: Number(amount),
+                startDate: date || new Date().toISOString().split('T')[0],
+                repeat: repeat,
+                customMonths: customMonths ? Number(customMonths) : 1
+            };
+
+            const generated = generateRecurringEntries(baseItem);
+            cashflowData.push(...generated);
+
+            document.getElementById('inc-amount-input').value = '';
+            document.getElementById('inc-name-input').value = '';
+            populateMonthFilter();
+            updateUI();
+        }
+
+        function addExpenseItem() {
+            const cat = document.getElementById('exp-cat-select').value;
+            const amount = document.getElementById('exp-amount-input').value;
+            const name = document.getElementById('exp-name-input').value.trim();
+            const date = document.getElementById('exp-date-input').value;
+            const repeat = document.getElementById('exp-repeat-select').value;
+            const customMonths = document.getElementById('exp-custom-months').value;
+
+            if (!amount || Number(amount) <= 0) {
+                alert('กรุณากรอกจำนวนเงิน');
+                return;
+            }
+
+            const baseItem = {
+                id: 'exp_' + Date.now(),
+                flowType: 'expense',
+                category: cat,
+                name: name || cat,
+                amount: Number(amount),
+                startDate: date || new Date().toISOString().split('T')[0],
+                repeat: repeat,
+                customMonths: customMonths ? Number(customMonths) : 1
+            };
+
+            const generated = generateRecurringEntries(baseItem);
+            cashflowData.push(...generated);
+
+            document.getElementById('exp-amount-input').value = '';
+            document.getElementById('exp-name-input').value = '';
+            populateMonthFilter();
+            updateUI();
+        }
+
+        function deleteCashflowItem(id) {
+            cashflowData = cashflowData.filter(item => item.id !== id);
+            populateMonthFilter();
+            updateUI();
+        }
+
+        function duplicateCashflowItem(id) {
+            const item = cashflowData.find(i => i.id === id);
+            if (!item) return;
+            const copy = { ...item, id: 'cf_' + Date.now(), name: item.name + ' (สำเนา)' };
+            cashflowData.push(copy);
+            populateMonthFilter();
+            updateUI();
+        }
+
+        function openEditModal(id, type) {
+            const modal = document.getElementById('edit-modal');
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-type').value = type;
+
+            if (type === 'asset') {
+                const item = assetsData.find(i => i.id === id);
+                if (!item) return;
+                document.getElementById('modal-title').innerText = 'แก้ไขสินทรัพย์';
+                document.getElementById('edit-name').value = item.name;
+                document.getElementById('edit-amount').value = item.value;
+                document.getElementById('edit-units').value = item.units || '';
+                document.getElementById('edit-date').value = item.date;
+                document.getElementById('edit-units-group').style.display = 'flex';
+                document.getElementById('edit-cat-group').style.display = 'none';
+            } else {
+                const item = cashflowData.find(i => i.id === id);
+                if (!item) return;
+                document.getElementById('modal-title').innerText = item.flowType === 'income' ? 'แก้ไขรายรับ' : 'แก้ไขรายจ่าย';
+                document.getElementById('edit-name').value = item.name;
+                document.getElementById('edit-amount').value = item.amount;
+                document.getElementById('edit-date').value = item.actualDate;
+                document.getElementById('edit-units-group').style.display = 'none';
+
+                const catSelect = document.getElementById('edit-category');
+                catSelect.innerHTML = '';
+                if (item.flowType === 'income') {
+                    ['เงินเดือนประจำ', 'โบนัส', 'เงินปันผล/ดอกเบี้ย', 'รายได้พิเศษ', 'Other'].forEach(c => {
+                        catSelect.innerHTML += `<option value="${c}" ${item.category === c ? 'selected' : ''}>${c}</option>`;
+                    });
+                } else {
+                    ['ที่อยู่อาศัย/ค่าน้ำ/ค่าไฟ', 'ค่าบริการรายเดือน', 'อาหารและเครื่องดื่ม', 'เดินทาง', 'ช้อปปิ้ง', 'ค่าประกัน', 'ค่า car maintenance', 'Other'].forEach(c => {
+                        catSelect.innerHTML += `<option value="${c}" ${item.category === c ? 'selected' : ''}>${c}</option>`;
+                    });
+                }
+                document.getElementById('edit-cat-group').style.display = 'flex';
+            }
+
+            modal.classList.add('active');
         }
 
         function closeEditModal() {
-            editingAssetId = null;
             document.getElementById('edit-modal').classList.remove('active');
         }
 
-        function saveEditAsset() {
-            const asset = assetsList.find(item => item.id === editingAssetId);
-            if (!asset) return;
+        function saveEditModal() {
+            const id = document.getElementById('edit-id').value;
+            const type = document.getElementById('edit-type').value;
+            const name = document.getElementById('edit-name').value.trim();
+            const amount = Number(document.getElementById('edit-amount').value);
+            const date = document.getElementById('edit-date').value;
 
-            const newName = document.getElementById('modal-name-input').value.trim();
-            const newValue = parseFloat(document.getElementById('modal-value-input').value);
-            const newUnitsInput = document.getElementById('modal-units-input').value.trim();
-            const newUnits = newUnitsInput ? parseFloat(newUnitsInput) : null;
-
-            if (isNaN(newValue)) {
-                alert(currentLang === 'th' ? 'กรุณากรอกมูลค่าปัจจุบันให้ถูกต้องครับ' : 'Please enter a valid value.');
+            if (!amount || amount <= 0) {
+                alert('กรุณากรอกจำนวนเงินให้ถูกต้อง');
                 return;
             }
 
-            asset.name = newName ? newName : asset.name;
-            asset.value = newValue;
-            asset.units = newUnits;
+            if (type === 'asset') {
+                const item = assetsData.find(i => i.id === id);
+                if (item) {
+                    item.name = name || item.type;
+                    item.value = amount;
+                    item.units = document.getElementById('edit-units').value ? Number(document.getElementById('edit-units').value) : null;
+                    item.date = date;
+                }
+            } else {
+                const item = cashflowData.find(i => i.id === id);
+                if (item) {
+                    item.name = name || item.category;
+                    item.amount = amount;
+                    item.actualDate = date;
+                    const catSelect = document.getElementById('edit-category');
+                    if (catSelect) item.category = catSelect.value;
+                }
+            }
 
             closeEditModal();
-            renderAssets();
-            updateSystem();
+            populateMonthFilter();
+            updateUI();
         }
 
-        function deleteAsset(id) {
-            assetsList = assetsList.filter(item => item.id !== id);
+        function updateUI() {
             renderAssets();
-            updateSystem();
+            renderCashflow();
+            updateDashboard();
         }
 
         function renderAssets() {
             const container = document.getElementById('asset-list-container');
-            if (assetsList.length === 0) {
-                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">${translations[currentLang].no_assets}</div>`;
+            if (assetsData.length === 0) {
+                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ยังไม่มีสินทรัพย์ในพอร์ต</div>`;
                 return;
             }
 
             container.innerHTML = '';
-            assetsList.forEach(item => {
-                const unitsText = item.units !== null ? `(${item.units.toLocaleString()} ${currentLang === 'th' ? 'หน่วย' : 'units'})` : '';
-                const subText = `${item.type} ${unitsText} • ${item.date || '-'}`;
-                const row = document.createElement('div');
-                row.className = 'list-item';
-                row.innerHTML = `
-                    <div class="item-left">
-                        <div class="item-icon">
-                            <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            assetsData.forEach(item => {
+                container.innerHTML += `
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">💰</div>
+                            <div>
+                                <div class="item-title">${item.name}</div>
+                                <div class="item-sub">${item.type} ${item.units ? '• ' + item.units + ' หน่วย' : ''} • บันทึก: ${item.date}</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="item-title">${item.name}</div>
-                            <div class="item-sub">${subText}</div>
-                        </div>
-                    </div>
-                    <div class="item-right">
-                        <div class="item-amount">฿ ${item.value.toLocaleString()}</div>
-                        <div class="action-btns-row">
-                            <button class="btn-mini" onclick="openEditModal(${item.id})">${translations[currentLang].edit}</button>
-                            <button class="btn-mini danger" onclick="deleteAsset(${item.id})">${translations[currentLang].delete}</button>
+                        <div class="item-right">
+                            <div class="item-amount val-plus">฿ ${formatNumber(item.value)}</div>
+                            <div class="action-btns-row">
+                                <button class="btn-mini" onclick="openEditModal('${item.id}', 'asset')">แก้ไข</button>
+                                <button class="btn-mini" onclick="duplicateAssetItem('${item.id}')">คัดลอก</button>
+                                <button class="btn-mini danger" onclick="deleteAssetItem('${item.id}')">ลบ</button>
+                            </div>
                         </div>
                     </div>
                 `;
-                container.appendChild(row);
             });
-        }
-
-        function renderAssetChart() {
-            const chartEl = document.getElementById('asset-donut-chart');
-            const legendEl = document.getElementById('asset-chart-legend');
-            
-            if (assetsList.length === 0) {
-                const surfaceHover = getComputedStyle(document.documentElement).getPropertyValue('--surface-hover').trim();
-                chartEl.style.background = surfaceHover;
-                legendEl.innerHTML = `<div style="font-size: 11px; color: var(--text-secondary);">${translations[currentLang].no_assets}</div>`;
-                return;
-            }
-
-            let grouped = {};
-            let total = 0;
-            assetsList.forEach(item => {
-                grouped[item.type] = (grouped[item.type] || 0) + item.value;
-                total += item.value;
-            });
-
-            let cumulativePercent = 0;
-            let conicStops = [];
-            let legendHtml = '';
-            let colorIdx = 0;
-
-            for (let type in grouped) {
-                let amount = grouped[type];
-                let percent = (amount / total) * 100;
-                let color = chartColors[colorIdx % chartColors.length];
-                
-                let startAngle = cumulativePercent * 3.6;
-                cumulativePercent += percent;
-                let endAngle = cumulativePercent * 3.6;
-
-                conicStops.push(`${color} ${startAngle}deg ${endAngle}deg`);
-
-                legendHtml += `
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: ${color};"></div>
-                        <span>${type} (${Math.round(percent)}%)</span>
-                    </div>
-                `;
-                colorIdx++;
-            }
-
-            chartEl.style.background = `conic-gradient(${conicStops.join(', ')})`;
-            legendEl.innerHTML = legendHtml;
-        }
-
-        function getCategorySvgIcon(category, type) {
-            if (type === 'income') {
-                return '<svg class="svg-icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>';
-            }
-            if (category.includes('ที่อยู่อาศัย')) {
-                return '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>';
-            } else if (category.includes('ค่าบริการ')) {
-                return '<svg class="svg-icon" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>';
-            } else if (category.includes('อาหาร')) {
-                return '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>';
-            } else if (category.includes('เดินทาง')) {
-                return '<svg class="svg-icon" viewBox="0 0 24 24"><rect x="1" y="3" width="22" height="13" rx="2" ry="2"></rect><line x1="1" y1="16" x2="23" y2="16"></line><circle cx="5" cy="19" r="2"></circle><circle cx="19" cy="19" r="2"></circle></svg>';
-            } else {
-                return '<svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>';
-            }
-        }
-
-        function addIncomeItem() {
-            let name = document.getElementById('inc-name-input').value.trim();
-            const amount = parseFloat(document.getElementById('inc-amount-input').value);
-            const category = document.getElementById('inc-cat-select').value;
-            const repeatSelect = document.getElementById('inc-repeat-select').value;
-            const date = document.getElementById('inc-date-input').value;
-            
-            let repeat = repeatSelect;
-            if (repeatSelect === 'ระบุเอง') {
-                const months = document.getElementById('inc-custom-months').value;
-                repeat = months ? `ทุกๆ ${months} เดือน` : 'ระบุเอง';
-            }
-
-            if (isNaN(amount)) {
-                alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินรายรับให้ถูกต้องครับ' : 'Please enter a valid income amount.');
-                return;
-            }
-
-            if (!name) {
-                name = `${currentLang === 'th' ? 'รายรับ' : 'Income'} (${category})`;
-            }
-
-            totalIncome += amount;
-            cashflowList.push({ id: Date.now(), name, amount, type: 'income', category, date, repeat });
-            renderCashflow();
-            updateSystem();
-
-            document.getElementById('inc-name-input').value = '';
-            document.getElementById('inc-amount-input').value = '';
-            document.getElementById('inc-custom-months').value = '';
-        }
-
-        function addExpenseItem() {
-            let name = document.getElementById('exp-name-input').value.trim();
-            const amount = parseFloat(document.getElementById('exp-amount-input').value);
-            const category = document.getElementById('exp-cat-select').value;
-            const repeatSelect = document.getElementById('exp-repeat-select').value;
-            const date = document.getElementById('exp-date-input').value;
-            
-            let repeat = repeatSelect;
-            if (repeatSelect === 'ระบุเอง') {
-                const months = document.getElementById('exp-custom-months').value;
-                repeat = months ? `ทุกๆ ${months} เดือน` : 'ระบุเอง';
-            }
-
-            if (isNaN(amount)) {
-                alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินรายจ่ายให้ถูกต้องครับ' : 'Please enter a valid expense amount.');
-                return;
-            }
-
-            if (!name) {
-                name = `${currentLang === 'th' ? 'รายจ่าย' : 'Expense'} (${category})`;
-            }
-
-            totalExpense += amount;
-            cashflowList.push({ id: Date.now(), name, amount, type: 'expense', category, date, repeat });
-            renderCashflow();
-            updateSystem();
-
-            document.getElementById('exp-name-input').value = '';
-            document.getElementById('exp-amount-input').value = '';
-            document.getElementById('exp-custom-months').value = '';
-        }
-
-        function openEditCashflowModal(id) {
-            const item = cashflowList.find(c => c.id === id);
-            if (!item) return;
-
-            editingCashflowId = id;
-            document.getElementById('cf-modal-title').innerText = item.type === 'income' ? 'แก้ไขรายการรายรับ' : 'แก้ไขรายการรายจ่าย';
-            document.getElementById('cf-modal-name-input').value = item.name;
-            document.getElementById('cf-modal-amount-input').value = item.amount;
-            document.getElementById('cf-modal-date-input').value = item.date || '';
-
-            const catSelect = document.getElementById('cf-modal-category-select');
-            catSelect.innerHTML = '';
-            const categories = item.type === 'income' ? incomeCategories : expenseCategories;
-            categories.forEach(cat => {
-                const opt = document.createElement('option');
-                opt.value = cat;
-                opt.innerText = cat;
-                if (cat === item.category) opt.selected = true;
-                catSelect.appendChild(opt);
-            });
-
-            const repeatSelect = document.getElementById('cf-modal-repeat-select');
-            const customGroup = document.getElementById('cf-modal-custom-group');
-            const customInput = document.getElementById('cf-modal-custom-months');
-
-            if (item.repeat.startsWith('ทุกๆ ')) {
-                repeatSelect.value = 'ระบุเอง';
-                customGroup.style.display = 'flex';
-                customInput.value = item.repeat.replace('ทุกๆ ', '').replace(' เดือน', '');
-            } else {
-                repeatSelect.value = item.repeat;
-                customGroup.style.display = 'none';
-                customInput.value = '';
-            }
-
-            document.getElementById('edit-cashflow-modal').classList.add('active');
-        }
-
-        function closeEditCashflowModal() {
-            editingCashflowId = null;
-            document.getElementById('edit-cashflow-modal').classList.remove('active');
-        }
-
-        function saveEditCashflow() {
-            const item = cashflowList.find(c => c.id === editingCashflowId);
-            if (!item) return;
-
-            const newName = document.getElementById('cf-modal-name-input').value.trim();
-            const newAmount = parseFloat(document.getElementById('cf-modal-amount-input').value);
-            const newCategory = document.getElementById('cf-modal-category-select').value;
-            const newDate = document.getElementById('cf-modal-date-input').value;
-            const repeatSelectVal = document.getElementById('cf-modal-repeat-select').value;
-
-            let newRepeat = repeatSelectVal;
-            if (repeatSelectVal === 'ระบุเอง') {
-                const months = document.getElementById('cf-modal-custom-months').value;
-                newRepeat = months ? `ทุกๆ ${months} เดือน` : 'ระบุเอง';
-            }
-
-            if (isNaN(newAmount)) {
-                alert(currentLang === 'th' ? 'กรุณากรอกจำนวนเงินให้ถูกต้องครับ' : 'Please enter a valid amount.');
-                return;
-            }
-
-            if (item.type === 'income') {
-                totalIncome = totalIncome - item.amount + newAmount;
-            } else {
-                totalExpense = totalExpense - item.amount + newAmount;
-            }
-
-            item.name = newName ? newName : item.name;
-            item.amount = newAmount;
-            item.category = newCategory;
-            item.date = newDate;
-            item.repeat = newRepeat;
-
-            closeEditCashflowModal();
-            renderCashflow();
-            updateSystem();
-        }
-
-        function deleteCashflow(id) {
-            const item = cashflowList.find(c => c.id === id);
-            if (item) {
-                if (item.type === 'income') totalIncome -= item.amount;
-                if (item.type === 'expense') totalExpense -= item.amount;
-                cashflowList = cashflowList.filter(c => c.id !== id);
-                renderCashflow();
-                updateSystem();
-            }
         }
 
         function renderCashflow() {
             const container = document.getElementById('cashflow-list-container');
-            if (cashflowList.length === 0) {
-                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">${translations[currentLang].no_cashflow}</div>`;
+            const upcomingContainer = document.getElementById('upcoming-list-container');
+            const selectedMonth = document.getElementById('cashflow-month-filter').value;
+
+            if (cashflowData.length === 0) {
+                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ยังไม่มีรายการกระแสเงินสด</div>`;
+                upcomingContainer.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ไม่มีรายการใกล้ถึงกำหนด</div>`;
                 return;
             }
 
             container.innerHTML = '';
-            cashflowList.forEach(item => {
-                const isInc = item.type === 'income';
-                const subDetail = `${item.category} • ${item.date || '-'} • [${item.repeat}]`;
-                const svgIconHtml = getCategorySvgIcon(item.category, item.type);
-                
-                const row = document.createElement('div');
-                row.className = 'list-item';
-                row.innerHTML = `
-                    <div class="item-left">
-                        <div class="item-icon" style="color: ${isInc ? 'var(--success)' : 'var(--danger)'}; background: ${isInc ? 'var(--success-bg)' : 'var(--danger-bg)'};">
-                            ${svgIconHtml}
+            let upcomingHTML = '';
+            let today = new Date();
+            today.setHours(0,0,0,0);
+            let next7Days = new Date();
+            next7Days.setDate(today.getDate() + 7);
+
+            let sorted = [...cashflowData].sort((a,b) => new Date(b.actualDate) - new Date(new Date(a.actualDate)));
+            let filteredCount = 0;
+
+            sorted.forEach(item => {
+                const isInc = item.flowType === 'income';
+                const sign = isInc ? '+' : '-';
+                const colorClass = isInc ? 'val-plus' : 'val-minus';
+                let itemYM = item.actualDate ? item.actualDate.substring(0, 7) : '';
+
+                // Filter by selected month
+                if (selectedMonth === 'all' || itemYM === selectedMonth) {
+                    filteredCount++;
+                    container.innerHTML += `
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="item-icon" style="color: ${isInc ? 'var(--success)' : 'var(--danger)'};">${isInc ? '📥' : '📤'}</div>
+                                <div>
+                                    <div class="item-title">${item.name}</div>
+                                    <div class="item-sub">${item.category} • วันที่: ${item.actualDate} ${item.isGenerated ? '(อัตโนมัติ)' : ''}</div>
+                                </div>
+                            </div>
+                            <div class="item-right">
+                                <div class="item-amount ${colorClass}">${sign}฿ ${formatNumber(item.amount)}</div>
+                                <div class="action-btns-row">
+                                    <button class="btn-mini" onclick="openEditModal('${item.id}', 'cashflow')">แก้ไข</button>
+                                    <button class="btn-mini" onclick="duplicateCashflowItem('${item.id}')">คัดลอก</button>
+                                    <button class="btn-mini danger" onclick="deleteCashflowItem('${item.id}')">ลบ</button>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="item-title">${item.name}</div>
-                            <div class="item-sub">${subDetail}</div>
+                    `;
+                }
+
+                // Check upcoming 7 days
+                let itemDate = new Date(item.actualDate);
+                if (itemDate >= today && itemDate <= next7Days) {
+                    upcomingHTML += `
+                        <div class="list-item">
+                            <div class="item-left">
+                                <div class="item-icon">${isInc ? '📥' : '📤'}</div>
+                                <div>
+                                    <div class="item-title">${item.name}</div>
+                                    <div class="item-sub">กำหนด: ${item.actualDate}</div>
+                                </div>
+                            </div>
+                            <div class="item-right">
+                                <div class="item-amount ${colorClass}">${sign}฿ ${formatNumber(item.amount)}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="item-right">
-                        <div class="item-amount ${isInc ? 'val-plus' : 'val-minus'}">${isInc ? '+' : '-'}฿ ${item.amount.toLocaleString()}</div>
-                        <div class="action-btns-row">
-                            <button class="btn-mini" onclick="openEditCashflowModal(${item.id})">${translations[currentLang].edit}</button>
-                            <button class="btn-mini danger" onclick="deleteCashflow(${item.id})">${translations[currentLang].delete}</button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(row);
+                    `;
+                }
             });
 
-            renderExpenseChart();
+            if (filteredCount === 0) {
+                container.innerHTML = `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ไม่มีรายการในเดือนนี้</div>`;
+            }
+
+            upcomingContainer.innerHTML = upcomingHTML || `<div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 10px;">ไม่มีรายการใกล้ถึงกำหนดใน 7 วันนี้</div>`;
         }
 
-        function renderExpenseChart() {
-            const chartEl = document.getElementById('expense-donut-chart');
-            const legendEl = document.getElementById('expense-chart-legend');
-            
-            const expenses = cashflowList.filter(item => item.type === 'expense');
+        function updateDashboard() {
+            let totalAssets = assetsData.reduce((sum, i) => sum + i.value, 0);
+            let totalLiabilities = 0;
 
-            if (expenses.length === 0) {
-                const surfaceHover = document.documentElement.getAttribute('data-theme') === 'light' ? '#e2e8f0' : '#1b2436';
-                chartEl.style.background = surfaceHover;
-                legendEl.innerHTML = `<div style="font-size: 11px; color: var(--text-secondary);">${translations[currentLang].no_cashflow}</div>`;
+            let currentYear = new Date().getFullYear();
+            let totalIncomeYTD = 0;
+            let totalExpenseYTD = 0;
+            let expenseCategories = {};
+
+            cashflowData.forEach(item => {
+                let itemYear = new Date(item.actualDate).getFullYear();
+                if (itemYear === currentYear) {
+                    if (item.flowType === 'income') {
+                        totalIncomeYTD += item.amount;
+                    } else {
+                        totalExpenseYTD += item.amount;
+                        expenseCategories[item.category] = (expenseCategories[item.category] || 0) + item.amount;
+                    }
+                }
+            });
+
+            let netSavings = totalIncomeYTD - totalExpenseYTD;
+            let netWorth = totalAssets - totalLiabilities;
+            let savingsRate = totalIncomeYTD > 0 ? Math.round((netSavings / totalIncomeYTD) * 100) : 0;
+
+            document.getElementById('home-networth').innerText = `฿ ${formatNumber(netWorth)}`;
+            document.getElementById('home-total-assets').innerText = `฿ ${formatNumber(totalAssets)}`;
+            document.getElementById('home-total-liabilities').innerText = `฿ ${formatNumber(totalLiabilities)}`;
+
+            document.getElementById('dash-total-income').innerText = `+฿ ${formatNumber(totalIncomeYTD)}`;
+            document.getElementById('dash-total-expense').innerText = `-฿ ${formatNumber(totalExpenseYTD)}`;
+            document.getElementById('dash-net-savings').innerText = `฿ ${formatNumber(netSavings)}`;
+            document.getElementById('dash-savings-rate').innerText = `ออมสุทธิ ${savingsRate}%`;
+
+            renderAssetDonut(totalAssets);
+            renderExpenseDonut(totalExpenseYTD, expenseCategories);
+        }
+
+        function renderAssetDonut(total) {
+            const chartEl = document.getElementById('asset-donut-chart');
+            const legendEl = document.getElementById('asset-chart-legend');
+            document.getElementById('asset-donut-val').innerText = `฿${formatNumber(total)}`;
+
+            if (total === 0 || assetsData.length === 0) {
+                chartEl.style.background = 'var(--surface-hover)';
+                legendEl.innerHTML = `<div style="font-size: 11px; color: var(--text-secondary);">ยังไม่มีสินทรัพย์ในพอร์ต</div>`;
                 return;
             }
 
-            let grouped = {};
-            let total = 0;
-            expenses.forEach(item => {
-                grouped[item.category] = (grouped[item.category] || 0) + item.amount;
-                total += item.amount;
-            });
+            let colors = ['#3b82f6', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6', '#ec4899'];
+            let categories = {};
+            assetsData.forEach(i => categories[i.type] = (categories[i.type] || 0) + i.value);
 
-            let cumulativePercent = 0;
-            let conicStops = [];
-            let legendHtml = '';
-            let colorIdx = 0;
+            let accumulated = 0;
+            let gradientStops = [];
+            let legendHTML = '';
+            let idx = 0;
 
-            for (let cat in grouped) {
-                let amount = grouped[cat];
-                let percent = (amount / total) * 100;
-                let color = chartColors[colorIdx % chartColors.length];
-                
-                let startAngle = cumulativePercent * 3.6;
-                cumulativePercent += percent;
-                let endAngle = cumulativePercent * 3.6;
+            for (let [cat, val] of Object.entries(categories)) {
+                let percentage = (val / total) * 100;
+                let startAngle = (accumulated / 100) * 360;
+                accumulated += percentage;
+                let endAngle = (accumulated / 100) * 360;
+                let color = colors[idx % colors.length];
 
-                conicStops.push(`${color} ${startAngle}deg ${endAngle}deg`);
-
-                legendHtml += `
+                gradientStops.push(`${color} ${startAngle}deg ${endAngle}deg`);
+                legendHTML += `
                     <div class="legend-item">
                         <div class="legend-color" style="background: ${color};"></div>
-                        <span>${cat.split('/')[0]} (${Math.round(percent)}%)</span>
+                        <span>${cat} (${Math.round(percentage)}%)</span>
                     </div>
                 `;
-                colorIdx++;
+                idx++;
             }
 
-            chartEl.style.background = `conic-gradient(${conicStops.join(', ')})`;
-            legendEl.innerHTML = legendHtml;
+            chartEl.style.background = `conic-gradient(${gradientStops.join(', ')})`;
+            legendEl.innerHTML = legendHTML;
+        }
+
+        function renderExpenseDonut(total, categories) {
+            const chartEl = document.getElementById('expense-donut-chart');
+            const legendEl = document.getElementById('expense-chart-legend');
+            document.getElementById('expense-donut-val').innerText = `฿${formatNumber(total)}`;
+
+            if (total === 0 || Object.keys(categories).length === 0) {
+                chartEl.style.background = 'var(--surface-hover)';
+                legendEl.innerHTML = `<div style="font-size: 11px; color: var(--text-secondary);">ยังไม่มีรายการกระแสเงินสด</div>`;
+                return;
+            }
+
+            let colors = ['#f43f5e', '#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899', '#06b6d4', '#64748b'];
+            let accumulated = 0;
+            let gradientStops = [];
+            let legendHTML = '';
+            let idx = 0;
+
+            for (let [cat, val] of Object.entries(categories)) {
+                let percentage = (val / total) * 100;
+                let startAngle = (accumulated / 100) * 360;
+                accumulated += percentage;
+                let endAngle = (accumulated / 100) * 360;
+                let color = colors[idx % colors.length];
+
+                gradientStops.push(`${color} ${startAngle}deg ${endAngle}deg`);
+                legendHTML += `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: ${color};"></div>
+                        <span>${cat} (${Math.round(percentage)}%)</span>
+                    </div>
+                `;
+                idx++;
+            }
+
+            chartEl.style.background = `conic-gradient(${gradientStops.join(', ')})`;
+            legendEl.innerHTML = legendHTML;
         }
     </script>
 </body>
