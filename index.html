@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WealthPulse - Life Finance Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WealthPulse - Mobile Finance Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -34,105 +34,57 @@
             margin: 0;
             padding: 0;
             font-family: 'Plus Jakarta Sans', 'Noto Sans Thai', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
             display: flex;
-            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             overflow: hidden;
         }
 
-        /* Sidebar Navigation for Desktop & Tablet */
-        .sidebar {
-            width: 260px;
-            background-color: var(--surface);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 24px 16px;
-        }
-
-        .brand-logo {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 32px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-logo span {
-            color: var(--primary);
-        }
-
-        .nav-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            background-color: var(--surface-hover);
-            color: var(--text-main);
-        }
-
-        .nav-link.active {
-            background: var(--primary-gradient);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        /* Main Workspace Content */
-        .main-workspace {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
+        /* Mobile Container Wrapper (จำลองหน้าจอมือถือแบบเต็มพื้นที่แนวดิ่ง) */
+        .mobile-app-container {
+            width: 100%;
+            max-width: 430px;
+            height: 100vh;
+            max-height: 932px;
             background-color: var(--bg-main);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
         }
 
-        /* Top Header Bar */
-        .app-topbar {
-            height: 70px;
-            border-bottom: 1px solid var(--border);
+        @media (min-width: 431px) {
+            .mobile-app-container {
+                border-radius: 40px;
+                border: 1px solid var(--border);
+                height: 88vh;
+            }
+        }
+
+        /* App Top Navigation Bar */
+        .app-header {
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 32px;
-            background: rgba(18, 24, 36, 0.6);
+            background: rgba(18, 24, 36, 0.8);
             backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            z-index: 10;
         }
 
-        .page-title-header {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .user-profile-widget {
+        .user-profile {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
         .avatar-circle {
@@ -144,118 +96,153 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             color: #fff;
         }
 
-        /* Views Content Container */
-        .view-container {
-            display: none;
-            padding: 32px;
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            flex-direction: column;
-            gap: 24px;
+        .user-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
-        .view-container.active {
+        .greeting-sub {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 7px;
+            height: 7px;
+            background-color: var(--danger);
+            border-radius: 50%;
+        }
+
+        /* Scrollable Content Views */
+        .view-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            scrollbar-width: none;
+        }
+
+        .view-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .view-content.active {
             display: flex;
         }
 
-        /* Cards & Grid Layouts */
-        .grid-2-cols {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 24px;
-        }
-
+        /* Cards Style */
         .card-box {
             background: var(--surface);
             border-radius: 20px;
-            padding: 24px;
+            padding: 16px;
             border: 1px solid var(--border);
             position: relative;
         }
 
-        .networth-box {
+        .networth-card {
             background: var(--networth-gradient);
-            box-shadow: 0 12px 30px -8px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
             border: none;
         }
 
-        .card-heading-label {
-            font-size: 13px;
+        .card-label {
+            font-size: 12px;
             color: rgba(255, 255, 255, 0.8);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .networth-figure {
-            font-size: 36px;
+        .networth-amount {
+            font-size: 28px;
             font-weight: 800;
-            margin: 8px 0;
+            margin: 6px 0 4px 0;
             color: #ffffff;
+            letter-spacing: -0.5px;
         }
 
-        .growth-pill {
+        .growth-badge {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.15);
             color: #ffffff;
         }
 
-        .card-hr {
+        .card-divider {
             height: 1px;
             background: rgba(255, 255, 255, 0.15);
-            margin: 16px 0;
+            margin: 12px 0;
         }
 
-        .networth-sub-details {
+        .networth-sub {
             display: flex;
             justify-content: space-between;
         }
 
-        .sub-col-label {
-            font-size: 12px;
+        .sub-label {
+            font-size: 11px;
             color: rgba(255, 255, 255, 0.7);
         }
 
-        .sub-col-val {
-            font-size: 16px;
+        .sub-val {
+            font-size: 14px;
             font-weight: 700;
             color: #ffffff;
             margin-top: 2px;
         }
 
         /* Section Titles */
-        .section-row-header {
+        .section-header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
         }
 
-        .section-main-title {
-            font-size: 16px;
+        .section-title {
+            font-size: 14px;
             font-weight: 700;
             color: var(--text-main);
         }
 
-        /* Asset Distribution Track */
-        .allocation-track {
-            height: 10px;
-            border-radius: 5px;
+        /* Allocation Bar */
+        .allocation-bar {
+            height: 8px;
+            border-radius: 4px;
             background: #1e293b;
             display: flex;
             overflow: hidden;
-            margin: 16px 0 12px 0;
+            margin: 10px 0 8px 0;
             gap: 2px;
         }
 
@@ -263,166 +250,201 @@
             height: 100%;
         }
 
-        .allocation-legend-row {
+        .legend-row {
             display: flex;
-            gap: 24px;
-            font-size: 13px;
+            justify-content: space-between;
+            font-size: 11px;
             color: var(--text-secondary);
         }
 
-        .legend-tag {
+        .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
         }
 
-        .legend-color-dot {
-            width: 10px;
-            height: 10px;
+        .legend-dot {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
         }
 
         /* Item Lists */
-        .item-list-stack {
+        .list-stack {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
 
-        .list-row-item {
+        .list-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
+            padding: 8px 0;
             border-bottom: 1px solid var(--border);
         }
 
-        .list-row-item:last-child {
+        .list-item:last-child {
             border-bottom: none;
             padding-bottom: 0;
         }
 
-        .item-left-group {
+        .item-left {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
-        .item-icon-box {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+        .item-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.04);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 16px;
             border: 1px solid var(--border);
         }
 
-        .item-main-title {
-            font-size: 14px;
+        .item-title {
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-main);
         }
 
-        .item-sub-desc {
-            font-size: 12px;
+        .item-sub {
+            font-size: 11px;
             color: var(--text-secondary);
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
-        .item-right-group {
+        .item-right {
             text-align: right;
         }
 
-        .item-val-text {
-            font-size: 15px;
+        .item-amount {
+            font-size: 13px;
             font-weight: 700;
         }
 
-        .val-positive { color: var(--success); }
-        .val-negative { color: var(--text-main); }
+        .val-plus { color: var(--success); }
+        .val-minus { color: var(--text-main); }
 
-        .status-pill-badge {
+        .badge-status {
             display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-size: 10px;
             font-weight: 600;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
-        /* Form Controls */
-        .interactive-form-card {
+        /* Forms */
+        .form-card {
             background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
             border: 1px solid var(--border-highlight);
         }
 
-        .form-heading-title {
-            font-size: 15px;
+        .form-title {
+            font-size: 13px;
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .field-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-bottom: 14px;
+            gap: 4px;
+            margin-bottom: 10px;
         }
 
         .field-label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--text-secondary);
         }
 
-        .text-input, .select-dropdown {
+        .text-input, .select-input {
             width: 100%;
             background: #090d16;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 16px;
+            border-radius: 10px;
+            padding: 10px 12px;
             color: var(--text-main);
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
             transition: all 0.2s;
         }
 
-        .text-input:focus, .select-dropdown:focus {
+        .text-input:focus, .select-input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
 
-        .action-submit-btn {
+        .submit-btn {
             width: 100%;
             background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 11px;
+            border-radius: 10px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
-            margin-top: 6px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            margin-top: 4px;
         }
 
-        .action-submit-btn.danger-btn {
+        .submit-btn.danger {
             background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
-            box-shadow: 0 4px 14px rgba(225, 29, 72, 0.4);
+            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+        }
+
+        /* Bottom Tab Navigation Bar (Mobile Native Style) */
+        .bottom-nav-bar {
+            height: 64px;
+            background: rgba(18, 24, 36, 0.95);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 6px 6px 6px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 25%;
+            transition: color 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-symbol {
+            font-size: 20px;
         }
 
         .tag-pill {
             background: rgba(255, 255, 255, 0.05);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 10px;
             font-weight: 600;
             color: var(--text-secondary);
         }
@@ -430,130 +452,94 @@
 </head>
 <body>
 
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-        <div class="brand-logo">
-            ⚡ Wealth<span>Pulse</span>
-        </div>
-        <div class="nav-menu">
-            <a class="nav-link active" onclick="switchWorkspace('view-home', this)" id="menu-home">
-                <span>🏠</span> ภาพรวม (Dashboard)
-            </a>
-            <a class="nav-link" onclick="switchWorkspace('view-wealth', this)" id="menu-wealth">
-                <span>📈</span> สินทรัพย์ & พอร์ตลงทุน
-            </a>
-            <a class="nav-link" onclick="switchWorkspace('view-expense', this)" id="menu-expense">
-                <span>💸</span> รายรับ - รายจ่าย
-            </a>
-            <a class="nav-link">
-                <span>📊</span> รายงานวิเคราะห์
-            </a>
-        </div>
-    </aside>
-
-    <!-- Main Workspace Area -->
-    <main class="main-workspace">
-        <header class="app-topbar">
-            <div class="page-title-header" id="topbar-title">ภาพรวมสุขภาพทางการเงิน (Dashboard)</div>
-            <div class="user-profile-widget">
-                <div style="text-align: right;">
-                    <div style="font-size: 13px; font-weight: 600;">คุณสมชาย เอกอนันต์</div>
-                    <div style="font-size: 11px; color: var(--text-secondary);">Premium Member</div>
-                </div>
+    <div class="mobile-app-container">
+        
+        <!-- Top App Header -->
+        <header class="app-header">
+            <div class="user-profile">
                 <div class="avatar-circle">SC</div>
+                <div>
+                    <div class="greeting-sub">ยินดีต้อนรับกลับมา</div>
+                    <div class="user-name">คุณสมชาย เอกอนันต์</div>
+                </div>
+            </div>
+            <div class="icon-btn">
+                🔔
+                <div class="notification-dot"></div>
             </div>
         </header>
 
-        <!-- VIEW 1: HOME DASHBOARD -->
-        <div id="view-home" class="view-container active">
-            <!-- Net Worth Hero Card -->
-            <div class="card-box networth-box">
-                <div class="card-heading-label">
+        <!-- VIEW 1: DASHBOARD & NET WORTH -->
+        <div id="view-home" class="view-content active">
+            <!-- Net Worth Card -->
+            <div class="card-box networth-card">
+                <div class="card-label">
                     <span>ความมั่งคั่งสุทธิ (Net Worth)</span>
-                    <span style="cursor: pointer;">👁️ ซ่อนตัวเลข</span>
+                    <span style="cursor: pointer;">👁️</span>
                 </div>
-                <div class="networth-figure">฿ 2,450,000.00</div>
-                <div class="growth-pill">▲ +3.2% จากเดือนที่แล้ว (+฿76,000)</div>
-                <div class="card-hr"></div>
-                <div class="networth-sub-details">
+                <div class="networth-amount">฿ 2,450,000</div>
+                <div class="growth-badge">▲ +3.2% เดือนนี้ (+฿76,000)</div>
+                <div class="card-divider"></div>
+                <div class="networth-sub">
                     <div>
-                        <div class="sub-col-label">สินทรัพย์รวมทั้งหมด</div>
-                        <div class="sub-col-val">฿ 2,700,000.00</div>
+                        <div class="sub-label">สินทรัพย์รวม</div>
+                        <div class="sub-val">฿ 2,700,000</div>
                     </div>
                     <div style="text-align: right;">
-                        <div class="sub-col-label">หนี้สินรวมทั้งหมด</div>
-                        <div class="sub-col-val" style="color: #fca5a5;">฿ 250,000.00</div>
+                        <div class="sub-label">หนี้สินรวม</div>
+                        <div class="sub-val" style="color: #fca5a5;">฿ 250,000</div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid-2-cols">
-                <!-- Left: Asset Allocation -->
-                <div class="card-box">
-                    <div class="section-row-header">
-                        <span class="section-main-title">สัดส่วนพอร์ตสินทรัพย์ (Asset Allocation)</span>
-                        <a style="font-size: 12px; color: var(--primary); cursor: pointer;">จัดการพอร์ต</a>
-                    </div>
-                    <div class="allocation-track">
-                        <div class="alloc-seg" style="width: 55%; background: #3b82f6;"></div>
-                        <div class="alloc-seg" style="width: 30%; background: #10b981;"></div>
-                        <div class="alloc-seg" style="width: 15%; background: #f59e0b;"></div>
-                    </div>
-                    <div class="allocation-legend-row" style="margin-top: 12px;">
-                        <div class="legend-tag"><div class="legend-color-dot" style="background: #3b82f6;"></div>หุ้นและกองทุนรวม (55%)</div>
-                        <div class="legend-tag"><div class="legend-color-dot" style="background: #10b981;"></div>เงินสดและสลาก (30%)</div>
-                        <div class="legend-tag"><div class="legend-color-dot" style="background: #f59e0b;"></div>หุ้นกู้และพันธบัตร (15%)</div>
-                    </div>
-                </div>
-
-                <!-- Right: Quick Summary Card -->
-                <div class="card-box">
-                    <div class="section-row-header">
-                        <span class="section-main-title">สภาพคล่องเดือนนี้</span>
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 8px;">
-                        <div>
-                            <div style="font-size: 12px; color: var(--text-secondary);">รายรับรวมเดือนนี้</div>
-                            <div style="font-size: 18px; font-weight: 700; color: var(--success);">+฿ 65,000.00</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 12px; color: var(--text-secondary);">รายจ่ายรวมเดือนนี้</div>
-                            <div style="font-size: 18px; font-weight: 700; color: var(--danger);">–฿ 28,400.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Upcoming Cash Flow Timeline -->
+            <!-- Asset Allocation -->
             <div class="card-box">
-                <div class="section-row-header">
-                    <span class="section-main-title">ปฏิทินกระแสเงินสด (Upcoming Cash Flow - 7 วันข้างหน้า)</span>
+                <div class="section-header-row">
+                    <span class="section-title">สัดส่วนพอร์ตสินทรัพย์</span>
+                    <span style="font-size: 12px; color: var(--primary);">จัดการ</span>
                 </div>
-                <div class="item-list-stack">
-                    <div class="list-row-item">
-                        <div class="item-left-group">
-                            <div class="item-icon-box" style="color: #10b981; background: var(--success-bg);">📜</div>
+                <div class="allocation-bar">
+                    <div class="alloc-seg" style="width: 55%; background: #3b82f6;"></div>
+                    <div class="alloc-seg" style="width: 30%; background: #10b981;"></div>
+                    <div class="alloc-seg" style="width: 15%; background: #f59e0b;"></div>
+                </div>
+                <div class="legend-row">
+                    <div class="legend-item"><div class="legend-dot" style="background: #3b82f6;"></div>หุ้น/กองทุน 55%</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: #10b981;"></div>เงินสด/สลาก 30%</div>
+                    <div class="legend-item"><div class="legend-dot" style="background: #f59e0b;"></div>หุ้นกู้ 15%</div>
+                </div>
+            </div>
+
+            <!-- Upcoming Timeline -->
+            <div class="card-box">
+                <div class="section-header-row">
+                    <span class="section-title">ปฏิทินเงินเข้า-ออก (7 วันนี้)</span>
+                </div>
+                <div class="list-stack">
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon" style="color: #10b981; background: var(--success-bg);">📜</div>
                             <div>
-                                <div class="item-main-title">ดอกเบี้ยหุ้นกู้ CPALL</div>
-                                <div class="item-sub-desc">15 ต.ค. 2026 • เข้าบัญชี KBank ออมทรัพย์</div>
+                                <div class="item-title">ดอกเบี้ยหุ้นกู้ CPALL</div>
+                                <div class="item-sub">15 ต.ค. • เข้าบัญชี KBank</div>
                             </div>
                         </div>
-                        <div class="item-right-group">
-                            <div class="item-val-text val-positive">+฿ 4,200.00</div>
-                            <div class="status-pill-badge" style="background: var(--success-bg); color: var(--success);">เงินเข้า</div>
+                        <div class="item-right">
+                            <div class="item-amount val-plus">+฿ 4,200</div>
+                            <div class="badge-status" style="background: var(--success-bg); color: var(--success);">รับเงิน</div>
                         </div>
                     </div>
-                    <div class="list-row-item">
-                        <div class="item-left-group">
-                            <div class="item-icon-box" style="color: #f43f5e; background: var(--danger-bg);">🏠</div>
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon" style="color: #f43f5e; background: var(--danger-bg);">🏠</div>
                             <div>
-                                <div class="item-main-title">ผ่อนคอนโดมิเนียม (Fixed Expense)</div>
-                                <div class="item-sub-desc">16 ต.ค. 2026 • ตัดบัญชีอัตโนมัติ</div>
+                                <div class="item-title">ผ่อนคอนโด (Fixed)</div>
+                                <div class="item-sub">16 ต.ค. • ตัดอัตโนมัติ</div>
                             </div>
                         </div>
-                        <div class="item-right-group">
-                            <div class="item-val-text val-negative">-฿ 18,000.00</div>
-                            <div class="status-pill-badge" style="background: var(--danger-bg); color: var(--danger);">รอชำระ</div>
+                        <div class="item-right">
+                            <div class="item-amount val-minus">-฿ 18,000</div>
+                            <div class="badge-status" style="background: var(--danger-bg); color: var(--danger);">รอชำระ</div>
                         </div>
                     </div>
                 </div>
@@ -561,178 +547,188 @@
         </div>
 
         <!-- VIEW 2: WEALTH & ASSETS MANAGEMENT -->
-        <div id="view-wealth" class="view-container">
-            <div class="grid-2-cols">
-                <!-- Left: Asset List -->
-                <div class="card-box">
-                    <div class="section-row-header" style="margin-bottom: 16px;">
-                        <span class="section-main-title">รายการสินทรัพย์ & เงินลงทุนทั้งหมด</span>
-                    </div>
-                    <div class="item-list-stack" id="asset-list-container">
-                        <div class="list-row-item">
-                            <div class="item-left-group">
-                                <div class="item-icon-box">🏦</div>
-                               <div>
-                                    <div class="item-main-title">KBank Digital Savings</div>
-                                    <div class="item-sub-desc">ดอกเบี้ย 1.5% ต่อปี</div>
-                                </div>
-                            </div>
-                            <div class="item-right-group">
-                                <div class="item-val-text">฿ 350,000</div>
-                                <div class="tag-pill">เงินฝาก</div>
-                            </div>
-                        </div>
-                        <div class="list-row-item">
-                            <div class="item-left-group">
-                                <div class="item-icon-box">🎁</div>
-                                <div>
-                                    <div class="item-main-title">สลากออมสินพิเศษ 2 ปี</div>
-                                    <div class="item-sub-desc">ถูกรางวัลล่าสุด ฿300</div>
-                                </div>
-                            </div>
-                            <div class="item-right-group">
-                                <div class="item-val-text">฿ 500,000</div>
-                                <div class="tag-pill">สลาก</div>
-                            </div>
-                        </div>
-                        <div class="list-row-item">
-                            <div class="item-left-group">
-                                <div class="item-icon-box">📜</div>
-                                <div>
-                                    <div class="item-main-title">หุ้นกู้ CPALL26NA</div>
-                                    <div class="item-sub-desc">ดอกเบี้ย 4.2% (รับ พ.ย.)</div>
-                                </div>
-                            </div>
-                            <div class="item-right-group">
-                                <div class="item-val-text">฿ 400,000</div>
-                                <div class="tag-pill">หุ้นกู้</div>
-                            </div>
-                        </div>
-                    </div>
+        <div id="view-wealth" class="view-content">
+            <!-- Add Asset Form -->
+            <div class="card-box form-card">
+                <div class="form-title">
+                    <span style="color: var(--primary);">⚡</span> เพิ่มสินทรัพย์ / เงินลงทุนใหม่
                 </div>
+                <div class="field-group">
+                    <label class="field-label">ประเภทสินทรัพย์</label>
+                    <select class="select-input" id="asset-type-select">
+                        <option value="cash">🏦 เงินฝากธนาคาร / สลาก</option>
+                        <option value="bond">📜 หุ้นกู้ / พันธบัตร</option>
+                        <option value="stock">📈 หุ้นสามัญ / กองทุนรวม</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">ชื่อรายการ</label>
+                    <input type="text" class="text-input" id="asset-name-input" placeholder="เช่น หุ้นกู้ CPALL, K-US500">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">มูลค่าปัจจุบัน (บาท)</label>
+                    <input type="number" class="text-input" id="asset-value-input" placeholder="0.00">
+                </div>
+                <button class="submit-btn" onclick="addNewAssetItem()">+ บันทึกเข้าพอร์ต</button>
+            </div>
 
-                <!-- Right: Add Asset Form -->
-                <div class="card-box interactive-form-card">
-                    <div class="form-heading-title">
-                        <span style="color: var(--primary);">⚡</span> บันทึกสินทรัพย์ / เงินลงทุนใหม่
+            <!-- Asset List -->
+            <div class="card-box">
+                <div class="section-header-row" style="margin-bottom: 8px;">
+                    <span class="section-title">รายการสินทรัพย์ทั้งหมด</span>
+                </div>
+                <div class="list-stack" id="asset-list-container">
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">🏦</div>
+                            <div>
+                                <div class="item-title">KBank Digital Savings</div>
+                                <div class="item-sub">ดอกเบี้ย 1.5% ต่อปี</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount">฿ 350,000</div>
+                            <div class="tag-pill">เงินฝาก</div>
+                        </div>
                     </div>
-                    <div class="field-group">
-                        <label class="field-label">ประเภทสินทรัพย์</label>
-                        <select class="select-dropdown" id="asset-type-select">
-                            <option value="cash">🏦 เงินฝากธนาคาร / สลากออมทรัพย์</option>
-                            <option value="bond">📜 หุ้นกู้ / พันธบัตรรัฐบาล</option>
-                            <option value="stock">📈 หุ้นสามัญ / กองทุนรวม</option>
-                        </select>
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">🎁</div>
+                            <div>
+                                <div class="item-title">สลากออมสินพิเศษ 2 ปี</div>
+                                <div class="item-sub">ถูกรางวัลล่าสุด ฿300</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount">฿ 500,000</div>
+                            <div class="tag-pill">สลาก</div>
+                        </div>
                     </div>
-                    <div class="field-group">
-                        <label class="field-label">ชื่อรายการ / สถาบันการเงิน</label>
-                        <input type="text" class="text-input" id="asset-name-input" placeholder="เช่น หุ้นกู้ CPALL, K-US500">
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">📜</div>
+                            <div>
+                                <div class="item-title">หุ้นกู้ CPALL26NA</div>
+                                <div class="item-sub">ดอกเบี้ย 4.2% (รับ พ.ย.)</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount">฿ 400,000</div>
+                            <div class="tag-pill">หุ้นกู้</div>
+                        </div>
                     </div>
-                    <div class="field-group">
-                        <label class="field-label">มูลค่าปัจจุบัน (บาท)</label>
-                        <input type="number" class="text-input" id="asset-value-input" placeholder="0.00">
-                    </div>
-                    <button class="action-submit-btn" onclick="addNewAssetItem()">+ เพิ่มลงพอร์ตทันที</button>
                 </div>
             </div>
         </div>
 
         <!-- VIEW 3: DAILY EXPENSE & BUDGETING -->
-        <div id="view-expense" class="view-container">
+        <div id="view-expense" class="view-content">
             <!-- Budget Status Card -->
             <div class="card-box">
-                <div class="section-row-header">
-                    <span class="section-main-title">งบประมาณรายจ่ายเดือนนี้</span>
-                    <span style="font-size: 13px; color: var(--text-secondary);">ใช้ไปแล้ว 63% ของงบทั้งหมด</span>
+                <div class="section-header-row">
+                    <span class="section-title">งบประมาณเดือนนี้</span>
+                    <span style="font-size: 11px; color: var(--text-secondary);">ใช้ไปแล้ว 63%</span>
                 </div>
-                <div style="height: 10px; background: #1e293b; border-radius: 5px; overflow: hidden; margin: 12px 0 8px 0;">
-                    <div style="height: 100%; width: 63%; background: var(--primary-gradient); border-radius: 5px;"></div>
+                <div style="height: 8px; background: #1e293b; border-radius: 4px; overflow: hidden; margin: 10px 0 6px 0;">
+                    <div style="height: 100%; width: 63%; background: var(--primary-gradient); border-radius: 4px;"></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                    <span style="color: var(--text-secondary);">ใช้ไปแล้ว ฿ 28,400.00</span>
-                    <span style="font-weight: 700;">งบประมาณรวม ฿ 45,000.00</span>
+                <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                    <span style="color: var(--text-secondary);">ใช้ไป ฿ 28,400</span>
+                    <span style="font-weight: 700;">งบรวม ฿ 45,000</span>
                 </div>
             </div>
 
-            <div class="grid-2-cols">
-                <!-- Left: Daily Expense List -->
-                <div class="card-box">
-                    <div class="section-row-header">
-                        <span class="section-main-title">รายการค่าใช้จ่ายวันนี้ (10 ต.ค. 2026)</span>
-                    </div>
-                    <div class="item-list-stack" id="expense-list-container">
-                        <div class="list-row-item">
-                            <div class="item-left-group">
-                                <div class="item-icon-box">☕</div>
-                                <div>
-                                    <div class="item-main-title">Starbucks Coffee</div>
-                                    <div class="item-sub-desc">อาหารและเครื่องดื่ม</div>
-                                </div>
-                            </div>
-                            <div class="item-right-group">
-                                <div class="item-val-text" style="color: var(--danger);">-฿ 165.00</div>
-                            </div>
-                        </div>
-                        <div class="list-row-item">
-                            <div class="item-left-group">
-                                <div class="item-icon-box">🚆</div>
-                                <div>
-                                    <div class="item-main-title">รถไฟฟ้า BTS</div>
-                                    <div class="item-sub-desc">เดินทาง</div>
-                                </div>
-                            </div>
-                            <div class="item-right-group">
-                                <div class="item-val-text" style="color: var(--danger);">-฿ 59.00</div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Add Expense Form -->
+            <div class="card-box form-card" style="border-color: rgba(244, 63, 94, 0.3);">
+                <div class="form-title" style="color: #fca5a5;">
+                    <span>💸</span> บันทึกค่าใช้จ่ายรายวัน
                 </div>
+                <div class="field-group">
+                    <label class="field-label">หมวดหมู่</label>
+                    <select class="select-input" id="exp-cat-select">
+                        <option value="อาหาร">🍔 อาหารและเครื่องดื่ม</option>
+                        <option value="เดินทาง">🚗 เดินทาง / น้ำมัน / BTS</option>
+                        <option value="ช้อปปิ้ง">🛍️ ช้อปปิ้ง / ของใช้</option>
+                        <option value="ค่าใช้จ่ายประจำ">🏠 ค่าใช้จ่ายประจำ (Fixed)</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">รายละเอียดรายการ</label>
+                    <input type="text" class="text-input" id="exp-name-input" placeholder="เช่น ค่ากาแฟ, ค่าทางด่วน">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">จำนวนเงิน (บาท)</label>
+                    <input type="number" class="text-input" id="exp-amount-input" placeholder="0.00">
+                </div>
+                <button class="submit-btn danger" onclick="addExpenseItem()">บันทึกรายจ่าย</button>
+            </div>
 
-                <!-- Right: Add Expense Form -->
-                <div class="card-box interactive-form-card" style="border-color: rgba(244, 63, 94, 0.3);">
-                    <div class="form-heading-title" style="color: #fca5a5;">
-                        <span>💸</span> บันทึกค่าใช้จ่ายรายวัน
+            <!-- Daily Expense List -->
+            <div class="card-box">
+                <div class="section-header-row">
+                    <span class="section-title">รายการวันนี้ (10 ต.ค.)</span>
+                </div>
+                <div class="list-stack" id="expense-list-container">
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">☕</div>
+                            <div>
+                                <div class="item-title">Starbucks Coffee</div>
+                                <div class="item-sub">อาหารและเครื่องดื่ม</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount" style="color: var(--danger);">-฿ 165</div>
+                        </div>
                     </div>
-                    <div class="field-group">
-                        <label class="field-label">หมวดหมู่</label>
-                        <select class="select-dropdown" id="exp-cat-select">
-                            <option value="อาหาร">🍔 อาหารและเครื่องดื่ม</option>
-                            <option value="เดินทาง">🚗 เดินทาง / น้ำมัน / BTS</option>
-                            <option value="ช้อปปิ้ง">🛍️ ช้อปปิ้ง / ของใช้</option>
-                            <option value="ค่าใช้จ่ายประจำ">🏠 ค่าใช้จ่ายประจำ (Fixed)</option>
-                        </select>
+                    <div class="list-item">
+                        <div class="item-left">
+                            <div class="item-icon">🚆</div>
+                            <div>
+                                <div class="item-title">รถไฟฟ้า BTS</div>
+                                <div class="item-sub">เดินทาง</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <div class="item-amount" style="color: var(--danger);">-฿ 59</div>
+                        </div>
                     </div>
-                    <div class="field-group">
-                        <label class="field-label">รายละเอียดรายการ</label>
-                        <input type="text" class="text-input" id="exp-name-input" placeholder="เช่น ค่ากาแฟ, ค่าทางด่วน">
-                    </div>
-                    <div class="field-group">
-                        <label class="field-label">จำนวนเงิน (บาท)</label>
-                        <input type="number" class="text-input" id="exp-amount-input" placeholder="0.00">
-                    </div>
-                    <button class="action-submit-btn danger-btn" onclick="addExpenseItem()">บันทึกรายจ่าย</button>
                 </div>
             </div>
         </div>
-    </main>
 
-    <!-- Script ควบคุมการทำงาน -->
+        <!-- Bottom Tab Navigation Bar -->
+        <nav class="bottom-nav-bar">
+            <div class="nav-item active" onclick="switchMobileView('view-home', this)" id="tab-home">
+                <span class="nav-symbol">🏠</span>
+                <span>หน้าหลัก</span>
+            </div>
+            <div class="nav-item" onclick="switchMobileView('view-wealth', this)" id="tab-wealth">
+                <span class="nav-symbol">📈</span>
+                <span>สินทรัพย์</span>
+            </div>
+            <div class="nav-item" onclick="switchMobileView('view-expense', this)" id="tab-expense">
+                <span class="nav-symbol">💸</span>
+                <span>รายจ่าย</span>
+            </div>
+            <div class="nav-item" onclick="alert('ฟีเจอร์รายงานวิเคราะห์กำลังพัฒนา')">
+                <span class="nav-symbol">📊</span>
+                <span>วิเคราะห์</span>
+            </div>
+        </nav>
+
+    </div>
+
+    <!-- Script ควบคุมการทำงานของ Mobile App -->
     <script>
-        function switchWorkspace(viewId, linkEl) {
-            document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        function switchMobileView(viewId, navEl) {
+            document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
             document.getElementById(viewId).classList.add('active');
-            if(linkEl) {
-                linkEl.classList.add('active');
+            if(navEl) {
+                navEl.classList.add('active');
             }
-
-            const titleMap = {
-                'view-home': 'ภาพรวมสุขภาพทางการเงิน (Dashboard)',
-                'view-wealth': 'พอร์ตสินทรัพย์และการลงทุน (Wealth & Assets)',
-                'view-expense': 'ระบบติดตามรายรับ - รายจ่าย (Cash Flow & Expenses)'
-            };
-            document.getElementById('topbar-title').innerText = titleMap[viewId];
         }
 
         function addNewAssetItem() {
@@ -748,17 +744,17 @@
 
             const container = document.getElementById('asset-list-container');
             const row = document.createElement('div');
-            row.className = 'list-row-item';
+            row.className = 'list-item';
             row.innerHTML = `
-                <div class="item-left-group">
-                    <div class="item-icon-box">💎</div>
+                <div class="item-left">
+                    <div class="item-icon">💎</div>
                     <div>
-                        <div class="item-main-title">${name}</div>
-                        <div class="item-sub-desc">บันทึกใหม่</div>
+                        <div class="item-title">${name}</div>
+                        <div class="item-sub">บันทึกใหม่</div>
                     </div>
                 </div>
-                <div class="item-right-group">
-                    <div class="item-val-text">฿ ${value.toLocaleString()}</div>
+                <div class="item-right">
+                    <div class="item-amount">฿ ${value.toLocaleString()}</div>
                     <div class="tag-pill">${typeText}</div>
                 </div>
             `;
@@ -781,17 +777,17 @@
 
             const container = document.getElementById('expense-list-container');
             const row = document.createElement('div');
-            row.className = 'list-row-item';
+            row.className = 'list-item';
             row.innerHTML = `
-                <div class="item-left-group">
-                    <div class="item-icon-box">🧾</div>
+                <div class="item-left">
+                    <div class="item-icon">🧾</div>
                     <div>
-                        <div class="item-main-title">${name}</div>
-                        <div class="item-sub-desc">${category}</div>
+                        <div class="item-title">${name}</div>
+                        <div class="item-sub">${category}</div>
                     </div>
                 </div>
-                <div class="item-right-group">
-                    <div class="item-val-text" style="color: var(--danger);">-฿ ${amount.toLocaleString()}</div>
+                <div class="item-right">
+                    <div class="item-amount" style="color: var(--danger);">-฿ ${amount.toLocaleString()}</div>
                 </div>
             `;
             container.prepend(row);
